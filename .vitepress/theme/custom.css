@@ -1,0 +1,71 @@
+/* ─── Thème tangerine — miroir de l'UI UHQ Panel OS ──────────────────────── */
+
+:root {
+  --vp-c-brand-1:   hsl(13, 80%, 55%);
+  --vp-c-brand-2:   hsl(13, 73%, 48%);
+  --vp-c-brand-3:   hsl(13, 70%, 42%);
+  --vp-c-brand-soft: hsla(13, 80%, 55%, 0.14);
+
+  --vp-button-brand-bg:           hsl(13, 80%, 55%);
+  --vp-button-brand-hover-bg:     hsl(13, 73%, 48%);
+  --vp-button-brand-active-bg:    hsl(13, 70%, 42%);
+  --vp-button-brand-border:       hsl(13, 80%, 55%);
+  --vp-button-brand-hover-border: hsl(13, 73%, 48%);
+  --vp-button-brand-text:         #fff;
+  --vp-button-brand-hover-text:   #fff;
+  --vp-button-brand-active-text:  #fff;
+}
+
+.dark {
+  --vp-c-brand-1:    hsl(13, 80%, 62%);
+  --vp-c-brand-2:    hsl(13, 80%, 55%);
+  --vp-c-brand-soft: hsla(13, 80%, 62%, 0.14);
+}
+
+/* ── Navbar ── */
+.VPNav .VPNavBar {
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+/* ── Home hero ── */
+.VPHome .VPHero .name .clip {
+  background: linear-gradient(135deg, hsl(13, 80%, 55%), hsl(30, 90%, 60%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Code blocks ── */
+.dark .vp-code-group .tabs label:hover {
+  color: var(--vp-c-brand-1);
+}
+
+/* ── Badges personnalisés ── */
+.badge-free {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: hsla(142, 60%, 40%, 0.15);
+  color: hsl(142, 55%, 45%);
+  border: 1px solid hsla(142, 60%, 40%, 0.3);
+}
+.badge-pro {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: hsla(13, 80%, 55%, 0.15);
+  color: hsl(13, 80%, 55%);
+  border: 1px solid hsla(13, 80%, 55%, 0.3);
+}
+
+/* ── Manifest fields table ── */
+.manifest-table th:first-child { width: 180px; }
+.manifest-table td code { font-size: 0.8em; }
