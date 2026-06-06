@@ -1,6 +1,11 @@
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({
+  vite: {
+    server: {
+      allowedHosts: true,
+    },
+  },
   ignoreDeadLinks: true,
   title: 'UHQ Panel OS',
   description: 'Documentation officielle — Panel proxy & système d\'addons',
