@@ -168,7 +168,7 @@ Ces paramètres définissent ce qui est **affiché aux clients** pour se connect
 
 ---
 
-## Webhooks (Discord / Slack)
+## Webhooks (Discord / Slack / BloumeChat)
 
 ### Discord
 
@@ -184,7 +184,16 @@ Ces paramètres définissent ce qui est **affiché aux clients** pour se connect
 | `slackAlertsEnabled` | `false` | Active les notifications Slack |
 | `slackWebhookUrl` | — | URL du webhook Slack |
 
-Les notifications sont envoyées lors d'événements importants : proxy mort, seuil de pool bas, etc.
+### BloumeChat
+
+| Paramètre | Défaut | Description |
+|---|---|---|
+| `bloumechatAlertsEnabled` | `false` | Active les notifications BloumeChat |
+| `bloumechatWebhookUrl` | — | URL du webhook BloumeChat (format `https://bloumechat.com/api/v2/webhooks/<id>/<token>`) |
+
+Chaque service dispose d'un bouton **Tester le webhook** dans le panel (Settings → Webhooks) qui envoie un message de test immédiat sur l'URL **enregistrée** (pensez à sauvegarder avant de tester).
+
+Les notifications sont envoyées lors d'événements importants : proxy mort, seuil de pool bas, quota dépassé, etc.
 
 ---
 
