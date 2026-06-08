@@ -21,7 +21,7 @@ Il combine dans une **image Docker unique** :
 │  │  Panel React  │   │   Sticky / Rotation    │ │
 │  └──────────────┘   └────────────────────────┘ │
 │                                                │
-│  PostgreSQL externe via DATABASE_URL           │
+│  PostgreSQL embarqué (Docker) ou externe       │
 └────────────────────────────────────────────────┘
          ↕  /uhq-manifest.json
 ┌─────────────────────────────────────────────────┐
