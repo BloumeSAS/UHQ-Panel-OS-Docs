@@ -2,11 +2,18 @@
 
 ## v2.0.x
 
+### v2.0.6
+- Fix : les paramètres `bloumechatWebhookUrl`, `bloumechatAlertsEnabled`, `skipDeadProxies` et `deadProxyMaxRetries` n'étaient pas enregistrés (absents de la liste blanche `UpdateSettingsDto` → supprimés par la `ValidationPipe`). Le panel affichait « enregistré » sans rien persister. Corrigé.
+
 ### v2.0.5
 - Checker : incrémentation du `failCount` à chaque vérification échouée, reset à 0 si le proxy repasse actif
-- Scraper : les proxies définitivement morts (`failCount ≥ maxRetries`) ne sont plus réactivés lors du re-scraping
-- Pool : colonne `Échecs`, filtre par statut (actifs / morts / définitifs), bouton de réactivation individuelle et en masse
-- Settings : nouveaux paramètres `skipDeadProxies` et `deadProxyMaxRetries`
+- Scraper : les proxies définitivement morts (`failCount ≥ maxRetries`) ne sont plus réactivés lors du re-scraping ; édition d'une source via une boîte de dialogue dédiée
+- Pool : colonne `Échecs`, filtre par statut (actifs / morts / définitifs), réactivation individuelle et en masse ; bascule blacklist par proxy ; export du pool en texte (`ip:port[:user:pass]`)
+- Utilisateurs panel : CRUD complet (édition e-mail / rôle / mot de passe / expiration / actif, colonne « créé le »)
+- Sous-utilisateurs : réinitialisation du trafic, copie des identifiants, sélection multiple + actions en masse (bloquer / débloquer / reset trafic / supprimer)
+- Webhooks : bouton « Tester le webhook » (Discord, Slack) et **nouveau provider BloumeChat**
+- Settings : nouveaux paramètres `skipDeadProxies`, `deadProxyMaxRetries`, `bloumechatWebhookUrl`, `bloumechatAlertsEnabled`
+- API : messages de réponse traduits (namespace i18n `info`, fr + en)
 - Docker : port proxy hardcodé `990:990/tcp` (plus de variable d'expansion fragile), `PROXY_PORT` et `API_PORT` injectés explicitement
 - Docs : pages `configuration`, `docker`, `api/zones`, `api/icons` créées ; `installation` mise à jour
 
