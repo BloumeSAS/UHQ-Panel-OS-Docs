@@ -75,6 +75,7 @@ Stocke le manifest en cache (DB)
 | Addon | Description | Licence |
 |---|---|---|
 | [Wallet](/addons/official/wallet) | Système de solde par compte proxy | <span class="badge-free">✓ Gratuit</span> |
+| [Orders](/addons/official/orders) | Boutique interne — commandes payées avec le solde Wallet | <span class="badge-free">✓ Gratuit</span> |
 
 ---
 
