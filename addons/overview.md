@@ -72,10 +72,24 @@ Stocke le manifest en cache (DB)
 
 ## Addons officiels
 
-| Addon | Description | Licence |
-|---|---|---|
-| [Wallet](/addons/official/wallet) | Système de solde par compte proxy | <span class="badge-free">✓ Gratuit</span> |
-| [Orders](/addons/official/orders) | Boutique interne — commandes payées avec le solde Wallet | <span class="badge-free">✓ Gratuit</span> |
+Ces addons sont **gratuits**, open-source (MIT), publiés par Bloume SAS et visibles directement dans l'onglet **Extensions** du panel (`Admin → Extensions`).
+
+| Addon | Version | Description | Dépend de | Licence |
+|---|---|---|---|---|
+| [Wallet](/addons/official/wallet) | v1.1.0 | Système de solde par compte proxy | — | <span class="badge-free">✓ Gratuit</span> |
+| [Orders](/addons/official/orders) | v1.1.0 | Boutique interne — commandes et livraison automatique de proxies | Wallet | <span class="badge-free">✓ Gratuit</span> |
+
+### Déploiement
+
+Chaque addon est livré avec un `Dockerfile` et un `docker-compose.coolify.yml` prêts à l'emploi.  
+Déployez sur Coolify (ou tout hôte Docker), configurez les variables d'environnement, puis connectez l'URL depuis le panel.
+
+Variables communes à tous les addons :
+
+| Variable | Description |
+|---|---|
+| `PANEL_URL` | URL publique du panel (ex : `https://panel.dom.com`) |
+| `PANEL_API_KEY` | Clé API du panel (`Admin → Paramètres → Clé API`) |
 
 ---
 
