@@ -25,7 +25,7 @@ export default defineConfig({
       { text: 'Addons', link: '/addons/overview' },
       { text: 'API', link: '/api/manifest' },
       {
-        text: 'v2.0.6',
+        text: 'v2.0.9',
         items: [
           { text: 'Changelog', link: '/changelog' },
           { text: 'GitHub', link: 'https://github.com/bloumesas/uhq-panel-os' },
