@@ -25,7 +25,7 @@ export default defineConfig({
       { text: 'Addons', link: '/addons/overview' },
       { text: 'API', link: '/api/manifest' },
       {
-        text: 'v2.0.9',
+        text: 'v2.0.11',
         items: [
           { text: 'Changelog', link: '/changelog' },
           { text: 'GitHub', link: 'https://github.com/bloumesas/uhq-panel-os' },
@@ -42,6 +42,7 @@ export default defineConfig({
             { text: 'Installation', link: '/guide/installation' },
             { text: 'Configuration', link: '/guide/configuration' },
             { text: 'Docker & Coolify', link: '/guide/docker' },
+            { text: 'Proxy Pools (catégories)', link: '/guide/proxy-pools' },
           ],
         },
       ],

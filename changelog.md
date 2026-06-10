@@ -2,6 +2,15 @@
 
 ## v2.0.x
 
+### v2.0.11
+- **Proxy Pools — catégories de proxies** : nouveau module permettant de segmenter le stock en pools nommés (Datacenter, Résidentiel, Mobile…).
+  - Page dédiée **Proxy Pools** (menu latéral) : CRUD complet avec couleur personnalisable.
+  - Champ **Pool** sur les proxies importés, les sources de scraping et les sous-utilisateurs.
+  - Le scraper propage automatiquement le pool lors de l'ingestion : les proxies scrapés héritent du pool de leur source.
+  - Le moteur proxy filtre le cache upstream par `pool` dès qu'un sous-utilisateur est assigné — les listes privées (`customProxies`) restent indépendantes.
+  - Filtre par pool dans la page **Pool de proxies** et badge pool dans **Sous-utilisateurs**.
+  - API REST admin : `GET/POST /api/panel/proxy-pools`, `PATCH/DELETE /api/panel/proxy-pools/:id`.
+
 ### v2.0.10
 - **Scraper — auto-détection du protocole** : nouveau mode `Auto-détection` (valeur `auto`) dans les sources de scraping.  
   - Si le contenu retourné contient des URLs avec schéma explicite (`http://ip:port`, `socks5://ip:port`), le protocole est lu directement depuis le contenu.  
