@@ -55,6 +55,24 @@ Dès que le sous-utilisateur est assigné :
 2. Si le pool est vide ou inexistant, la connexion est rejetée (aucun upstream disponible).
 3. Les listes privées (`customProxies`) **ignorent** le pool — elles sont toujours utilisées telles quelles.
 
+## Ports dédiés
+
+En plus du port partagé (`990` par défaut, inchangé), un **pool** ou un **sous-utilisateur** peut recevoir un port TCP dédié, personnalisable entre **9000 et 9100** (plage publiée par Docker — voir [Docker & Coolify](/guide/docker#ports-dédiés)).
+
+### Port dédié à un pool
+
+Dans **Proxy Pools → Créer / Modifier**, renseignez un **Port dédié**. Toute connexion authentifiée sur ce port utilise **cette pool**, même si le compte qui se connecte a une autre catégorie par défaut — un seul compte peut ainsi accéder à plusieurs catégories simplement en changeant de port (ex. `:9001` → Mobile, `:9002` → Datacenter).
+
+### Port dédié à un sous-utilisateur
+
+Dans **Sous-utilisateurs → Créer / Modifier**, renseignez un **Port dédié**. C'est une **voie exclusive** : toute autre identification (même valide ailleurs) est rejetée sur ce port. Le comportement est sinon strictement identique au port partagé (même résolution de pool, mêmes sessions, mêmes quotas) — l'authentification reste obligatoire, ce port ne la contourne pas.
+
+::: warning Plage de ports
+Un port hors de 9000-9100 est refusé par l'API. Si vous avez besoin d'une autre plage, élargissez-la dans `docker-compose.yml` (`ports:` + `PROXY_PORT_RANGE`) **avant** de redéployer — voir [Docker & Coolify](/guide/docker#ports-dédiés).
+:::
+
+Les ports s'activent et se désactivent **en live** dès l'enregistrement dans le panel, sans redémarrage de l'API.
+
 ## API REST (admin)
 
 | Méthode | Endpoint | Description |
@@ -74,7 +92,8 @@ Content-Type: application/json
 {
   "name": "Résidentiel",
   "description": "IPs résidentielles FR/DE",
-  "color": "#10b981"
+  "color": "#10b981",
+  "port": 9002
 }
 ```
 
@@ -86,8 +105,11 @@ model ProxyPool {
   name        String   @unique
   description String?
   color       String?  @default("#6366f1")
+  port        Int?     @unique
   createdAt   DateTime @default(now())
 }
 ```
 
 Le champ `pool String?` est ajouté sur `BackendProxy`, `UserProxy` et `ScraperSource`. C'est une **dénormalisation intentionnelle** (le nom est stocké directement, sans FK) pour simplifier les requêtes et les filtres du moteur.
+
+Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié au compte — voir [Ports dédiés](#ports-dédiés) ci-dessus). `null` = pas de port dédié.
