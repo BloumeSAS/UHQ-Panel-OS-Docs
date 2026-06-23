@@ -93,6 +93,58 @@ Exemple : un compte sans domaine propre, assigné à la pool « Mobile » (domai
 Un domaine n'est pas un port : aucune unicité ni plage requise (plusieurs pools/comptes peuvent partager le même domaine s'il pointe vers la même instance).
 :::
 
+### Où cette résolution s'applique
+
+La cascade (compte → pool → réglages globaux) est utilisée par **tous** les endpoints qui renvoient une connexion à un compte :
+
+- Panel : `GET /api/panel/subusers/:id/sticky-list`, `GET /api/panel/me/proxies/:id/sticky-list`, ainsi que les listes (`effective_host`/`effective_port` en plus des champs bruts `port`/`domain`).
+- API legacy (`/api/v1`) : `GET /api/v1/sub-user/list`, `GET /api/v1/sub-user/get-sticky-proxies`, `GET /api/v1/me/proxies`, `GET /api/v1/me/proxies/sticky-list` — tous renvoient désormais `host`/`port` résolus, jamais juste la valeur globale brute.
+
+Chaque liste sticky inclut aussi un format **rotatif** sans session (`rotating: "username:password@host:port"`), pratique pour les clients qui n'ont pas besoin du `host:port:user:session:pass` complet.
+
+## Toujours en ligne (stats simulées)
+
+Une pool peut être marquée **Toujours en ligne** : ses `BackendProxy` ne sont alors jamais testés par le checker (donc jamais marqués KO/morts), et l'API legacy peut afficher des statistiques **simulées** pour cette catégorie — utile pour présenter une offre « géolocalisée » sans dépendre du stock réel scrapé.
+
+### Comportement du checker
+
+- Les proxies d'une pool `alwaysOnline` sont **exclus** de chaque cycle de vérification (jamais testés en masse).
+- Au début de chaque cycle, tout proxy de cette pool encore marqué mort est **forcé** `isWorking = true`.
+- Le bouton **Tester** (test manuel par proxy) exécute toujours le vrai test (diagnostic visible), mais le résultat persisté ne marque jamais ce proxy KO si sa pool est `alwaysOnline`.
+- Le scraper, lui, ne marque déjà rien mort de son côté (seul le checker teste la connectivité réelle) — aucun changement nécessaire à ce niveau.
+
+### Pays et nombre d'IP simulés
+
+Dans **Proxy Pools → Créer / Modifier**, une fois **Toujours en ligne** activé :
+
+| Champ | Description |
+|---|---|
+| Pays affichés | Codes ISO 2 lettres séparés par des virgules (ex. `FR,DE,US,GB`) |
+| Nombre d'IP | **Valeur fixe** (un nombre) ou **Aléatoire** (une plage, ex. 100 000–300 000) |
+
+En mode aléatoire, le nombre est **tiré une seule fois** dans la plage et reste stable (pas de valeur qui change à chaque requête) — il n'est re-tiré que si vous modifiez la plage elle-même.
+
+### Impact sur l'API legacy
+
+`GET /api/v1/common/category-stats?pool=<nom>` renvoie, pour une pool `alwaysOnline` configurée, des stats **synthétiques** réparties sur les pays déclarés (répartition déterministe, pas uniforme, stable entre les appels) au lieu des vraies données issues de `BackendProxy` :
+
+```json
+{
+  "status": "success",
+  "pool": "Résidentiel Premium",
+  "data": {
+    "countries_count": 4,
+    "ip_count": 247813,
+    "proxy_count": 247813,
+    "by_country": { "US": 89421, "FR": 71204, "DE": 52188, "GB": 35000 }
+  }
+}
+```
+
+::: warning Purement déclaratif
+Ces stats n'ajoutent ni ne déplacent aucun `BackendProxy` réel — c'est uniquement ce que `category-stats` affiche. Les autres endpoints (`pool_stats`, `countries`, `proxies`) ne sont pas concernés et continuent de refléter les données réelles.
+:::
+
 ## API REST (admin)
 
 | Méthode | Endpoint | Description |
@@ -114,7 +166,11 @@ Content-Type: application/json
   "description": "IPs résidentielles FR/DE",
   "color": "#10b981",
   "port": 9002,
-  "domain": "residential.example.com"
+  "domain": "residential.example.com",
+  "alwaysOnline": true,
+  "fakeCountries": "FR,DE,US,GB",
+  "fakeIpCountMin": 100000,
+  "fakeIpCountMax": 300000
 }
 ```
 
@@ -122,16 +178,21 @@ Content-Type: application/json
 
 ```prisma
 model ProxyPool {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  description String?
-  color       String?  @default("#6366f1")
-  port        Int?     @unique
-  domain      String?
-  createdAt   DateTime @default(now())
+  id             String   @id @default(cuid())
+  name           String   @unique
+  description    String?
+  color          String?  @default("#6366f1")
+  port           Int?     @unique
+  domain         String?
+  alwaysOnline   Boolean  @default(false)
+  fakeCountries  String?
+  fakeIpCountMin Int?
+  fakeIpCountMax Int?
+  fakeIpCount    Int?
+  createdAt      DateTime @default(now())
 }
 ```
 
 Le champ `pool String?` est ajouté sur `BackendProxy`, `UserProxy` et `ScraperSource`. C'est une **dénormalisation intentionnelle** (le nom est stocké directement, sans FK) pour simplifier les requêtes et les filtres du moteur.
 
-Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `null` = pas de valeur dédiée, fallback sur les settings globaux.
+Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `alwaysOnline`/`fakeCountries`/`fakeIpCountMin`/`fakeIpCountMax`/`fakeIpCount` sont spécifiques à `ProxyPool` — voir [Toujours en ligne](#toujours-en-ligne-stats-simulées) ci-dessus. `null`/`false` = pas de valeur dédiée, fallback sur les settings globaux.
