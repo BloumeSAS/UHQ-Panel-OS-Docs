@@ -31,7 +31,7 @@ services:
         condition: service_healthy
     ports:
       - "990:990/tcp"              # Proxy TCP — bindé sur l'hôte
-      - "9000-9100:9000-9100/tcp"  # Ports dédiés (pools / sous-utilisateurs)
+      - "9000-9999:9000-9999/tcp"  # Ports dédiés (pools / sous-utilisateurs)
     expose:
       - "8000"             # HTTP — géré par Traefik via le réseau interne
     labels:
@@ -46,7 +46,7 @@ services:
       TZ: Europe/Paris
       PROXY_PORT: "990"
       API_PORT: "8000"
-      PROXY_PORT_RANGE: "9000-9100"
+      PROXY_PORT_RANGE: "9000-9999"
     volumes:
       - appdata:/app/data
 
@@ -65,7 +65,7 @@ volumes:
 |---|---|---|---|
 | `8000` | HTTP | Panel web + API REST | Via Traefik (réseau Docker interne), pas de binding hôte |
 | `990` | TCP | Moteur proxy (port partagé, défaut) | Bindé directement sur l'hôte (`ports:`) |
-| `9000-9100` | TCP | Ports dédiés (pools / sous-utilisateurs) | Plage pré-publiée sur l'hôte (`ports:`) |
+| `9000-9999` | TCP | Ports dédiés (pools / sous-utilisateurs) | Plage pré-publiée sur l'hôte (`ports:`) |
 
 ::: info Pourquoi séparer les ports ?
 Le port `990` est un proxy TCP brut (HTTP CONNECT) — Traefik ne sait pas le router. Il doit être accessible directement. Le port `8000` est du HTTP normal que Traefik intercepte et auquel il ajoute HTTPS + domaine.
@@ -77,11 +77,15 @@ Le port `990` est un proxy TCP brut (HTTP CONNECT) — Traefik ne sait pas le ro
 
 Depuis la v2.0.14, un [pool ou un sous-utilisateur](/guide/proxy-pools#ports-dédiés) peut recevoir un port TCP dédié en plus du port partagé `990`.
 
-Docker ne peut publier que des ports déclarés au **démarrage du conteneur** — il est impossible d'en ouvrir de nouveaux à la volée sans modifier `docker-compose.yml` et redéployer. La stratégie retenue : **pré-publier une plage une fois** (`9000-9100` ci-dessus), puis assigner dynamiquement des ports à l'intérieur de cette plage depuis le panel, sans redéploiement.
+Docker ne peut publier que des ports déclarés au **démarrage du conteneur** — il est impossible d'en ouvrir de nouveaux à la volée sans modifier `docker-compose.yml` et redéployer. La stratégie retenue : **pré-publier une plage une fois** (`9000-9999` ci-dessus), puis assigner dynamiquement des ports à l'intérieur de cette plage depuis le panel, sans redéploiement.
 
-- L'API refuse tout port hors de `9000-9100` (`PROXY_PORT_RANGE`).
+- L'API refuse tout port hors de `9000-9999` (`PROXY_PORT_RANGE`).
 - Pour utiliser une plage différente : élargissez-la dans `docker-compose.yml` (`ports:`) **et** dans `PROXY_PORT_RANGE`, puis redéployez. Les deux doivent rester cohérents.
 - Un port assigné dans la plage publiée est actif **en live** (sans redémarrage de l'API) dès l'enregistrement dans le panel.
+
+::: tip Domaine dédié (DNS uniquement)
+Depuis la v2.0.15, un pool ou un sous-utilisateur peut aussi recevoir un **domaine** affiché dans ses connexions, en plus du port — voir [Domaine dédié](/guide/proxy-pools#domaine-dédié). Contrairement au port, ça ne nécessite **aucune configuration Docker** : il suffit que le domaine choisi pointe (DNS) vers la même IP que `publicProxyHost` aujourd'hui — même logique que la section [DNS et Cloudflare](#dns-et-cloudflare) ci-dessous.
+:::
 
 ---
 

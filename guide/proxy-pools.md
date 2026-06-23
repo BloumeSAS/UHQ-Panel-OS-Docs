@@ -57,7 +57,7 @@ Dès que le sous-utilisateur est assigné :
 
 ## Ports dédiés
 
-En plus du port partagé (`990` par défaut, inchangé), un **pool** ou un **sous-utilisateur** peut recevoir un port TCP dédié, personnalisable entre **9000 et 9100** (plage publiée par Docker — voir [Docker & Coolify](/guide/docker#ports-dédiés)).
+En plus du port partagé (`990` par défaut, inchangé), un **pool** ou un **sous-utilisateur** peut recevoir un port TCP dédié, personnalisable entre **9000 et 9999** (plage publiée par Docker — voir [Docker & Coolify](/guide/docker#ports-dédiés)).
 
 ### Port dédié à un pool
 
@@ -68,10 +68,30 @@ Dans **Proxy Pools → Créer / Modifier**, renseignez un **Port dédié**. Tout
 Dans **Sous-utilisateurs → Créer / Modifier**, renseignez un **Port dédié**. C'est une **voie exclusive** : toute autre identification (même valide ailleurs) est rejetée sur ce port. Le comportement est sinon strictement identique au port partagé (même résolution de pool, mêmes sessions, mêmes quotas) — l'authentification reste obligatoire, ce port ne la contourne pas.
 
 ::: warning Plage de ports
-Un port hors de 9000-9100 est refusé par l'API. Si vous avez besoin d'une autre plage, élargissez-la dans `docker-compose.yml` (`ports:` + `PROXY_PORT_RANGE`) **avant** de redéployer — voir [Docker & Coolify](/guide/docker#ports-dédiés).
+Un port hors de 9000-9999 est refusé par l'API. Si vous avez besoin d'une autre plage, élargissez-la dans `docker-compose.yml` (`ports:` + `PROXY_PORT_RANGE`) **avant** de redéployer — voir [Docker & Coolify](/guide/docker#ports-dédiés).
 :::
 
 Les ports s'activent et se désactivent **en live** dès l'enregistrement dans le panel, sans redémarrage de l'API.
+
+## Domaine dédié
+
+En plus du port, un **pool** ou un **sous-utilisateur** peut recevoir un **domaine** affiché dans ses listes/connexions (ex. `mobile.example.com`) — utile pour présenter une offre sous votre propre marque/domaine plutôt que l'hôte global.
+
+C'est **purement informatif (DNS)** : contrairement au port, le domaine ne change rien au bind réseau réel du moteur — il faut juste que ce domaine pointe (DNS `A`/`CNAME`) vers la même IP que votre instance, exactement comme `publicProxyHost` aujourd'hui.
+
+### Résolution
+
+Pour un compte qui se connecte, le `host:port` affiché dans une liste sticky (ou via le générateur de format de **Mes Proxies**) est résolu en cascade :
+
+1. Le domaine/port **propre au compte**, si renseigné.
+2. Sinon, le domaine/port de **sa pool** (si assignée et renseigné).
+3. Sinon, `publicProxyHost`/`publicProxyPort` (Settings > Proxy public).
+
+Exemple : un compte sans domaine propre, assigné à la pool « Mobile » (domaine `mobile.example.com`, port `9114`), reçoit des listes au format `mobile.example.com:9114:user:session:pass` — sans rien configurer sur le compte lui-même.
+
+::: tip Comme le port, mais sans contrainte de plage
+Un domaine n'est pas un port : aucune unicité ni plage requise (plusieurs pools/comptes peuvent partager le même domaine s'il pointe vers la même instance).
+:::
 
 ## API REST (admin)
 
@@ -93,7 +113,8 @@ Content-Type: application/json
   "name": "Résidentiel",
   "description": "IPs résidentielles FR/DE",
   "color": "#10b981",
-  "port": 9002
+  "port": 9002,
+  "domain": "residential.example.com"
 }
 ```
 
@@ -106,10 +127,11 @@ model ProxyPool {
   description String?
   color       String?  @default("#6366f1")
   port        Int?     @unique
+  domain      String?
   createdAt   DateTime @default(now())
 }
 ```
 
 Le champ `pool String?` est ajouté sur `BackendProxy`, `UserProxy` et `ScraperSource`. C'est une **dénormalisation intentionnelle** (le nom est stocké directement, sans FK) pour simplifier les requêtes et les filtres du moteur.
 
-Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié au compte — voir [Ports dédiés](#ports-dédiés) ci-dessus). `null` = pas de port dédié.
+Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `null` = pas de valeur dédiée, fallback sur les settings globaux.
