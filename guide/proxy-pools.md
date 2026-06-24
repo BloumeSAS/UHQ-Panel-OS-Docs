@@ -102,9 +102,9 @@ La cascade (compte → pool → réglages globaux) est utilisée par **tous** le
 
 Chaque liste sticky inclut aussi un format **rotatif** sans session (`rotating: "username:password@host:port"`), pratique pour les clients qui n'ont pas besoin du `host:port:user:session:pass` complet.
 
-## Toujours en ligne (stats simulées)
+## Toujours en ligne
 
-Une pool peut être marquée **Toujours en ligne** : ses `BackendProxy` ne sont alors jamais testés par le checker (donc jamais marqués KO/morts), et l'API legacy peut afficher des statistiques **simulées** pour cette catégorie — utile pour présenter une offre « géolocalisée » sans dépendre du stock réel scrapé.
+Une pool peut être marquée **Toujours en ligne** : ses `BackendProxy` ne sont alors jamais testés par le checker (donc jamais marqués KO/morts) — ils restent affichés **OK** dans le Pool de proxies. Ce réglage est **indépendant** des pays/IP en plus ci-dessous : il ne contrôle que le comportement du checker, rien côté stats.
 
 ### Comportement du checker
 
@@ -113,9 +113,11 @@ Une pool peut être marquée **Toujours en ligne** : ses `BackendProxy` ne sont 
 - Le bouton **Tester** (test manuel par proxy) exécute toujours le vrai test (diagnostic visible), mais le résultat persisté ne marque jamais ce proxy KO si sa pool est `alwaysOnline`.
 - Le scraper, lui, ne marque déjà rien mort de son côté (seul le checker teste la connectivité réelle) — aucun changement nécessaire à ce niveau.
 
-### Pays et nombre d'IP simulés
+## Pays et nombre d'IP en plus (stats simulées)
 
-Dans **Proxy Pools → Créer / Modifier**, une fois **Toujours en ligne** activé :
+**Indépendamment de "Toujours en ligne"** (pas besoin de l'activer), n'importe quelle pool peut déclarer des pays et un nombre d'IP **en plus** de ses vraies stats — utile pour présenter une couverture géographique élargie sans dépendre uniquement du stock réel scrapé.
+
+Dans **Proxy Pools → Créer / Modifier** :
 
 | Champ | Description |
 |---|---|
@@ -124,9 +126,13 @@ Dans **Proxy Pools → Créer / Modifier**, une fois **Toujours en ligne** activ
 
 En mode aléatoire, le nombre est **tiré une seule fois** dans la plage et reste stable (pas de valeur qui change à chaque requête) — il n'est re-tiré que si vous modifiez la plage elle-même.
 
+::: tip Additif, jamais un remplacement
+Les pays/IP déclarés ici s'**ajoutent** aux vraies stats de la pool — une pool sans aucun vrai proxy n'affichera donc que les chiffres simulés, tandis qu'une pool avec du vrai stock affichera réel + simulé combinés (par pays).
+:::
+
 ### Impact sur l'API legacy
 
-`GET /api/v1/common/category-stats?pool=<nom>` renvoie, pour une pool `alwaysOnline` configurée, des stats **synthétiques** réparties sur les pays déclarés (répartition déterministe, pas uniforme, stable entre les appels) au lieu des vraies données issues de `BackendProxy` :
+`GET /api/v1/common/category-stats?pool=<nom>` renvoie, pour une pool ayant des pays/IP en plus configurés, les vraies stats **augmentées** des chiffres simulés (répartition déterministe par pays, pas uniforme, stable entre les appels) :
 
 ```json
 {
@@ -195,4 +201,4 @@ model ProxyPool {
 
 Le champ `pool String?` est ajouté sur `BackendProxy`, `UserProxy` et `ScraperSource`. C'est une **dénormalisation intentionnelle** (le nom est stocké directement, sans FK) pour simplifier les requêtes et les filtres du moteur.
 
-Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `alwaysOnline`/`fakeCountries`/`fakeIpCountMin`/`fakeIpCountMax`/`fakeIpCount` sont spécifiques à `ProxyPool` — voir [Toujours en ligne](#toujours-en-ligne-stats-simulées) ci-dessus. `null`/`false` = pas de valeur dédiée, fallback sur les settings globaux.
+Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `alwaysOnline`/`fakeCountries`/`fakeIpCountMin`/`fakeIpCountMax`/`fakeIpCount` sont spécifiques à `ProxyPool` — voir [Toujours en ligne](#toujours-en-ligne) et [Pays et nombre d'IP en plus](#pays-et-nombre-d-ip-en-plus-stats-simulées) ci-dessus. `null`/`false` = pas de valeur dédiée, fallback sur les settings globaux.

@@ -2,6 +2,16 @@
 
 ## v2.0.x
 
+### v2.0.17
+- **Pays/IP simulés découplés de "Toujours en ligne"** : `fakeCountries`/`fakeIpCount` fonctionnent désormais sur **n'importe quelle pool**, sans activer `alwaysOnline`. Les chiffres simulés s'**ajoutent** aux vraies stats (jamais un remplacement) — une pool sans aucun vrai proxy n'affiche que le simulé, une pool avec du vrai stock affiche réel + simulé combiné. `alwaysOnline` reste un réglage indépendant, qui ne contrôle plus que le comportement du checker.
+- **Anti-spam scraper renforcé** : la validation IPv4 stricte (déjà ajoutée pour le checker) couvre maintenant aussi les 3 étapes de détection du scraper (regex personnalisée, `parseProxyList`, scan brut) — une source renvoyant du texte pollué (export Tor, etc.) ne peut plus faire entrer de fausses entrées `ip:port` dans le pool.
+- **Notifications du panel** : remplacement du système maison (event-bus + composant custom) par [sonner](https://sonner.emilkowal.ski/) (shadcn/ui) — rendu plus moderne (couleurs riches par type, empilement, thème clair/sombre auto). Même API `toast.success/error/info/warning(...)` côté code, rien à changer dans les pages existantes.
+- **Performances de l'API panel** :
+  - Nouveaux index DB (`BackendProxy.isWorking/isBlacklisted/provider`, `ProxyUsage.userProxyId+date/date`).
+  - `monitoring/live`, `monitoring/pool`, `monitoring/countries` et `monitoring/reports` agrègent désormais côté base (`groupBy`/`aggregate`) au lieu de charger tout le pool de proxies ou tout l'historique de trafic en mémoire pour les sommer en JS.
+  - `me/proxies/:id/usage` : sommes calculées en DB, plus de chargement illimité de lignes pour ne garder que les 100 affichées.
+  - Nettoyage des entrées malformées du checker batché (un seul lot) au lieu d'un appel DB par ligne.
+
 ### v2.0.16
 - **Pools "Toujours en ligne" + stats simulées** : une pool peut être marquée pour que ses proxies ne soient **jamais** testés/marqués KO par le checker (forcés en ligne à chaque cycle ; le test manuel "Tester" reste un vrai diagnostic mais ne marque jamais KO en DB pour ces pools).
   - Pays simulés (codes ISO) + nombre d'IP simulé (valeur fixe ou plage aléatoire tirée une fois, stable) configurables par pool.
