@@ -2,6 +2,11 @@
 
 ## v2.0.x
 
+### v2.0.18
+- **Fix : suppression définitive de proxies KO** — une tâche d'arrière-plan purgeait toutes les 12h (et pour toujours) les proxies `isWorking=false` en base, y compris des proxies manuels valides (hostname) temporairement indisponibles. Cette purge automatique a été **retirée**.
+- **Nouveau : archivage des proxies morts définitifs** — un proxy ayant atteint `deadProxyMaxRetries` échecs consécutifs est désormais marqué `archived` (au lieu d'être supprimé) : plus jamais re-testé par le checker, plus jamais réactivé/écrasé par un re-scrape. Seule une suppression manuelle depuis le panel (Pool) peut encore le faire sortir de la base.
+- **Traductions manquantes du journal d'audit** (`/audit`) : les actions (`pool.update`, `auth.login`, `proxy.delete`, etc.) sont désormais traduites en FR/EN au lieu d'afficher la clé technique brute.
+
 ### v2.0.17
 - **Pays/IP simulés découplés de "Toujours en ligne"** : `fakeCountries`/`fakeIpCount` fonctionnent désormais sur **n'importe quelle pool**, sans activer `alwaysOnline`. Les chiffres simulés s'**ajoutent** aux vraies stats (jamais un remplacement) — une pool sans aucun vrai proxy n'affiche que le simulé, une pool avec du vrai stock affiche réel + simulé combiné. `alwaysOnline` reste un réglage indépendant, qui ne contrôle plus que le comportement du checker.
 - **Anti-spam scraper renforcé** : la validation IPv4 stricte (déjà ajoutée pour le checker) couvre maintenant aussi les 3 étapes de détection du scraper (regex personnalisée, `parseProxyList`, scan brut) — une source renvoyant du texte pollué (export Tor, etc.) ne peut plus faire entrer de fausses entrées `ip:port` dans le pool.
