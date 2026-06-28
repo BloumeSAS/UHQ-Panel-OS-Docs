@@ -2,6 +2,12 @@
 
 ## v2.0.x
 
+### v2.0.19
+- **Fix : pays/IP simulés invisibles dans le panel sans "Toujours en ligne"** — `fakeCountries`/`fakeIpCount` fonctionnent depuis v2.0.17 indépendamment d'`alwaysOnline`, mais la page **Proxy Pools** ne montrait le badge récapitulatif (pays · nb d'IP) que si `alwaysOnline` était activé. Badge dédié désormais affiché dès qu'un nombre d'IP simulé est configuré, peu importe ce réglage.
+- **Fix : `GET /api/v1/common/category-stats?pool=`** plus robuste — le nom de pool passé en query est désormais nettoyé (`trim`) avant la recherche, évitant qu'un espace parasite empêche silencieusement l'ajout des stats simulées.
+- **Sécurité — moteur proxy (`:990`)** : la vérification du mot de passe des sous-utilisateurs utilisait une comparaison de chaîne classique (`!==`), vulnérable à une attaque temporelle. Remplacée par une comparaison à temps constant (`crypto.timingSafeEqual`), comme c'était déjà le cas pour les clés API.
+- **Sécurité — fuite de JWT par URL** : le guard JWT global (`/api/panel/*`) acceptait le token via `?token=` sur **toutes** les routes protégées, alors que ce fallback n'était nécessaire que pour deux cas précis (doc API embarquée, flux SSE). Un token transmis en query string se retrouve dans les logs serveur, l'historique navigateur et l'en-tête `Referer` envoyé à des tiers. Le fallback générique est retiré du guard ; `GET /docs/spec` valide désormais son token lui-même (même schéma que `logs/stream`), sans rien casser pour la doc embarquée.
+
 ### v2.0.18
 - **Fix : suppression définitive de proxies KO** — une tâche d'arrière-plan purgeait toutes les 12h (et pour toujours) les proxies `isWorking=false` en base, y compris des proxies manuels valides (hostname) temporairement indisponibles. Cette purge automatique a été **retirée**.
 - **Nouveau : archivage des proxies morts définitifs** — un proxy ayant atteint `deadProxyMaxRetries` échecs consécutifs est désormais marqué `archived` (au lieu d'être supprimé) : plus jamais re-testé par le checker, plus jamais réactivé/écrasé par un re-scrape. Seule une suppression manuelle depuis le panel (Pool) peut encore le faire sortir de la base.
