@@ -124,7 +124,14 @@ Dans **Proxy Pools → Créer / Modifier** :
 | Pays affichés | Codes ISO 2 lettres séparés par des virgules (ex. `FR,DE,US,GB`) |
 | Nombre d'IP | **Valeur fixe** (un nombre) ou **Aléatoire** (une plage, ex. 100 000–300 000) |
 
-En mode aléatoire, le nombre est **tiré une seule fois** dans la plage et reste stable (pas de valeur qui change à chaque requête) — il n'est re-tiré que si vous modifiez la plage elle-même.
+::: tip Chaque pays a son propre nombre d'IP
+Depuis la v2.0.20, la plage configurée n'est **pas** un total partagé réparti entre les pays listés : **chaque pays tire son propre nombre indépendamment** dans `[min, max]`. Ajouter un pays à la liste lui donne immédiatement son propre tirage, sans changer les chiffres déjà affichés pour les autres pays.
+:::
+
+En mode aléatoire, le nombre de chaque pays est **tiré une seule fois** et reste stable (pas de valeur qui change à chaque requête) — il n'est re-tiré que si :
+- vous modifiez la plage min/max (tous les pays sont alors re-tirés dans la nouvelle plage) ;
+- le pays vient d'être ajouté à la liste (lui seul reçoit un nouveau tirage, les autres restent stables) ;
+- vous cliquez sur le bouton **Régénérer les IP simulées** (dans le dialogue de modification) — il force un nouveau tirage pour **tous** les pays déjà configurés, sans toucher à la plage.
 
 ::: tip Additif, jamais un remplacement
 Les pays/IP déclarés ici s'**ajoutent** aux vraies stats de la pool — une pool sans aucun vrai proxy n'affichera donc que les chiffres simulés, tandis qu'une pool avec du vrai stock affichera réel + simulé combinés (par pays).
@@ -132,7 +139,7 @@ Les pays/IP déclarés ici s'**ajoutent** aux vraies stats de la pool — une po
 
 ### Impact sur l'API legacy
 
-`GET /api/v1/common/category-stats?pool=<nom>` renvoie, pour une pool ayant des pays/IP en plus configurés, les vraies stats **augmentées** des chiffres simulés (répartition déterministe par pays, pas uniforme, stable entre les appels) :
+`GET /api/v1/common/category-stats?pool=<nom>` renvoie, pour une pool ayant des pays/IP en plus configurés, les vraies stats **augmentées** des chiffres simulés (un total indépendant par pays, stable entre les appels) :
 
 ```json
 {
@@ -158,6 +165,7 @@ Ces stats n'ajoutent ni ne déplacent aucun `BackendProxy` réel — c'est uniqu
 | `GET` | `/api/panel/proxy-pools` | Lister tous les pools |
 | `POST` | `/api/panel/proxy-pools` | Créer un pool |
 | `PATCH` | `/api/panel/proxy-pools/:id` | Modifier nom / description / couleur |
+| `POST` | `/api/panel/proxy-pools/:id/reroll-fake-ips` | Re-tirer l'IP simulée de chaque pays déjà configuré (plage inchangée) |
 | `DELETE` | `/api/panel/proxy-pools/:id` | Supprimer un pool |
 
 Exemple de création :
@@ -191,14 +199,14 @@ model ProxyPool {
   port           Int?     @unique
   domain         String?
   alwaysOnline   Boolean  @default(false)
-  fakeCountries  String?
-  fakeIpCountMin Int?
-  fakeIpCountMax Int?
-  fakeIpCount    Int?
-  createdAt      DateTime @default(now())
+  fakeCountries        String?
+  fakeIpCountMin       Int?
+  fakeIpCountMax       Int?
+  fakeIpCountByCountry Json     @default("{}")
+  createdAt            DateTime @default(now())
 }
 ```
 
 Le champ `pool String?` est ajouté sur `BackendProxy`, `UserProxy` et `ScraperSource`. C'est une **dénormalisation intentionnelle** (le nom est stocké directement, sans FK) pour simplifier les requêtes et les filtres du moteur.
 
-Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `alwaysOnline`/`fakeCountries`/`fakeIpCountMin`/`fakeIpCountMax`/`fakeIpCount` sont spécifiques à `ProxyPool` — voir [Toujours en ligne](#toujours-en-ligne) et [Pays et nombre d'IP en plus](#pays-et-nombre-d-ip-en-plus-stats-simulées) ci-dessus. `null`/`false` = pas de valeur dédiée, fallback sur les settings globaux.
+Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `alwaysOnline`/`fakeCountries`/`fakeIpCountMin`/`fakeIpCountMax`/`fakeIpCountByCountry` sont spécifiques à `ProxyPool` — voir [Toujours en ligne](#toujours-en-ligne) et [Pays et nombre d'IP en plus](#pays-et-nombre-d-ip-en-plus-stats-simulées) ci-dessus. `null`/`false`/`{}` = pas de valeur dédiée, fallback sur les settings globaux. `fakeIpCountByCountry` est une map `{ "FR": 12345, "DE": 8901 }` (clé = code pays, valeur = IP tirée pour CE pays) — recalculée par pays, jamais comme un total partagé.
