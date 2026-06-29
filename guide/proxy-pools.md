@@ -121,14 +121,15 @@ Dans **Proxy Pools → Créer / Modifier** :
 
 | Champ | Description |
 |---|---|
-| Pays affichés | Codes ISO 2 lettres séparés par des virgules (ex. `FR,DE,US,GB`) |
+| Pays affichés | Codes ISO 2 lettres séparés par des virgules (ex. `FR,DE,US,GB`) — **aucune limite** sur le nombre de pays |
 | Nombre d'IP | **Valeur fixe** (un nombre) ou **Aléatoire** (une plage, ex. 100 000–300 000) |
+| Mode rotatif | Optionnel — intervalle en secondes (voir [Mode rotatif](#mode-rotatif) ci-dessous) |
 
 ::: tip Chaque pays a son propre nombre d'IP
 Depuis la v2.0.20, la plage configurée n'est **pas** un total partagé réparti entre les pays listés : **chaque pays tire son propre nombre indépendamment** dans `[min, max]`. Ajouter un pays à la liste lui donne immédiatement son propre tirage, sans changer les chiffres déjà affichés pour les autres pays.
 :::
 
-En mode aléatoire, le nombre de chaque pays est **tiré une seule fois** et reste stable (pas de valeur qui change à chaque requête) — il n'est re-tiré que si :
+En mode aléatoire (rotatif désactivé), le nombre de chaque pays est **tiré une seule fois** et reste stable (pas de valeur qui change à chaque requête) — il n'est re-tiré que si :
 - vous modifiez la plage min/max (tous les pays sont alors re-tirés dans la nouvelle plage) ;
 - le pays vient d'être ajouté à la liste (lui seul reçoit un nouveau tirage, les autres restent stables) ;
 - vous cliquez sur le bouton **Régénérer les IP simulées** (dans le dialogue de modification) — il force un nouveau tirage pour **tous** les pays déjà configurés, sans toucher à la plage.
@@ -136,6 +137,15 @@ En mode aléatoire, le nombre de chaque pays est **tiré une seule fois** et res
 ::: tip Additif, jamais un remplacement
 Les pays/IP déclarés ici s'**ajoutent** aux vraies stats de la pool — une pool sans aucun vrai proxy n'affichera donc que les chiffres simulés, tandis qu'une pool avec du vrai stock affichera réel + simulé combinés (par pays).
 :::
+
+### Mode rotatif
+
+Depuis la v2.0.21, au lieu d'un nombre stable par pays, vous pouvez activer un **mode rotatif** : renseignez un intervalle en secondes, et l'IP affichée pour chaque pays **change automatiquement** à chaque fenêtre de temps écoulée — sans tâche planifiée ni écriture en base, le nombre est recalculé à la volée à chaque appel de `category-stats` à partir de l'heure courante.
+
+- Nécessite une plage min/max configurée (le mode rotatif tire dans cette plage, exactement comme le mode aléatoire stable).
+- Le tirage est déterministe par fenêtre de temps : deux appels dans la même fenêtre de N secondes renvoient exactement le même nombre ; dès que la fenêtre suivante commence, le nombre change.
+- Pendant que le mode rotatif est actif, le bouton **Régénérer les IP simulées** est masqué dans le panel (il n'aurait aucun effet visible, puisque la valeur n'est plus celle stockée en base).
+- Désactiver le mode rotatif fait retomber sur la dernière valeur stable connue par pays.
 
 ### Impact sur l'API legacy
 
@@ -203,10 +213,11 @@ model ProxyPool {
   fakeIpCountMin       Int?
   fakeIpCountMax       Int?
   fakeIpCountByCountry Json     @default("{}")
+  fakeIpRotateSeconds  Int?
   createdAt            DateTime @default(now())
 }
 ```
 
 Le champ `pool String?` est ajouté sur `BackendProxy`, `UserProxy` et `ScraperSource`. C'est une **dénormalisation intentionnelle** (le nom est stocké directement, sans FK) pour simplifier les requêtes et les filtres du moteur.
 
-Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `alwaysOnline`/`fakeCountries`/`fakeIpCountMin`/`fakeIpCountMax`/`fakeIpCountByCountry` sont spécifiques à `ProxyPool` — voir [Toujours en ligne](#toujours-en-ligne) et [Pays et nombre d'IP en plus](#pays-et-nombre-d-ip-en-plus-stats-simulées) ci-dessus. `null`/`false`/`{}` = pas de valeur dédiée, fallback sur les settings globaux. `fakeIpCountByCountry` est une map `{ "FR": 12345, "DE": 8901 }` (clé = code pays, valeur = IP tirée pour CE pays) — recalculée par pays, jamais comme un total partagé.
+Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `alwaysOnline`/`fakeCountries`/`fakeIpCountMin`/`fakeIpCountMax`/`fakeIpCountByCountry`/`fakeIpRotateSeconds` sont spécifiques à `ProxyPool` — voir [Toujours en ligne](#toujours-en-ligne), [Pays et nombre d'IP en plus](#pays-et-nombre-d-ip-en-plus-stats-simulées) et [Mode rotatif](#mode-rotatif) ci-dessus. `null`/`false`/`{}` = pas de valeur dédiée, fallback sur les settings globaux. `fakeIpCountByCountry` est une map `{ "FR": 12345, "DE": 8901 }` (clé = code pays, valeur = IP tirée pour CE pays) — recalculée par pays, jamais comme un total partagé ; ignorée si `fakeIpRotateSeconds` est actif (la valeur est alors calculée à la volée, pas lue en base).

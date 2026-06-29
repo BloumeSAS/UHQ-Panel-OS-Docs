@@ -2,6 +2,10 @@
 
 ## v2.0.x
 
+### v2.0.21
+- **Pays simulés sans limite** : le champ `fakeCountries` n'est plus borné à 255 caractères — listez autant de pays que vous voulez.
+- **Mode rotatif pour les IP simulées** : intervalle en secondes optionnel (`ProxyPool.fakeIpRotateSeconds`) — l'IP simulée de chaque pays change alors automatiquement à chaque fenêtre de temps écoulée, calculée à la volée par `category-stats` (hash déterministe, aucune tâche planifiée ni écriture en base). Toggle dans le dialogue de modification d'un pool ; le bouton "Régénérer" se masque automatiquement quand le mode rotatif est actif.
+
 ### v2.0.20
 - **Pays/IP simulés — tirage indépendant par pays** : `fakeIpCountMin`/`fakeIpCountMax` ne décrivent plus un total partagé réparti par pondération entre les pays de `fakeCountries` — **chaque pays tire désormais son propre nombre indépendamment** dans cette plage (`ProxyPool.fakeIpCountByCountry`). Ajouter un pays lui donne immédiatement son propre tirage, sans changer les chiffres déjà affichés pour les autres pays ; changer la plage re-tire tout le monde.
 - **Nouveau bouton "Régénérer les IP simulées"** (panel, dialogue de modification d'un pool) : force un nouveau tirage pour tous les pays déjà configurés, sans toucher à la plage (`POST /api/panel/proxy-pools/:id/reroll-fake-ips`).
