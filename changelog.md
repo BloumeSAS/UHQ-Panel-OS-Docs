@@ -2,6 +2,10 @@
 
 ## v2.0.x
 
+### v2.0.22
+- **Pays prioritaires pour les IP simulées** : `ProxyPool.fakePriorityCountries`, un sous-ensemble de `fakeCountries` qui tire **toujours** un nombre d'IP plus élevé que les pays non listés — la plage configurée est découpée en deux moitiés disjointes (prioritaire = moitié haute), garanti quel que soit le tirage, en mode stable comme en mode rotatif. Sans effet en valeur fixe.
+- **Interne** : logique de tirage/hash des IP simulées consolidée dans `common/utils/fake-stats.ts` au lieu d'être dupliquée entre le module Proxy Pools et l'API legacy.
+
 ### v2.0.21
 - **Pays simulés sans limite** : le champ `fakeCountries` n'est plus borné à 255 caractères — listez autant de pays que vous voulez.
 - **Mode rotatif pour les IP simulées** : intervalle en secondes optionnel (`ProxyPool.fakeIpRotateSeconds`) — l'IP simulée de chaque pays change alors automatiquement à chaque fenêtre de temps écoulée, calculée à la volée par `category-stats` (hash déterministe, aucune tâche planifiée ni écriture en base). Toggle dans le dialogue de modification d'un pool ; le bouton "Régénérer" se masque automatiquement quand le mode rotatif est actif.

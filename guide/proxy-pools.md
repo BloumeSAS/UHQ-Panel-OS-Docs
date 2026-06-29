@@ -122,6 +122,7 @@ Dans **Proxy Pools → Créer / Modifier** :
 | Champ | Description |
 |---|---|
 | Pays affichés | Codes ISO 2 lettres séparés par des virgules (ex. `FR,DE,US,GB`) — **aucune limite** sur le nombre de pays |
+| Pays prioritaires | Optionnel — sous-ensemble des pays ci-dessus à toujours faire tirer plus haut (voir [Pays prioritaires](#pays-prioritaires) ci-dessous) |
 | Nombre d'IP | **Valeur fixe** (un nombre) ou **Aléatoire** (une plage, ex. 100 000–300 000) |
 | Mode rotatif | Optionnel — intervalle en secondes (voir [Mode rotatif](#mode-rotatif) ci-dessous) |
 
@@ -146,6 +147,18 @@ Depuis la v2.0.21, au lieu d'un nombre stable par pays, vous pouvez activer un *
 - Le tirage est déterministe par fenêtre de temps : deux appels dans la même fenêtre de N secondes renvoient exactement le même nombre ; dès que la fenêtre suivante commence, le nombre change.
 - Pendant que le mode rotatif est actif, le bouton **Régénérer les IP simulées** est masqué dans le panel (il n'aurait aucun effet visible, puisque la valeur n'est plus celle stockée en base).
 - Désactiver le mode rotatif fait retomber sur la dernière valeur stable connue par pays.
+
+### Pays prioritaires
+
+Depuis la v2.0.22, vous pouvez désigner un sous-ensemble des pays affichés qui doit **toujours** tirer un nombre d'IP plus élevé que les pays non listés — utile pour qu'un ou deux pays "phares" (ex. votre marché principal) ressortent systématiquement en tête, sans dépendre du hasard du tirage.
+
+Mécanique : la plage `[min, max]` est découpée en deux moitiés disjointes — les pays prioritaires tirent dans la moitié haute, tous les autres dans la moitié basse. La garantie tient **quel que soit le tirage de chacun** (même la plus basse valeur prioritaire possible reste au-dessus de la plus haute valeur non-prioritaire possible), aussi bien en mode stable qu'en mode rotatif.
+
+::: tip Sans effet en valeur fixe
+Une plage `min == max` (mode "Valeur fixe") ne laisse aucune place pour départager deux moitiés — tous les pays reçoivent alors le même nombre, prioritaires ou non. Les pays prioritaires n'ont d'effet qu'en mode "Aléatoire" (plage).
+:::
+
+Modifier la liste des pays prioritaires déclenche un nouveau tirage pour **tous** les pays déjà configurés (comme un changement de plage) — la garantie doit rester valide pour l'ensemble, pas seulement pour le pays qu'on vient de (dé)prioriser.
 
 ### Impact sur l'API legacy
 
@@ -209,15 +222,16 @@ model ProxyPool {
   port           Int?     @unique
   domain         String?
   alwaysOnline   Boolean  @default(false)
-  fakeCountries        String?
-  fakeIpCountMin       Int?
-  fakeIpCountMax       Int?
-  fakeIpCountByCountry Json     @default("{}")
-  fakeIpRotateSeconds  Int?
-  createdAt            DateTime @default(now())
+  fakeCountries          String?
+  fakePriorityCountries  String?
+  fakeIpCountMin         Int?
+  fakeIpCountMax         Int?
+  fakeIpCountByCountry   Json     @default("{}")
+  fakeIpRotateSeconds    Int?
+  createdAt              DateTime @default(now())
 }
 ```
 
 Le champ `pool String?` est ajouté sur `BackendProxy`, `UserProxy` et `ScraperSource`. C'est une **dénormalisation intentionnelle** (le nom est stocké directement, sans FK) pour simplifier les requêtes et les filtres du moteur.
 
-Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `alwaysOnline`/`fakeCountries`/`fakeIpCountMin`/`fakeIpCountMax`/`fakeIpCountByCountry`/`fakeIpRotateSeconds` sont spécifiques à `ProxyPool` — voir [Toujours en ligne](#toujours-en-ligne), [Pays et nombre d'IP en plus](#pays-et-nombre-d-ip-en-plus-stats-simulées) et [Mode rotatif](#mode-rotatif) ci-dessus. `null`/`false`/`{}` = pas de valeur dédiée, fallback sur les settings globaux. `fakeIpCountByCountry` est une map `{ "FR": 12345, "DE": 8901 }` (clé = code pays, valeur = IP tirée pour CE pays) — recalculée par pays, jamais comme un total partagé ; ignorée si `fakeIpRotateSeconds` est actif (la valeur est alors calculée à la volée, pas lue en base).
+Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `alwaysOnline`/`fakeCountries`/`fakePriorityCountries`/`fakeIpCountMin`/`fakeIpCountMax`/`fakeIpCountByCountry`/`fakeIpRotateSeconds` sont spécifiques à `ProxyPool` — voir [Toujours en ligne](#toujours-en-ligne), [Pays et nombre d'IP en plus](#pays-et-nombre-d-ip-en-plus-stats-simulées), [Mode rotatif](#mode-rotatif) et [Pays prioritaires](#pays-prioritaires) ci-dessus. `null`/`false`/`{}` = pas de valeur dédiée, fallback sur les settings globaux. `fakeIpCountByCountry` est une map `{ "FR": 12345, "DE": 8901 }` (clé = code pays, valeur = IP tirée pour CE pays) — recalculée par pays, jamais comme un total partagé ; ignorée si `fakeIpRotateSeconds` est actif (la valeur est alors calculée à la volée, pas lue en base). `fakePriorityCountries` est un sous-ensemble (mêmes codes) de `fakeCountries`.
