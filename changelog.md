@@ -2,6 +2,12 @@
 
 ## v2.0.x
 
+### v2.0.23
+- **Fix : port dédié par catégorie (pool)** — un compte assigné à une pool ayant son propre domaine/port était accessible via n'importe quel autre port (port par défaut, ou port d'une autre pool) ; seule l'exclusivité de port *par compte* était vérifiée. Le compte est désormais rejeté (407) si la connexion n'arrive pas sur le port dédié de sa pool.
+- **Fix : pools "Toujours en ligne" jamais KO** — un échec de connexion réel (rare, souvent transitoire) marquait quand même le proxy `isWorking=false` en base pour les pools `alwaysOnline`, cassant la promesse "jamais KO" et rétrécissant la pool jusqu'au prochain cycle du checker au lieu de basculer proprement sur le fallback résidentiel pour la requête en cours.
+- **Fix : import de proxies plus tolérant** — réimporter un proxy déjà archivé/mort, ou déjà assigné à une autre catégorie, renvoyait silencieusement "0 proxy importé" et le rendait invisible dans la catégorie visée (`POST /monitoring/proxies/import` utilisait `createMany`+`skipDuplicates`, qui ignore toute ligne dont l'URL existe déjà). Remplacé par un upsert par ligne qui réactive le proxy existant (`isWorking`/`archived`/`failCount` remis à zéro) et le réassigne à la catégorie demandée.
+- **`GET /api/v1/sub-user/usage-stat/get`** renvoie désormais `host`/`port` dans la réponse, résolus selon le domaine/port propre du compte, sinon ceux de sa catégorie, sinon les valeurs globales (Settings > Proxy public) — même logique que `get-sticky-proxies`.
+
 ### v2.0.22
 - **Pays prioritaires pour les IP simulées** : `ProxyPool.fakePriorityCountries`, un sous-ensemble de `fakeCountries` qui tire **toujours** un nombre d'IP plus élevé que les pays non listés — la plage configurée est découpée en deux moitiés disjointes (prioritaire = moitié haute), garanti quel que soit le tirage, en mode stable comme en mode rotatif. Sans effet en valeur fixe.
 - **Interne** : logique de tirage/hash des IP simulées consolidée dans `common/utils/fake-stats.ts` au lieu d'être dupliquée entre le module Proxy Pools et l'API legacy.
