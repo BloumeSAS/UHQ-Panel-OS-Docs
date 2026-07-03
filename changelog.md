@@ -2,6 +2,11 @@
 
 ## v2.0.x
 
+### v2.0.24
+- **Perf : empreinte mémoire/CPU du checker et du scraper réduite** — sans changement de comportement (vérifié par revue adversariale multi-agents), aucune réécriture du cœur métier.
+  - **Checker** — le cycle de vérification ne charge plus que les colonnes réellement lues (`id/url/ip/port/protocol`) au lieu de toutes les colonnes de `BackendProxy` pour le lot de ~150 000 candidats (~3× moins de RAM). L'authentification des upstreams est désormais résolue paresseusement par chaque worker, au lieu de ~150 000 `new URL()` synchrones exécutés en amont qui gelaient brièvement l'event loop — partagé avec le serveur proxy live (`:990`).
+  - **Scraper** — déduplication **incrémentale** au fil des sources (Map partagée) au lieu d'accumuler des millions d'entrées dans un seul tableau avant de dédupliquer : le pic mémoire retombe à « une source en vol + la Map d'uniques » au lieu de la somme de toutes les sources. Parsing accéléré : le nettoyage HTML est court-circuité sur les listes `ip:port` pures (aucune balise) et l'extraction de candidats évite une passe regex sur chaque ligne dépourvue de schéma `://`.
+
 ### v2.0.23
 - **Fix : port dédié par catégorie (pool)** — un compte assigné à une pool ayant son propre domaine/port était accessible via n'importe quel autre port (port par défaut, ou port d'une autre pool) ; seule l'exclusivité de port *par compte* était vérifiée. Le compte est désormais rejeté (407) si la connexion n'arrive pas sur le port dédié de sa pool.
 - **Fix : pools "Toujours en ligne" jamais KO** — un échec de connexion réel (rare, souvent transitoire) marquait quand même le proxy `isWorking=false` en base pour les pools `alwaysOnline`, cassant la promesse "jamais KO" et rétrécissant la pool jusqu'au prochain cycle du checker au lieu de basculer proprement sur le fallback résidentiel pour la requête en cours.
