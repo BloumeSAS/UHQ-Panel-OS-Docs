@@ -2,6 +2,10 @@
 
 ## v2.0.x
 
+### v2.0.25
+- **Notification à chaque déclenchement manuel du scraper** — `POST /api/panel/scraper-sources/run` créait un cycle de scraping sans qu'aucune notification (in-app / Discord / Slack / BloumeChat) ne soit émise. Le lancement manuel envoie désormais une notification `NotificationService.notifyScraperRun(...)`, avec l'email de l'admin qui a déclenché le cycle.
+- **Icône et nom du panel personnalisables** : Settings > Général expose désormais un champ "Icône du panel" (`logoUrl`) à côté du nom du site (`siteName`), tous deux affichés dans l'en-tête du panel. Le **footer** ("UHQ Panel OS by Bloume.fr", crédit éditeur) reste volontairement figé et n'est plus affecté par ces réglages.
+
 ### v2.0.24
 - **Perf : empreinte mémoire/CPU du checker et du scraper réduite** — sans changement de comportement (vérifié par revue adversariale multi-agents), aucune réécriture du cœur métier.
   - **Checker** — le cycle de vérification ne charge plus que les colonnes réellement lues (`id/url/ip/port/protocol`) au lieu de toutes les colonnes de `BackendProxy` pour le lot de ~150 000 candidats (~3× moins de RAM). L'authentification des upstreams est désormais résolue paresseusement par chaque worker, au lieu de ~150 000 `new URL()` synchrones exécutés en amont qui gelaient brièvement l'event loop — partagé avec le serveur proxy live (`:990`).
