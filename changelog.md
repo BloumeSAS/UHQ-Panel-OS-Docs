@@ -1,5 +1,38 @@
 # Changelog
 
+## v2.3.x
+
+### v2.3.0
+- **Fix : `npm install` cassé dans `api/`** — `@nestjs/platform-ws` et `@nestjs/websockets` étaient épinglés en v11 alors que tout le reste du projet (`@nestjs/core`, `@nestjs/common`...) est en v10. Un `npm install` frais (sans le `--legacy-peer-deps` caché dans le Dockerfile) plantait en conflit de peer dependencies — exactement ce que demande le README pour le dev local. Réalignés sur v10, install propre confirmée.
+- **Fix : reconnexion base de données** — dans `prisma.service.ts`, le flag interne `connected` ne repassait jamais à `false` après une coupure réelle (Postgres qui redémarre, réseau qui saute), seul l'arrêt propre de l'app le faisait. `ensureConnection()` (appelée à chaque cycle du checker et à chaque rafraîchissement du moteur proxy) croyait donc rester connectée indéfiniment et ne retentait jamais `$connect()` : après un simple pépin DB, tout restait cassé jusqu'à un redémarrage manuel du conteneur. Un middleware Prisma détecte désormais la perte de connexion partout où elle survient et déclenche une reconnexion automatique.
+- **Nouveau : "Checker actif" par catégorie** — dans le dialogue de création/édition d'une catégorie (Pools), un toggle "Checker actif" (activé par défaut) s'ajoute à côté de "Toujours en ligne". Désactivé, le cycle automatique du checker ignore complètement les proxies de cette catégorie (aucun test, statut figé tel quel) — différent de "Toujours en ligne" qui force le statut à "en ligne" : ici c'est un vrai "hands off", sans mentir sur le statut. Le bouton "Tester" manuel continue de fonctionner dans tous les cas. Badge "Checker désactivé" affiché dans la liste des catégories.
+
+## v2.2.x
+
+### v2.2.0
+- **Import de thèmes tweakcn.com** (URL libre + galerie de 12 presets), conversion oklch → HSL faite côté serveur.
+- **Templates de sous-users** (profils réutilisables : threads/quota/pays/TTL) pour la création rapide.
+- **Historique des changements de settings** : diff avant/après par clé, visible dans l'Audit.
+- **Vue rapide (slide-over) sur les sous-users**, alternative légère au dialog plein écran.
+- **Dashboard Analytics complet** : tendance pool, répartition pays/provider/protocole, distribution de latence, top proxies.
+- **Comparaison période sur période** sur les rapports (deltas +/- %).
+- **Heatmap calendrier** de l'activité quotidienne (12 derniers mois).
+- **Export PDF** des rapports.
+- **Animations UI** : transitions de page, effet press sur les boutons, hover sur les cards.
+
+## v2.1.x
+
+### v2.1.0
+- **Thème custom du panel** (color pickers façon tweakcn.com), avec reset au thème par défaut.
+- **Alerte seuil pool de proxies bas** (in-app + Discord/Slack/BloumeChat).
+- **Import CSV en masse de sous-users.**
+- **Vue "santé système"** (RAM/CPU/latence DB/threads) sur le dashboard.
+- **Recherche globale** Cmd/Ctrl+K (navigation + sous-users + utilisateurs).
+- **Mode compact** pour les tableaux (densité d'affichage).
+- **Import/export de la configuration complète** (settings + sources scraper).
+- **Rôle SUPPORT** (lecture seule : dashboard, pool, logs, rapports, audit).
+- **Liens de partage temporaires** pour les comptes proxy (accès sans login, expiration configurable, révocable).
+
 ## v2.0.x
 
 ### v2.0.25
