@@ -113,6 +113,17 @@ Une pool peut être marquée **Toujours en ligne** : ses `BackendProxy` ne sont 
 - Le bouton **Tester** (test manuel par proxy) exécute toujours le vrai test (diagnostic visible), mais le résultat persisté ne marque jamais ce proxy KO si sa pool est `alwaysOnline`.
 - Le scraper, lui, ne marque déjà rien mort de son côté (seul le checker teste la connectivité réelle) — aucun changement nécessaire à ce niveau.
 
+## Checker actif
+
+Chaque pool a un toggle **Checker actif** (activé par défaut). Désactivé, il fait complètement ignorer les proxies de cette pool par le cycle automatique du checker :
+
+- Aucun test n'est exécuté sur ces proxies pendant le cycle.
+- Leur statut (`isWorking`) reste **figé tel quel** — contrairement à **Toujours en ligne**, ce réglage ne force **rien** : c'est un vrai "hands off", sans mentir sur le statut affiché.
+- Le bouton **Tester** manuel continue de fonctionner dans tous les cas (diagnostic à la demande), quel que soit ce réglage.
+- Une pool peut combiner les deux réglages (`alwaysOnline` + `checkerEnabled: false`), auquel cas elle est simplement exclue du cycle sans être re-forcée en ligne à chaque passage.
+
+Un badge **Checker désactivé** est affiché dans la liste des catégories quand ce réglage est actif.
+
 ## Pays et nombre d'IP en plus (stats simulées)
 
 **Indépendamment de "Toujours en ligne"** (pas besoin de l'activer), n'importe quelle pool peut déclarer des pays et un nombre d'IP **en plus** de ses vraies stats — utile pour présenter une couverture géographique élargie sans dépendre uniquement du stock réel scrapé.
@@ -222,6 +233,7 @@ model ProxyPool {
   port           Int?     @unique
   domain         String?
   alwaysOnline   Boolean  @default(false)
+  checkerEnabled Boolean  @default(true)
   fakeCountries          String?
   fakePriorityCountries  String?
   fakeIpCountMin         Int?
@@ -234,4 +246,4 @@ model ProxyPool {
 
 Le champ `pool String?` est ajouté sur `BackendProxy`, `UserProxy` et `ScraperSource`. C'est une **dénormalisation intentionnelle** (le nom est stocké directement, sans FK) pour simplifier les requêtes et les filtres du moteur.
 
-Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `alwaysOnline`/`fakeCountries`/`fakePriorityCountries`/`fakeIpCountMin`/`fakeIpCountMax`/`fakeIpCountByCountry`/`fakeIpRotateSeconds` sont spécifiques à `ProxyPool` — voir [Toujours en ligne](#toujours-en-ligne), [Pays et nombre d'IP en plus](#pays-et-nombre-d-ip-en-plus-stats-simulées), [Mode rotatif](#mode-rotatif) et [Pays prioritaires](#pays-prioritaires) ci-dessus. `null`/`false`/`{}` = pas de valeur dédiée, fallback sur les settings globaux. `fakeIpCountByCountry` est une map `{ "FR": 12345, "DE": 8901 }` (clé = code pays, valeur = IP tirée pour CE pays) — recalculée par pays, jamais comme un total partagé ; ignorée si `fakeIpRotateSeconds` est actif (la valeur est alors calculée à la volée, pas lue en base). `fakePriorityCountries` est un sous-ensemble (mêmes codes) de `fakeCountries`.
+Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `alwaysOnline`/`checkerEnabled`/`fakeCountries`/`fakePriorityCountries`/`fakeIpCountMin`/`fakeIpCountMax`/`fakeIpCountByCountry`/`fakeIpRotateSeconds` sont spécifiques à `ProxyPool` — voir [Toujours en ligne](#toujours-en-ligne), [Checker actif](#checker-actif), [Pays et nombre d'IP en plus](#pays-et-nombre-d-ip-en-plus-stats-simulées), [Mode rotatif](#mode-rotatif) et [Pays prioritaires](#pays-prioritaires) ci-dessus. `null`/`false`/`{}` = pas de valeur dédiée, fallback sur les settings globaux. `fakeIpCountByCountry` est une map `{ "FR": 12345, "DE": 8901 }` (clé = code pays, valeur = IP tirée pour CE pays) — recalculée par pays, jamais comme un total partagé ; ignorée si `fakeIpRotateSeconds` est actif (la valeur est alors calculée à la volée, pas lue en base). `fakePriorityCountries` est un sous-ensemble (mêmes codes) de `fakeCountries`.
