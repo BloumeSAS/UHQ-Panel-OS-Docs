@@ -227,6 +227,19 @@ Les notifications sont envoyées lors d'événements importants : proxy mort, se
 | `backupS3SecretKey` | — | Clé secrète (chiffrée en base) |
 | `backupS3Region` | `us-east-1` | Région AWS / compatible |
 
+::: tip Sauvegarde manuelle : destination indépendante du cycle auto
+Le bouton **Lancer une sauvegarde** (Paramètres → Sauvegardes) a son propre
+sélecteur Local/S3 : il force la destination de **cette exécution
+uniquement**, sans toucher à `backupStorageType` ni au cycle automatique
+planifié. Pratique pour tester un stockage sans changer la config globale.
+:::
+
+::: tip Tester la connexion S3
+Un bouton **Tester la connexion** valide bucket + identifiants (`ListObjectsV2`
+léger) sans lancer de sauvegarde — un champ vide/masqué retombe sur la valeur
+déjà enregistrée en settings.
+:::
+
 ---
 
 ## Clé API legacy
