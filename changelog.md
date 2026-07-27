@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.4.x
+
+### v2.4.0
+- **Fix majeur : la sauvegarde automatique de la base ne prenait jamais effet** — `PUT /api/panel/settings` ne rappelait jamais `BackupService.reschedule()`, le cron restait figé sur l'état lu au démarrage du conteneur. Activer "Sauvegarde auto BDD" (ou changer le cron/stockage) depuis le panel n'avait donc **aucun effet** avant un redémarrage complet. La replanification est désormais instantanée dès l'enregistrement des paramètres — vérifié en conditions réelles.
+- **Logs enrichis pour le diagnostic des sauvegardes** : planification du cron (avec la prochaine exécution), durée de chaque cycle, taille du payload avant écriture, cause précise en cas d'échec local/S3 — tout remonte désormais dans **Journaux**.
+- **Bouton "Lancer une sauvegarde" : choix Local/S3 par exécution** — un sélecteur permet de forcer la destination de cette sauvegarde manuelle uniquement, sans toucher au réglage global utilisé par le cycle automatique.
+- **Nouveau bouton "Tester la connexion" (config S3)** — vérifie que le bucket et les identifiants S3 sont valides (`ListObjectsV2` léger) sans lancer de sauvegarde.
+
 ## v2.3.x
 
 ### v2.3.0
