@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.1
+- **Fix majeur : la sauvegarde manuelle ne fonctionnait pas pour les bases volumineuses** (~200 Mo et plus) — le déclenchement bloquait la requête HTTP jusqu'à la fin complète (requête DB + sérialisation + upload S3/local), largement plus long que le timeout du reverse-proxy devant l'API en prod (Traefik/Coolify), qui coupait la connexion en route sans afficher ni succès ni erreur. Le déclenchement manuel est désormais **non-bloquant** : `POST /backup/run` répond immédiatement (~50ms, vérifié en conditions réelles) et le panel poll un nouvel endpoint `GET /backup/run-status` pour afficher le résultat réel une fois la sauvegarde terminée, quelle que soit sa durée.
+- **Fix : faux "succès" affiché même en cas d'échec réel** — le backend renvoyait un HTTP 200/201 avec `{status:'error'}` dans le corps pour signaler un échec interne (ex. permissions S3 insuffisantes), mais le panel ne vérifiait jamais ce champ et affichait toujours le toast de succès. Corrigé sur les 4 actions concernées (sauvegarde manuelle, restauration, suppression, import de settings). Vérifié avec un vrai stockage S3 (Synology C2) : le toast affiche maintenant la vraie erreur AWS quand elle survient.
+- **Timeout de la transaction de restauration** relevé de 30s à 5 minutes — insuffisant pour restaurer des centaines de milliers de lignes (`BackendProxy`/`ProxyUsage`).
+
 ### v2.4.0
 - **Fix majeur : la sauvegarde automatique de la base ne prenait jamais effet** — `PUT /api/panel/settings` ne rappelait jamais `BackupService.reschedule()`, le cron restait figé sur l'état lu au démarrage du conteneur. Activer "Sauvegarde auto BDD" (ou changer le cron/stockage) depuis le panel n'avait donc **aucun effet** avant un redémarrage complet. La replanification est désormais instantanée dès l'enregistrement des paramètres — vérifié en conditions réelles.
 - **Logs enrichis pour le diagnostic des sauvegardes** : planification du cron (avec la prochaine exécution), durée de chaque cycle, taille du payload avant écriture, cause précise en cas d'échec local/S3 — tout remonte désormais dans **Journaux**.
