@@ -240,6 +240,14 @@ léger) sans lancer de sauvegarde — un champ vide/masqué retombe sur la valeu
 déjà enregistrée en settings.
 :::
 
+::: tip Déclenchement non-bloquant (bases volumineuses)
+`POST /backup/run` répond immédiatement (le déclenchement se fait en tâche de
+fond) — indispensable pour une base de plusieurs centaines de Mo, dont la
+sauvegarde peut largement dépasser le timeout du reverse-proxy devant l'API en
+prod. Le panel poll `GET /backup/run-status` pour afficher le résultat réel
+une fois la sauvegarde terminée.
+:::
+
 ---
 
 ## Clé API legacy
