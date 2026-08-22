@@ -102,6 +102,26 @@ La cascade (compte → pool → réglages globaux) est utilisée par **tous** le
 
 Chaque liste sticky inclut aussi un format **rotatif** sans session (`rotating: "username:password@host:port"`), pratique pour les clients qui n'ont pas besoin du `host:port:user:session:pass` complet.
 
+## Sélection des upstreams (rotation & trust score)
+
+Depuis v2.4.2, le choix du `BackendProxy` utilisé pour une connexion n'est plus un tirage uniforme parmi les "meilleurs" (top-N par succès/latence) : chaque candidat reçoit un **trust score** = taux de succès × 1/latence², et le moteur fait un **tirage pondéré** (roulette wheel) sur une fenêtre élargie de candidats plutôt qu'un simple `random()` sur le top 50-100.
+
+Un proxy qui vient d'être sélectionné reçoit en plus une **pénalité de cooldown** (60s, qui s'estompe progressivement) : il reste favorisé s'il est objectivement le meilleur, mais n'est plus systématiquement réutilisé en boucle H24 — le trafic se répartit davantage sur l'ensemble du stock performant au lieu de marteler toujours les mêmes IP.
+
+::: tip Pourquoi ce changement
+Avant, un tirage uniforme dans un top-N fixe favorisait mécaniquement toujours les mêmes quelques proxies (ceux entrés les premiers dans le top), pendant que le reste du stock qualifié ne servait presque jamais. Le trust score + cooldown répartit la charge sans sacrifier la performance moyenne.
+:::
+
+## Session statique (identifiants temporaires)
+
+Depuis v2.4.2, en plus du format sticky classique (`host:port:user:session:pass`), **Mes Proxies → Générer** propose un préréglage **Session statique** qui génère des identifiants **temporaires** dédiés :
+
+```
+GET /api/panel/me/proxies/:id/static-session?count=10&ttl=1800
+```
+
+Chaque ligne renvoyée est un simple `host:port:user:pass` (aucun champ session visible) — mais chaque paire user/pass est **unique**, épinglée sur son propre upstream pendant `ttl` secondes (comme une session sticky), puis expire automatiquement. Utile pour les clients/logiciels qui n'acceptent que le format classique à 4 champs et ne savent pas gérer un champ "session" séparé.
+
 ## Toujours en ligne
 
 Une pool peut être marquée **Toujours en ligne** : ses `BackendProxy` ne sont alors jamais testés par le checker (donc jamais marqués KO/morts) — ils restent affichés **OK** dans le Pool de proxies. Ce réglage est **indépendant** des pays/IP en plus ci-dessous : il ne contrôle que le comportement du checker, rien côté stats.

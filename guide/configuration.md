@@ -90,6 +90,10 @@ Ces paramètres définissent ce qui est **affiché aux clients** pour se connect
 - **Défaut :** `3`
 - Nombre de vérifications consécutives échouées avant qu'un proxy soit considéré **définitivement mort** et ignoré. Fonctionne uniquement si `skipDeadProxies` est activé.
 
+::: tip Test de vivacité HTTP (depuis v2.4.2)
+Le checker teste désormais les proxies **HTTP** via un `GET` en forme absolue plutôt qu'un `CONNECT` — beaucoup de proxies HTTP bas de gamme ne supportent que le relais GET et rejettent `CONNECT` (réservé en pratique au tunneling HTTPS), ce qui les faisait auparavant marquer morts à tort. Les proxies SOCKS4/5 utilisent toujours la négociation SOCKS classique, inchangée.
+:::
+
 ### `scraperProxy`
 - **Type :** secret
 - **Variable d'env :** `SCRAPER_PROXY`
@@ -261,6 +265,20 @@ une fois la sauvegarde terminée.
 
 ::: danger
 La clé API legacy donne un accès complet aux routes `/api/v1/*`. Ne la partager qu'avec des systèmes de confiance.
+:::
+
+---
+
+## Tableau de bord (stats base de données)
+
+Depuis v2.4.2, l'onglet **Settings → Tableau de bord** affiche :
+- la **taille de la base PostgreSQL sur disque** (`pg_database_size`) ;
+- le **nombre de lignes** des tables principales (proxies du pool, comptes proxy, lignes d'usage/trafic, journaux d'audit, sources scraper).
+
+C'est une lecture à la demande (`GET /api/panel/monitoring/db-stats`), pas un polling continu — cliquez **Actualiser** pour rafraîchir.
+
+::: tip Import manuel de proxies
+La limite de taille des requêtes JSON de l'API est passée de 100 Ko (défaut NestJS) à **25 Mo** en v2.4.2 — l'import manuel d'une grosse liste de proxies (Pool de proxies → Importer) ne renvoie plus "entity too large".
 :::
 
 ---
