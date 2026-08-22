@@ -2,6 +2,19 @@
 
 ## v2.4.x
 
+### v2.4.3
+- **Fix : `check-update` renvoyait une "dernière version" périmée** — l'appel à l'API de tags GHCR (`/v2/{image}/tags/list`) n'utilisait aucun paramètre `n` explicite ; GitHub pagine cette réponse par défaut (~100 entrées, **pas nécessairement triées par version**), ce qui pouvait couper la liste juste avant les tags semver les plus récents (ex. affichait `2.4.0` alors que `2.4.1`/`2.4.2` étaient déjà publiées sur le registre). L'appel demande désormais explicitement `n=1000`, largement au-dessus de la volumétrie réelle du dépôt.
+
+### v2.4.2
+- **Rotation des proxies par trust score** — le choix de l'upstream backend combine désormais taux de succès et latence (`trust score`) avec un tirage pondéré sur une fenêtre élargie de candidats, plus une pénalité de cooldown (60s) après chaque sélection : les meilleurs proxies restent favorisés mais ne sont plus systématiquement réutilisés en boucle H24. Voir [Sélection des upstreams](/guide/proxy-pools#sélection-des-upstreams-rotation-trust-score).
+- **Fix : import manuel de proxies en erreur "entity too large"** — la limite JSON par défaut de NestJS (100 Ko) rejetait les grosses listes collées dans **Pool de proxies → Importer**. Relevée à 25 Mo.
+- **Nouveau : Session statique** — `GET /me/proxies/:id/static-session` génère des identifiants **temporaires** (`host:port:user:pass`, sans champ "session" visible), chacun épinglé sur son propre upstream pour la durée du TTL. Nouveau préréglage dans **Mes Proxies → Générer**. Voir [Session statique](/guide/proxy-pools#session-statique-identifiants-temporaires).
+- **Fix majeur : le checker marquait à tort des proxies HTTP fonctionnels comme morts** — le test de vivacité utilisait un `CONNECT` HTTPS pour tous les protocoles, mais beaucoup de proxies HTTP bas de gamme ne supportent que le relais `GET` et rejettent `CONNECT`. Les proxies HTTP sont désormais testés via un `GET` en forme absolue ; SOCKS4/5, non affectés, gardent la négociation SOCKS classique.
+- **Nouveau : Settings → Tableau de bord** — taille de la base PostgreSQL sur disque + volumétrie des tables principales (`GET /monitoring/db-stats`).
+- **Nouveau : proxies utilisés en direct** sur le Dashboard admin — liste en temps réel des `BackendProxy` actuellement en cours d'utilisation (connexions actives, comptes), rafraîchie toutes les 5s.
+- **Mode compact étendu** — la densité "compact" ne resserrait que les tableaux ; elle s'applique désormais aussi aux marges de page et à l'espacement des cartes, sur toutes les pages du panel.
+- **i18n** — ajout des traductions manquantes pour les actions d'audit `subuser.bulk.*` et `subuser.share-link.*` (FR/EN).
+
 ### v2.4.1
 - **Fix majeur : la sauvegarde manuelle ne fonctionnait pas pour les bases volumineuses** (~200 Mo et plus) — le déclenchement bloquait la requête HTTP jusqu'à la fin complète (requête DB + sérialisation + upload S3/local), largement plus long que le timeout du reverse-proxy devant l'API en prod (Traefik/Coolify), qui coupait la connexion en route sans afficher ni succès ni erreur. Le déclenchement manuel est désormais **non-bloquant** : `POST /backup/run` répond immédiatement (~50ms, vérifié en conditions réelles) et le panel poll un nouvel endpoint `GET /backup/run-status` pour afficher le résultat réel une fois la sauvegarde terminée, quelle que soit sa durée.
 - **Fix : faux "succès" affiché même en cas d'échec réel** — le backend renvoyait un HTTP 200/201 avec `{status:'error'}` dans le corps pour signaler un échec interne (ex. permissions S3 insuffisantes), mais le panel ne vérifiait jamais ce champ et affichait toujours le toast de succès. Corrigé sur les 4 actions concernées (sauvegarde manuelle, restauration, suppression, import de settings). Vérifié avec un vrai stockage S3 (Synology C2) : le toast affiche maintenant la vraie erreur AWS quand elle survient.
