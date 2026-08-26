@@ -100,11 +100,15 @@ La cascade (compte → pool → réglages globaux) est utilisée par **tous** le
 - Panel : `GET /api/panel/subusers/:id/sticky-list`, `GET /api/panel/me/proxies/:id/sticky-list`, ainsi que les listes (`effective_host`/`effective_port` en plus des champs bruts `port`/`domain`).
 - API legacy (`/api/v1`) : `GET /api/v1/sub-user/list`, `GET /api/v1/sub-user/get-sticky-proxies`, `GET /api/v1/me/proxies`, `GET /api/v1/me/proxies/sticky-list` — tous renvoient désormais `host`/`port` résolus, jamais juste la valeur globale brute.
 
-Chaque liste sticky inclut aussi un format **rotatif** sans session (`rotating: "username:password@host:port"`), pratique pour les clients qui n'ont pas besoin du `host:port:user:session:pass` complet.
+Chaque liste sticky inclut aussi un format **rotatif** sans session (`rotating: "username:password@host:port"`), pratique pour les clients qui n'ont pas besoin du format sticky complet.
+
+::: warning Format sticky : 4 champs depuis v2.4.5
+`host:port:user:session:pass` (5 champs) était rejeté par la plupart des logiciels proxy, qui n'acceptent que le format classique à 4 champs. Le générateur produit désormais `host:port:user-session-XXXX:pass` : la session est intégrée au nom d'utilisateur via le suffixe `-session-` (convention reconnue par la plupart des logiciels proxy), et le moteur la comprend nativement (`ProxyServerService.authenticate`). Les anciennes listes à 5 champs déjà générées/partagées continuent de fonctionner — le moteur accepte les deux formats.
+:::
 
 ## Sélection des upstreams (rotation & trust score)
 
-Depuis v2.4.2, le choix du `BackendProxy` utilisé pour une connexion n'est plus un tirage uniforme parmi les "meilleurs" (top-N par succès/latence) : chaque candidat reçoit un **trust score** = taux de succès × 1/latence², et le moteur fait un **tirage pondéré** (roulette wheel) sur une fenêtre élargie de candidats plutôt qu'un simple `random()` sur le top 50-100.
+Depuis v2.4.2, le choix du `BackendProxy` utilisé pour une connexion n'est plus un tirage uniforme parmi les "meilleurs" (top-N par succès/latence) : chaque candidat reçoit un **trust score** = taux de succès × 1/latence², et le moteur fait un **tirage pondéré** (roulette wheel) parmi les candidats plutôt qu'un simple `random()` sur un sous-ensemble fixe.
 
 Un proxy qui vient d'être sélectionné reçoit en plus une **pénalité de cooldown** (60s, qui s'estompe progressivement) : il reste favorisé s'il est objectivement le meilleur, mais n'est plus systématiquement réutilisé en boucle H24 — le trafic se répartit davantage sur l'ensemble du stock performant au lieu de marteler toujours les mêmes IP.
 
@@ -112,9 +116,13 @@ Un proxy qui vient d'être sélectionné reçoit en plus une **pénalité de coo
 Avant, un tirage uniforme dans un top-N fixe favorisait mécaniquement toujours les mêmes quelques proxies (ceux entrés les premiers dans le top), pendant que le reste du stock qualifié ne servait presque jamais. Le trust score + cooldown répartit la charge sans sacrifier la performance moyenne.
 :::
 
+::: warning Cache par pool, sans troncature par succès (v2.4.4 / v2.4.5)
+Le cache mémoire de sélection était un seul "top-N" global toutes pools confondues, trié par taux de succès — une pool dédiée bien remplie en proxies performants empêchait alors le moteur de jamais "voir" un proxy fraîchement ajouté manuellement (`successCount: 0`) dans cette même pool, même après des milliers de requêtes. Corrigé en deux temps : le cache est construit **par pool** (v2.4.4), puis le tri par succès avant troncature a été supprimé (v2.4.5) — chaque pool voit désormais tout son stock actif, et c'est le trust score qui arbitre au moment du choix, pas une requête qui excluait déjà les nouveaux venus en amont.
+:::
+
 ## Session statique (identifiants temporaires)
 
-Depuis v2.4.2, en plus du format sticky classique (`host:port:user:session:pass`), **Mes Proxies → Générer** propose un préréglage **Session statique** qui génère des identifiants **temporaires** dédiés :
+Depuis v2.4.2, en plus du format sticky, **Mes Proxies → Générer** propose un préréglage **Session statique** qui génère des identifiants **temporaires** dédiés :
 
 ```
 GET /api/panel/me/proxies/:id/static-session?count=10&ttl=1800
@@ -221,6 +229,11 @@ Ces stats n'ajoutent ni ne déplacent aucun `BackendProxy` réel — c'est uniqu
 | `PATCH` | `/api/panel/proxy-pools/:id` | Modifier nom / description / couleur |
 | `POST` | `/api/panel/proxy-pools/:id/reroll-fake-ips` | Re-tirer l'IP simulée de chaque pays déjà configuré (plage inchangée) |
 | `DELETE` | `/api/panel/proxy-pools/:id` | Supprimer un pool |
+| `DELETE` | `/api/panel/proxy-pools/:id/proxies` | **Vider la catégorie** (depuis v2.4.6) : supprime tous les `BackendProxy` de cette pool, sans toucher à la pool elle-même |
+
+::: tip Vider une catégorie sans la supprimer
+`pool` est une simple string dénormalisée sur `BackendProxy` (pas de FK) — supprimer une pool ne nettoyait jusqu'ici jamais ses proxies (ils restaient avec un `pool` pointant vers un nom qui n'existe plus). Le bouton **Vider la catégorie** (icône gomme, page Proxy Pools) résout ce cas directement : tous les proxies de la catégorie disparaissent, mais son port/domaine/stats simulées restent configurés.
+:::
 
 Exemple de création :
 

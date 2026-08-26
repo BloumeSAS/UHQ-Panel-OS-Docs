@@ -58,9 +58,18 @@ Ces paramètres définissent ce qui est **affiché aux clients** pour se connect
 - **Variable d'env :** `PROXY_RACING_TIMEOUT`
 - Timeout du mode racing (plusieurs upstreams testés en parallèle, le plus rapide gagne).
 
+### `connectionIdleTimeout`
+- **Défaut :** `600` (secondes = 10min)
+- **Variable d'env :** `CONNECTION_IDLE_TIMEOUT`
+- Depuis v2.4.6. Ferme un tunnel client↔upstream sans aucune donnée échangée depuis ce délai. Sans ça, un client qui disparaît sans fermeture TCP propre (poste éteint brutalement, coupure réseau) ne déclenche jamais d'événement de fermeture côté serveur — la connexion, et le thread qu'elle occupe, restent comptés actifs indéfiniment (observé en prod : plus d'un jour après extinction du poste client).
+
 ---
 
 ## Scraper & Checker
+
+::: warning Scraper et checker ne tournent jamais en même temps (depuis v2.4.6)
+Chacun peut charger et traiter jusqu'à ~150 000 proxies — le cumul de RAM/CPU des deux en même temps a déjà causé des crashes/redémarrages en prod. Un `JobCoordinatorService` interne fait attendre celui qui démarrerait en second (jusqu'à 30 min) que l'autre se termine, plutôt que de les laisser se chevaucher. Aucun réglage requis, c'est automatique.
+:::
 
 ### `scrapeInterval`
 - **Défaut :** `3600` (secondes = 1h)
@@ -210,6 +219,14 @@ Les notifications sont envoyées lors d'événements importants : proxy mort, se
 ### `backupIntervalCron`
 - **Défaut :** `0 0 * * *` (minuit chaque jour)
 - Expression cron de la fréquence de sauvegarde.
+
+::: tip Fenêtre calme avant une sauvegarde planifiée (depuis v2.4.6)
+Une sauvegarde **planifiée** (cron) attend que le scraper et le checker soient à l'arrêt, et que le trafic soit raisonnable (≤100 threads actifs), avant de démarrer réellement — jusqu'à 20 minutes d'attente, puis elle se lance quand même pour ne jamais sauter un cycle planifié. Le déclenchement **manuel** ("Lancer une sauvegarde" dans le panel) reste immédiat, sans attente : c'est une intention explicite de l'admin.
+:::
+
+::: tip Sauvegarde streamée (depuis v2.4.5)
+Sur une base volumineuse (plusieurs Go), la sauvegarde ne charge plus chaque table entière en mémoire avant de tout sérialiser en un bloc — ça dépassait la limite de taille de string V8 et/ou la limite S3 de 5 Go pour un upload non-multipart. Les grosses tables (`UserProxy`/`ProxyUsage`/`BackendProxy`) sont désormais lues par pages de 5000 lignes et streamées directement ; l'upload S3 passe par un multipart automatique (`@aws-sdk/lib-storage`), sans limite de taille.
+:::
 
 ### `backupStorageType`
 - **Défaut :** `local`
