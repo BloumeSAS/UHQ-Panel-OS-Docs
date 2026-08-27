@@ -2,6 +2,9 @@
 
 ## v2.4.x
 
+### v2.4.7
+- **Fix : "Vider la catégorie" renvoyait un 500** — sur une catégorie très fournie, la suppression était un seul `deleteMany` géant attendu de façon synchrone, ce qui pouvait dépasser une limite de la base ou le timeout du reverse-proxy en prod. Tourne désormais en tâche de fond, par lots de 5000 ids, suivie via un endpoint de polling (même pattern que les sauvegardes manuelles) — le bouton se déclenche instantanément et notifie une fois terminé.
+
 ### v2.4.6
 - **Fix majeur : crashes/redémarrages causés par le scraper et le checker tournant en même temps** — chacun peut charger et traiter jusqu'à ~150 000 proxies ; le cumul de RAM/CPU a déjà fait sauter le process en prod. Un nouveau `JobCoordinatorService` garantit qu'un seul des deux tourne à la fois : l'autre attend (jusqu'à 30 min) que le premier se libère avant de démarrer, au lieu de risquer le chevauchement.
 - **Sauvegarde automatique : attend une fenêtre calme** — les sauvegardes planifiées (cron) attendent désormais que le scraper/checker soient à l'arrêt ET que le trafic soit raisonnable (≤100 threads actifs) avant de démarrer (jusqu'à 20 min d'attente, puis lancement quand même pour ne jamais sauter un cycle planifié). Le déclenchement manuel ("Lancer maintenant") reste immédiat.

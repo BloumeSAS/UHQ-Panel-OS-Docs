@@ -229,10 +229,15 @@ Ces stats n'ajoutent ni ne déplacent aucun `BackendProxy` réel — c'est uniqu
 | `PATCH` | `/api/panel/proxy-pools/:id` | Modifier nom / description / couleur |
 | `POST` | `/api/panel/proxy-pools/:id/reroll-fake-ips` | Re-tirer l'IP simulée de chaque pays déjà configuré (plage inchangée) |
 | `DELETE` | `/api/panel/proxy-pools/:id` | Supprimer un pool |
-| `DELETE` | `/api/panel/proxy-pools/:id/proxies` | **Vider la catégorie** (depuis v2.4.6) : supprime tous les `BackendProxy` de cette pool, sans toucher à la pool elle-même |
+| `DELETE` | `/api/panel/proxy-pools/:id/proxies` | **Vider la catégorie** (depuis v2.4.6, en tâche de fond depuis v2.4.7) : déclenche la suppression de tous les `BackendProxy` de cette pool, sans toucher à la pool elle-même |
+| `GET` | `/api/panel/proxy-pools/:id/proxies/clear-status` | État du vidage en cours (depuis v2.4.7) — `{running, deleted, error}` |
 
 ::: tip Vider une catégorie sans la supprimer
 `pool` est une simple string dénormalisée sur `BackendProxy` (pas de FK) — supprimer une pool ne nettoyait jusqu'ici jamais ses proxies (ils restaient avec un `pool` pointant vers un nom qui n'existe plus). Le bouton **Vider la catégorie** (icône gomme, page Proxy Pools) résout ce cas directement : tous les proxies de la catégorie disparaissent, mais son port/domaine/stats simulées restent configurés.
+:::
+
+::: warning Suppression en tâche de fond (depuis v2.4.7)
+`DELETE /:id/proxies` déclenche la suppression et répond immédiatement (`{started: true}`) — sur une catégorie très fournie (dizaines/centaines de milliers de proxies), attendre la fin dépassait le timeout du reverse-proxy en prod et renvoyait un 500 générique. La suppression réelle tourne en arrière-plan par lots de 5000 ids ; le panel poll `GET /:id/proxies/clear-status` (`{running, deleted, error}`) pour savoir quand c'est fini.
 :::
 
 Exemple de création :
