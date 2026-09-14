@@ -120,6 +120,52 @@ Avant, un tirage uniforme dans un top-N fixe favorisait mécaniquement toujours 
 Le cache mémoire de sélection était un seul "top-N" global toutes pools confondues, trié par taux de succès — une pool dédiée bien remplie en proxies performants empêchait alors le moteur de jamais "voir" un proxy fraîchement ajouté manuellement (`successCount: 0`) dans cette même pool, même après des milliers de requêtes. Corrigé en deux temps : le cache est construit **par pool** (v2.4.4), puis le tri par succès avant troncature a été supprimé (v2.4.5) — chaque pool voit désormais tout son stock actif, et c'est le trust score qui arbitre au moment du choix, pas une requête qui excluait déjà les nouveaux venus en amont.
 :::
 
+## Proxies "pays sélectionnable" (depuis v2.4.13)
+
+Certains fournisseurs (résidentiels ou datacenter) exposent **une seule passerelle** qui sert plusieurs pays selon le username envoyé, plutôt que des IP à pays fixe. Pour ces proxies, le pays réel n'est jamais dans la colonne `country` de la base — il est décidé à la connexion en réécrivant le username.
+
+Deux niveaux, à ne pas confondre :
+
+| Niveau | Où le configurer | Ce que ça affecte |
+|---|---|---|
+| **Pool** — `fallbackCountryFormat` | Édition d'une pool (Proxy Pools) | UNIQUEMENT le proxy résidentiel de secours unique (`SCRAPER_PROXY`) — un seul format par pool |
+| **Proxy** — `countryFormat` | Import manuel (toggle "Proxies pays sélectionnable") ou sélection multiple + barre d'action (Pool de proxies) | Les vrais `BackendProxy` de la pool — **un format différent par proxy**, donc plusieurs fournisseurs avec des conventions différentes peuvent cohabiter dans la même catégorie |
+
+### Gabarit de username
+
+Un gabarit est une chaîne avec des placeholders :
+
+- `{user}` — le username d'origine stocké en base
+- `{country}` — le code pays cible, en **minuscule**
+- `{COUNTRY}` — le code pays cible, en **MAJUSCULE**
+
+Doit contenir au minimum `{user}` et `{country}` (validé au moment de la sauvegarde, sinon erreur explicite). Exemples réels :
+
+| Gabarit | `user` stocké | Résultat pour FR |
+|---|---|---|
+| `{user}__country__{country}` (défaut) | `abc123` | `abc123__country__fr` |
+| `{user}-country-{country}` | `abc123` | `abc123-country-fr` |
+| `dc-{country}` | `dc-any` (ignoré) | `dc-fr` |
+| `{user}-{COUNTRY}` | `rotating` | `rotating-FR` |
+
+Le username n'est réécrit **qu'au moment de la connexion** (juste avant le CONNECT/handshake) — que ce soit une sélection normale via le tirage pondéré, ou une session sticky réutilisée. Le username stocké en base reste tel quel.
+
+::: warning Pays multiples : tirage aléatoire (depuis v2.4.17)
+Si le filtre pays demandé contient plusieurs codes séparés par virgule (ex. `IT,FR,US` — filtre pays d'un compte), un code est tiré **au hasard** parmi la liste à chaque connexion. Avant v2.4.17, c'était toujours le premier code de la liste, sans jamais varier.
+:::
+
+### Éditer le format sur des proxies déjà importés
+
+Depuis v2.4.15, page **Pool de proxies** : cases à cocher par ligne (+ tout sélectionner en en-tête) et une barre d'action groupée apparaît dès qu'une sélection existe — applique ou retire (`countryFormat: null`, repasse en pays fixe classique) un gabarit sur toute la sélection. La colonne "Pays" affiche le gabarit configuré en badge à la place du pays statique quand il est renseigné.
+
+```http
+PATCH /api/panel/monitoring/proxies/country-format
+Authorization: Bearer <jwt>
+Content-Type: application/json
+
+{ "ids": ["id1", "id2"], "countryFormat": "{user}-country-{country}" }
+```
+
 ## Session statique (identifiants temporaires)
 
 Depuis v2.4.2, en plus du format sticky, **Mes Proxies → Générer** propose un préréglage **Session statique** qui génère des identifiants **temporaires** dédiés :

@@ -2,6 +2,20 @@
 
 ## v2.4.x
 
+### v2.4.17
+- **Fix : pays multiples toujours résolus au premier de la liste** — quand plusieurs pays étaient demandés (ex. `IT,FR,US`), l'injection du pays dans le username d'un proxy "pays sélectionnable" prenait toujours le premier code, quel que soit le nombre de requêtes. Un pays est désormais tiré au hasard parmi la liste à chaque connexion.
+
+### v2.4.16
+- **Nouveau : statistiques par compte proxy dans le panel admin** — nouveau bouton sur chaque compte dans **Sous-utilisateurs** : filtre par période (semaine/mois/année/tout), requêtes, données totales, envoyé/reçu, threads actifs, et **top 25 des sites les plus visités** avec requêtes + volume par domaine. Auparavant réservé au propriétaire du compte via "Mes Proxies".
+- **Fix** : le format sticky-list affiché côté admin (`GET /subusers/:id/sticky-list`) annonçait encore l'ancien format à 5 champs — resté oublié lors du passage au format 4 champs en v2.4.5 (seule la copie côté "Mes Proxies" avait été corrigée).
+
+### v2.4.13 – v2.4.15 — Proxies "pays sélectionnable"
+- **Nouveau : format de username configurable pour l'injection du pays**, à deux niveaux — voir [Proxies "pays sélectionnable"](/guide/proxy-pools#proxies-pays-sélectionnable-depuis-v2-4-13) :
+  - **Par pool** (`fallbackCountryFormat`) : gabarit utilisé par le fallback résidentiel unique de cette catégorie.
+  - **Par proxy** (`countryFormat`) : les vrais proxies de la pool peuvent chacun avoir leur propre gabarit — plusieurs fournisseurs avec des conventions différentes cohabitent dans la même catégorie. Réglable à l'import manuel (toggle "Proxies pays sélectionnable") **ou après coup** (v2.4.15) via sélection multiple + barre d'action groupée dans Pool de proxies.
+  - Exemples de gabarits cliquables dans les deux écrans.
+- **v2.4.14** : clarification UI — le champ pool-level ne concerne QUE le fallback résidentiel, pas les proxies de la pool ; note ajoutée dans les deux écrans pointant l'un vers l'autre.
+
 ### v2.4.12
 - **Fix sécurité (suite v2.4.11)** — le rate-limiter de login/forgot-password lisait `X-Forwarded-For` directement depuis les headers de requête, un champ entièrement contrôlé par le client tant que l'app ne déclare pas explicitement de quel hop se méfier — en changer la valeur à chaque requête permettait de contourner la limite par IP. `app.set('trust proxy', 1)` déclare qu'un seul hop (Traefik/Coolify, seul reverse-proxy devant l'API) est de confiance, et `req.ip` (Express) remplace le parsing manuel partout où l'IP client est utilisée.
 
