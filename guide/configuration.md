@@ -30,6 +30,20 @@ Chaque paramètre peut avoir une variable d'environnement de repli : si aucune v
 
 ---
 
+## Sécurité (durcissement v2.4.11 / v2.4.12)
+
+Ces protections ne sont **pas** des `SETTING_DEFS` — elles sont actives par défaut, sans réglage panel.
+
+::: tip Rate limiting login/forgot-password (depuis v2.4.11)
+`/auth/login` et `/auth/forgot-password` sont protégés par un limiteur en mémoire (sans dépendance externe) : 5 tentatives/min par IP+email en login (+ 20/min par IP contre le spray multi-comptes), 5/min par IP sur forgot-password. S'ajoute au captcha (`captchaProvider`), qui n'est pas configuré par défaut sur une install fraîche.
+:::
+
+::: warning `trust proxy` = 1 hop (depuis v2.4.12)
+L'API déclare (`app.set('trust proxy', 1)` dans `main.ts`) ne faire confiance qu'à **un seul** reverse-proxy en amont (Traefik/Coolify, le déploiement standard — voir [Docker & Coolify](/guide/docker)) pour lire `X-Forwarded-For`/`req.ip`. **Si vous ajoutez un second reverse-proxy devant Traefik** (CDN, load balancer supplémentaire), il faut ajuster ce nombre de hops dans `main.ts` — sinon `req.ip` peut résoudre la mauvaise IP de la chaîne (celle du hop non pris en compte plutôt que le vrai client), ce qui fausserait le rate limiting ci-dessus.
+:::
+
+---
+
 ## Proxy public
 
 Ces paramètres définissent ce qui est **affiché aux clients** pour se connecter au proxy. Ils n'affectent pas le port d'écoute réel du moteur proxy (défini par `PROXY_PORT` dans le `docker-compose.yml`).
@@ -112,6 +126,10 @@ Le checker teste désormais les proxies **HTTP** via un `GET` en forme absolue p
 - **Type :** secret
 - **Variable d'env :** `GROQ_API_KEY`
 - Clé API Groq pour le provider de scraping assisté par IA. Obtenir une clé gratuite sur [console.groq.com](https://console.groq.com).
+
+::: warning Modèles Groq décommissionnés sans préavis (depuis v2.4.8)
+Groq retire des modèles de son catalogue sans préavis long — `gemma2-9b-it` a par exemple été décommissionné et cassait l'aide "Détecter le pattern automatiquement" (sources scraper) avec `HTTP 400 "no longer supported"`. Les modèles utilisés en repli (v2.4.10 : `llama-3.3-70b-versatile` → `llama-3.1-8b-instant` → `openai/gpt-oss-20b`) sont codés en dur dans `scraper-sources.controller.ts` — si l'erreur "no longer supported" réapparaît, vérifier [console.groq.com/docs/deprecations](https://console.groq.com/docs/deprecations) et mettre à jour la liste.
+:::
 
 ---
 

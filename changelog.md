@@ -2,6 +2,23 @@
 
 ## v2.4.x
 
+### v2.4.12
+- **Fix sécurité (suite v2.4.11)** — le rate-limiter de login/forgot-password lisait `X-Forwarded-For` directement depuis les headers de requête, un champ entièrement contrôlé par le client tant que l'app ne déclare pas explicitement de quel hop se méfier — en changer la valeur à chaque requête permettait de contourner la limite par IP. `app.set('trust proxy', 1)` déclare qu'un seul hop (Traefik/Coolify, seul reverse-proxy devant l'API) est de confiance, et `req.ip` (Express) remplace le parsing manuel partout où l'IP client est utilisée.
+
+### v2.4.11
+- **Fix sécurité : path traversal admin sur la restauration/suppression de backups locaux** — `POST /backup/restore` et `DELETE /backup/:filename` concaténaient le nom de fichier fourni tel quel dans le chemin disque. Un nom du type `../../../../etc/passwd` sortait du répertoire de backups. `path.basename()` neutralise désormais toute traversée.
+- **Fix sécurité : aucune protection anti-brute-force sur `/auth/login` et `/auth/forgot-password`** — le seul frein existant (captcha) n'est pas configuré par défaut sur une install fraîche. Nouveau limiteur en mémoire (fenêtre glissante) : 5 tentatives/min par IP+email en login (+ 20/min par IP contre le spray multi-comptes), 5/min par IP sur forgot-password.
+
+### v2.4.10
+- **Fix majeur : crashes "Uncaught exception: read ECONNRESET"** — le listener d'erreur sur les sockets (client comme upstream) n'était actif que pendant la phase de connexion (`.once('error', ...)`), qui se retire définitivement après son premier déclenchement même sans rien faire. Toute erreur socket ultérieure (ECONNRESET pendant le relais réel) se retrouvait alors sans aucun listener — Node la relance comme exception non interceptée jusqu'au process. Un listener d'erreur permanent est maintenant posé dès la création de chaque socket.
+- **Fix : "détecter le pattern" (Groq) pouvait échouer avec "Réponse vide du modèle"** — les modèles `openai/gpt-oss-*` consomment des tokens de raisonnement caché avant de produire la réponse visible ; avec un budget de 150 tokens, tout pouvait être englouti par ce raisonnement. `max_tokens` relevé à 300 et `reasoning_effort: 'low'` ajouté pour ces modèles. Chaque message d'erreur indique aussi désormais quel modèle a échoué et pourquoi.
+
+### v2.4.9
+- **Fix : "détecter le pattern" pouvait renvoyer un succès avec un pattern vide** — `new RegExp('')` ne lève jamais d'erreur ; une réponse vide/mal formée du modèle passait le contrôle de validité existant et renvoyait un faux succès, effaçant silencieusement le champ pattern. L'API rejette maintenant une réponse vide et vérifie que le regex retourné a bien ses 2 groupes de capture requis avant de l'accepter.
+
+### v2.4.8
+- **Fix : modèle Groq décommissionné** — `gemma2-9b-it` a été retiré par Groq (HTTP 400 "no longer supported"), cassant le dernier fallback de l'aide "détecter le pattern automatiquement". Remplacé par `openai/gpt-oss-20b`.
+
 ### v2.4.7
 - **Fix : "Vider la catégorie" renvoyait un 500** — sur une catégorie très fournie, la suppression était un seul `deleteMany` géant attendu de façon synchrone, ce qui pouvait dépasser une limite de la base ou le timeout du reverse-proxy en prod. Tourne désormais en tâche de fond, par lots de 5000 ids, suivie via un endpoint de polling (même pattern que les sauvegardes manuelles) — le bouton se déclenche instantanément et notifie une fois terminé.
 
