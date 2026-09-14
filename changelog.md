@@ -2,6 +2,9 @@
 
 ## v2.4.x
 
+### v2.4.18
+- **Fix : validation trop stricte du format "pays sélectionnable"** — exigeait `{user}` ET `{country}`, mais l'un des exemples cliquables fournis dans l'UI elle-même (`dc-{country}`) est un gabarit à remplacement complet qui ignore volontairement le username d'origine (usage réel et légitime). Seul `{country}` (ou `{COUNTRY}`) est désormais requis ; `{user}` reste utilisable mais optionnel.
+
 ### v2.4.17
 - **Fix : pays multiples toujours résolus au premier de la liste** — quand plusieurs pays étaient demandés (ex. `IT,FR,US`), l'injection du pays dans le username d'un proxy "pays sélectionnable" prenait toujours le premier code, quel que soit le nombre de requêtes. Un pays est désormais tiré au hasard parmi la liste à chaque connexion.
 

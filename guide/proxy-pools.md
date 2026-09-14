@@ -139,7 +139,7 @@ Un gabarit est une chaîne avec des placeholders :
 - `{country}` — le code pays cible, en **minuscule**
 - `{COUNTRY}` — le code pays cible, en **MAJUSCULE**
 
-Doit contenir au minimum `{user}` et `{country}` (validé au moment de la sauvegarde, sinon erreur explicite). Exemples réels :
+Doit contenir `{country}` ou `{COUNTRY}` (validé au moment de la sauvegarde, sinon erreur explicite) — `{user}` est **optionnel** : un gabarit à remplacement complet comme `dc-{country}` (qui ignore volontairement le username d'origine) est un usage légitime. Exemples réels :
 
 | Gabarit | `user` stocké | Résultat pour FR |
 |---|---|---|
