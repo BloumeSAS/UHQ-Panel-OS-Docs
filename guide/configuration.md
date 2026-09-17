@@ -113,6 +113,10 @@ Chacun peut charger et traiter jusqu'à ~150 000 proxies — le cumul de RAM/CPU
 - **Défaut :** `3`
 - Nombre de vérifications consécutives échouées avant qu'un proxy soit considéré **définitivement mort** et ignoré. Fonctionne uniquement si `skipDeadProxies` est activé.
 
+### `auditLogRetentionMonths`
+- **Défaut :** `12`
+- Ancienneté (en mois) au-delà de laquelle les lignes du journal d'audit sont purgées automatiquement (tâche planifiée quotidienne, depuis v2.4.19). Contrairement au buffer de logs mémoire (2000 entrées) ou aux fichiers de logs (30 jours), le journal d'audit n'avait auparavant aucune rétention.
+
 ::: tip Test de vivacité HTTP (depuis v2.4.2)
 Le checker teste désormais les proxies **HTTP** via un `GET` en forme absolue plutôt qu'un `CONNECT` — beaucoup de proxies HTTP bas de gamme ne supportent que le relais GET et rejettent `CONNECT` (réservé en pratique au tunneling HTTPS), ce qui les faisait auparavant marquer morts à tort. Les proxies SOCKS4/5 utilisent toujours la négociation SOCKS classique, inchangée.
 :::
@@ -328,4 +332,6 @@ Ces paramètres ne sont **pas** gérés par le panel — ils doivent être défi
 | `PROXY_PORT` | `990` | Port d'écoute réel du moteur proxy TCP |
 | `API_PORT` | `8000` | Port d'écoute de l'API NestJS |
 | `DATA_DIR` | `/app/data` | Répertoire de données persistantes |
+| `LOG_DIR` | `/app/logs` | Répertoire des fichiers de logs journaliers |
+| `LOG_LEVEL` | `log` | Seuil de verbosité (`verbose`, `debug`, `log`, `warn`, `error`, `fatal`) — `error` toujours émis quel que soit le seuil (depuis v2.4.19) |
 | `TZ` | `Europe/Paris` | Fuseau horaire |

@@ -2,6 +2,15 @@
 
 ## v2.4.x
 
+### v2.4.19 — Logs & audit
+- **Nouveau : volume Docker pour `/app/logs`** — les fichiers de logs survivent désormais aux redéploiements (jusqu'ici seul `/app/data` était monté).
+- **Nouveau : lecture des fichiers de logs déjà écrits** — `GET /api/panel/logs/files` (liste) + `GET /api/panel/logs/files/:filename` (contenu, `?tail=N`) ; nouvel onglet "Historique fichiers" dans **Administration → Logs**, qui charge aussi désormais le buffer mémoire au chargement (avant, seul le flux live SSE alimentait l'écran).
+- **Nouveau : variable `LOG_LEVEL`** — filtre debug/verbose au démarrage sans changement de code ; `error` reste toujours émis quel que soit le seuil configuré.
+- **Nouveau : rétention du journal d'audit** — purge quotidienne des lignes plus vieilles que `auditLogRetentionMonths` (réglage panel, défaut 12 mois) ; auparavant la table `AuditLog` grossissait indéfiniment.
+- **Nouveau : ID de corrélation par requête** — chaque ligne de log émise pendant une requête HTTP porte désormais le même ID (repris de `X-Request-Id` si fourni, sinon généré), affiché dans le flux live du panel.
+- **Nouveau : dimension erreur sur le trafic** — le sniff HTTP en clair (403/captcha/geo-block) est maintenant persisté (nouvelle table `ProxyUsageError`) au lieu de se perdre dans un simple avertissement. Exposé en `errors`/`errors_by_reason` sur les statistiques admin et sur l'API legacy (`/api/v1/stats/proxy/:id`) — corrige le widget "Erreurs HTTP" vide côté UHQ.Monster. Limite connue : l'HTTPS (l'essentiel du trafic) reste structurellement opaque pour un tunnel TCP bas niveau, aucune tentative de MITM/TLS-termination n'a été ajoutée.
+- **Fix : export CSV du journal d'audit** — le bouton "Télécharger CSV" n'exportait que la page affichée (50 lignes) malgré son libellé ; génère maintenant le CSV complet côté serveur sur le résultat filtré. Nouveaux filtres (action, email, plage de dates) dans l'écran **Audit**.
+
 ### v2.4.18
 - **Fix : validation trop stricte du format "pays sélectionnable"** — exigeait `{user}` ET `{country}`, mais l'un des exemples cliquables fournis dans l'UI elle-même (`dc-{country}`) est un gabarit à remplacement complet qui ignore volontairement le username d'origine (usage réel et légitime). Seul `{country}` (ou `{COUNTRY}`) est désormais requis ; `{user}` reste utilisable mais optionnel.
 

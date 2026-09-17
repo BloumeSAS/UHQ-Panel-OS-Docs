@@ -49,12 +49,15 @@ services:
       PROXY_PORT_RANGE: "9000-9999"
     volumes:
       - appdata:/app/data
+      - logsdata:/app/logs
 
 volumes:
   pgdata:
     name: uhq-panel-pgdata
   appdata:
     name: uhq-panel-appdata
+  logsdata:
+    name: uhq-panel-logsdata
 ```
 
 ---
@@ -97,6 +100,7 @@ Les volumes sont nommés avec `name:` explicite. Coolify et Docker Compose ne pe
 |---|---|---|
 | `uhq-panel-pgdata` | `/var/lib/postgresql/data` | Base PostgreSQL |
 | `uhq-panel-appdata` | `/app/data` | JWT secret, config runtime, backups locaux |
+| `uhq-panel-logsdata` | `/app/logs` | Fichiers de logs journaliers (`combined-*.log`, `error-*.log`, depuis v2.4.19) |
 
 ---
 
