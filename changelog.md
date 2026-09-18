@@ -2,6 +2,9 @@
 
 ## v2.4.x
 
+### v2.4.20
+- **Fix : colonne "Pays" de Sous-utilisateurs cassait avec beaucoup de pays sélectionnés** — une longue liste (ex. `NL,FR,DE,GB,RU,TR,ES,IT,UA,PL,CZ,SE,...`) débordait en texte brut la ligne du tableau. Affichée désormais en **drapeaux** (jusqu'à 8 inline), avec un bouton "+N" ouvrant la liste complète dans une modal au-delà — dans le tableau et dans la vue rapide.
+
 ### v2.4.19 — Logs & audit
 - **Nouveau : volume Docker pour `/app/logs`** — les fichiers de logs survivent désormais aux redéploiements (jusqu'ici seul `/app/data` était monté).
 - **Nouveau : lecture des fichiers de logs déjà écrits** — `GET /api/panel/logs/files` (liste) + `GET /api/panel/logs/files/:filename` (contenu, `?tail=N`) ; nouvel onglet "Historique fichiers" dans **Administration → Logs**, qui charge aussi désormais le buffer mémoire au chargement (avant, seul le flux live SSE alimentait l'écran).
