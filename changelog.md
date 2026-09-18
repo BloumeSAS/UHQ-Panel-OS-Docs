@@ -2,6 +2,9 @@
 
 ## v2.4.x
 
+### v2.4.21
+- **Fix : les drapeaux pays ne s'affichaient pas sous Chrome (Windows)** — les emoji drapeaux (ajoutés en v2.4.20) ne rendent pas nativement sur Windows, faute de police système embarquant ces glyphes (contrairement à macOS/Android/iOS) ; Chrome/Edge/Firefox y affichaient le code pays brut à la place. Remplacés par des images (flagcdn.com), identiques sur toutes les plateformes — corrigé dans Sous-utilisateurs et dans Pool de proxies.
+
 ### v2.4.20
 - **Fix : colonne "Pays" de Sous-utilisateurs cassait avec beaucoup de pays sélectionnés** — une longue liste (ex. `NL,FR,DE,GB,RU,TR,ES,IT,UA,PL,CZ,SE,...`) débordait en texte brut la ligne du tableau. Affichée désormais en **drapeaux** (jusqu'à 8 inline), avec un bouton "+N" ouvrant la liste complète dans une modal au-delà — dans le tableau et dans la vue rapide.
 
