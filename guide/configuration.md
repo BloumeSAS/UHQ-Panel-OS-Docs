@@ -42,6 +42,14 @@ Ces protections ne sont **pas** des `SETTING_DEFS` — elles sont actives par d�
 L'API déclare (`app.set('trust proxy', 1)` dans `main.ts`) ne faire confiance qu'à **un seul** reverse-proxy en amont (Traefik/Coolify, le déploiement standard — voir [Docker & Coolify](/guide/docker)) pour lire `X-Forwarded-For`/`req.ip`. **Si vous ajoutez un second reverse-proxy devant Traefik** (CDN, load balancer supplémentaire), il faut ajuster ce nombre de hops dans `main.ts` — sinon `req.ip` peut résoudre la mauvaise IP de la chaîne (celle du hop non pris en compte plutôt que le vrai client), ce qui fausserait le rate limiting ci-dessus.
 :::
 
+::: tip IP bannies (depuis v2.4.22)
+Barre latérale admin → **IP bannies** (`/banned-ips`) : bannit une ou plusieurs IP (une par ligne) de l'utilisation du moteur proxy, **indépendamment des comptes** — une IP bannie ne peut plus rien faire avec aucun identifiant. Vérifié en mémoire dès l'établissement de la connexion TCP, avant même la lecture de la requête d'auth : l'IP reçoit une erreur HTTP 403 et la connexion est fermée immédiatement. Raison et expiration optionnelles ; débannissement individuel ou par sélection multiple.
+:::
+
+::: tip Activer la 2FA sur un compte admin (depuis v2.4.22)
+Avant v2.4.22, la page `/security` existait déjà côté API et web mais n'était liée nulle part dans le menu admin (bug corrigé). Aujourd'hui : barre latérale → **Sécurité** (ou **Profil** → raccourci) → scanner le QR code avec une app TOTP → saisir le code à 6 chiffres pour confirmer. Une page **Profil** (`/profile`, tous rôles) permet aussi de changer son mot de passe.
+:::
+
 ---
 
 ## Proxy public

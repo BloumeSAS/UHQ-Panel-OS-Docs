@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.22 — IP bannies, page Profil
+- **Nouveau : bannissement d'IP** — page admin **IP bannies** (`/banned-ips`) : bannit une ou plusieurs IP en une fois (indépendamment des comptes), vérifié avant même l'authentification (erreur HTTP 403 immédiate, connexion fermée, aucun thread consommé). Raison et expiration optionnelles ; débannissement individuel ou en masse.
+- **Nouveau : page Profil** (`/profile`, tous rôles) — infos du compte + changement de mot de passe, avec raccourci vers le statut 2FA.
+- **Fix : navigation admin vers Sécurité/Clés API** — ces pages existaient déjà (backend + route) mais n'étaient liées nulle part dans le menu admin, rendant la 2FA inaccessible sans taper l'URL à la main. Corrigé — voir [Configuration → IP bannies / 2FA](/guide/configuration#s%C3%A9curit%C3%A9-durcissement-v2-4-11-v2-4-12).
+
 ### v2.4.21
 - **Fix : les drapeaux pays ne s'affichaient pas sous Chrome (Windows)** — les emoji drapeaux (ajoutés en v2.4.20) ne rendent pas nativement sur Windows, faute de police système embarquant ces glyphes (contrairement à macOS/Android/iOS) ; Chrome/Edge/Firefox y affichaient le code pays brut à la place. Remplacés par des images (flagcdn.com), identiques sur toutes les plateformes — corrigé dans Sous-utilisateurs et dans Pool de proxies.
 
