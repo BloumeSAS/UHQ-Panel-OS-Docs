@@ -206,3 +206,45 @@ docker compose down
 # Supprimer TOUT (y compris les données) ⚠️
 docker compose down -v
 ```
+
+---
+
+## Dépannage
+
+### `EMFILE: too many open files` (500 sur n'importe quelle page)
+
+Corrigé côté code en **v2.4.23** (`PrismaService` laissait fuir des sockets TCP à chaque reconnexion DB — voir le [changelog](/changelog)). Si ça se reproduit malgré tout, ou sur une version antérieure :
+
+**Diagnostic** — vérifier la limite de descripteurs réellement appliquée dans le conteneur (le bloc `ulimits: nofile: 200000` du `docker-compose.yml` ci-dessus n'est pas toujours honoré par toutes les plateformes) :
+
+```bash
+docker exec <nom_conteneur> sh -c 'ulimit -n'
+# Compare au nombre de descripteurs réellement ouverts par le process (PID 1 dans le conteneur) :
+docker exec <nom_conteneur> sh -c 'ls /proc/1/fd | wc -l'
+```
+
+Si `ulimit -n` renvoie une valeur basse (1024, 4096…) malgré le `docker-compose.yml`, la limite n'est pas appliquée. Sur un VPS Coolify (déploiement **Docker Compose**, voir plus haut), c'est généralement le **daemon Docker de l'hôte** qui plafonne — pas Coolify lui-même. Sur le VPS :
+
+```bash
+# Limite max que le daemon Docker peut accorder à un conteneur
+cat /etc/systemd/system/docker.service.d/override.conf 2>/dev/null
+systemctl show docker --property=LimitNOFILE
+```
+
+Si `LimitNOFILE` est bas (défaut systemd historique : 1024), créer/éditer un override et relancer Docker :
+
+```bash
+mkdir -p /etc/systemd/system/docker.service.d
+cat > /etc/systemd/system/docker.service.d/override.conf <<'EOF'
+[Service]
+LimitNOFILE=1048576
+EOF
+systemctl daemon-reload
+systemctl restart docker
+```
+
+Puis redéployer l'application depuis Coolify pour que le nouveau conteneur hérite de la limite relevée.
+
+::: tip Le fix v2.4.23 suffit dans la quasi-totalité des cas
+La fuite de sockets était la cause du problème observé en prod — avec un `ulimit` par défaut (même bas, ex. 1024), il n'y a normalement aucune raison qu'une utilisation normale du panel approche cette limite une fois le fix appliqué. Ne relever `LimitNOFILE` qu'en dernier recours, si `EMFILE` se reproduit malgré une version à jour.
+:::

@@ -2,6 +2,9 @@
 
 ## v2.4.x
 
+### v2.4.23 — Fix fuite de descripteurs (EMFILE)
+- **Fix critique : `EMFILE: too many open files` après une série de coupures DB** — `PrismaService` refaisait `$connect()` après une perte de connexion sans jamais `$disconnect()` l'ancien client d'abord, laissant son pool de sockets TCP ouvert en arrière-plan à chaque cycle. Sur une série de coupures DB rapprochées, les descripteurs jamais libérés finissaient par épuiser la limite du process — provoquant des 500 sur n'importe quelle page du panel (fichiers statiques compris). Voir [Docker & Coolify → Dépannage](/guide/docker#d%C3%A9pannage) pour le diagnostic si ça se reproduit.
+
 ### v2.4.22 — IP bannies, page Profil
 - **Nouveau : bannissement d'IP** — page admin **IP bannies** (`/banned-ips`) : bannit une ou plusieurs IP en une fois (indépendamment des comptes), vérifié avant même l'authentification (erreur HTTP 403 immédiate, connexion fermée, aucun thread consommé). Raison et expiration optionnelles ; débannissement individuel ou en masse.
 - **Nouveau : page Profil** (`/profile`, tous rôles) — infos du compte + changement de mot de passe, avec raccourci vers le statut 2FA.
