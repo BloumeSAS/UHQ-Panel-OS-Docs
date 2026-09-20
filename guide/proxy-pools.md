@@ -211,6 +211,24 @@ Content-Type: application/json
 
 `blocked-domains/add` **fusionne** avec la liste existante (comme `allowed-ips/add`) — pratique pour ajouter un domaine sans avoir à relire puis réécrire toute la liste.
 
+```http
+POST /api/v1/sub-user/blocked-domains/remove
+Content-Type: application/json
+
+{ "id": "subuser_id", "domains": ["troisieme-site.com"] }
+```
+
+Retire les domaines donnés de la liste (depuis v2.4.27) — le pendant de `blocked-domains/add`.
+
+```http
+POST /api/v1/sub-user/blocked-domains/set
+Content-Type: application/json
+
+{ "id": "subuser_id", "domains": ["exemple.com", "autre.net"] }
+```
+
+`blocked-domains/set` (depuis v2.4.27) **remplace intégralement** la liste, contrairement à `add`/`remove` — pratique pour un client qui veut resynchroniser l'état complet en un seul appel plutôt que calculer un diff.
+
 ## Toujours en ligne
 
 Une pool peut être marquée **Toujours en ligne** : ses `BackendProxy` ne sont alors jamais testés par le checker (donc jamais marqués KO/morts) — ils restent affichés **OK** dans le Pool de proxies. Ce réglage est **indépendant** des pays/IP en plus ci-dessous : il ne contrôle que le comportement du checker, rien côté stats.

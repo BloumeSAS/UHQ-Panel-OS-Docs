@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.27 — Retrait/resynchronisation des domaines bloqués (API sub-user)
+- **Nouveau : `POST /api/v1/sub-user/blocked-domains/remove`** — retire des domaines de la liste bloquée d'un compte (l'endpoint `/add` existait depuis v2.4.26, mais aucun moyen de revenir en arrière).
+- **Nouveau : `POST /api/v1/sub-user/blocked-domains/set`** — remplace intégralement la liste en un appel, pour resynchroniser l'état complet côté client sans calculer un diff add/remove.
+
 ### v2.4.26 — Fix tracking domaine, domaines bloqués par compte
 - **Fix : le tracker de trafic (top domaines visités) affichait souvent "google.com" au lieu du vrai domaine** — pour CONNECT (HTTPS) sans header `Host` (fréquent, pas obligatoire pour cette méthode), le code repassait par `extractHost()` (pensé pour une URL absolue ou un header Host) au lieu d'utiliser directement `path` (déjà le host:port cible pour CONNECT). Même bug, plus grave, sur le tunnel de secours résidentiel : une requête CONNECT concernée ouvrait le tunnel vers **google.com au lieu de la vraie destination**.
 - **Nouveau : domaines bloqués par compte proxy** — chaque sous-utilisateur peut avoir une liste de domaines interdits (bloque le domaine exact + ses sous-domaines), vérifiée dès la connexion. Configurable en panel admin, en self-service (Mes Proxies), et via l'[API sub-user](/guide/proxy-pools#domaines-bloqués) (`/api/v1/sub-user/create`, `/update`, `/blocked-domains/add`).
