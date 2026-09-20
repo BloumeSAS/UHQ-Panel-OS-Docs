@@ -2,6 +2,9 @@
 
 ## v2.4.x
 
+### v2.4.24 — Plafond de descripteurs relevé (1 048 576)
+- **`ulimits.nofile` du container relevé de 200 000 à 1 048 576** dans `docker-compose.yml` — un burst de connexions d'un seul sous-compte (checker de combos IPTV : des centaines de requêtes/seconde, chacune faisant courir jusqu'à 5 upstreams en parallèle) a suffi à épuiser 200 000 descripteurs et redéclencher `EMFILE`, malgré le fix v2.4.23 (qui corrigeait une fuite différente, côté reconnexions Prisma). Voir [Docker & Coolify → Dépannage](/guide/docker#d%C3%A9pannage-emfile-too-many-open-files) — le daemon Docker de l'hôte doit lui aussi autoriser au moins cette valeur (`LimitNOFILE`), sinon le plafond réel reste inchangé malgré ce réglage.
+
 ### v2.4.23 — Fix fuite de descripteurs (EMFILE)
 - **Fix critique : `EMFILE: too many open files` après une série de coupures DB** — `PrismaService` refaisait `$connect()` après une perte de connexion sans jamais `$disconnect()` l'ancien client d'abord, laissant son pool de sockets TCP ouvert en arrière-plan à chaque cycle. Sur une série de coupures DB rapprochées, les descripteurs jamais libérés finissaient par épuiser la limite du process — provoquant des 500 sur n'importe quelle page du panel (fichiers statiques compris). Voir [Docker & Coolify → Dépannage](/guide/docker#d%C3%A9pannage) pour le diagnostic si ça se reproduit.
 

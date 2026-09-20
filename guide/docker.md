@@ -38,8 +38,8 @@ services:
       - "traefik.http.services.uhq-panel-app.loadbalancer.server.port=8000"
     ulimits:
       nofile:
-        soft: 200000
-        hard: 200000
+        soft: 1048576
+        hard: 1048576
     environment:
       DATABASE_URL: postgresql://uhq:uhqpanel_internal@db:5432/uhqpanel
       DATA_DIR: /app/data
@@ -211,11 +211,14 @@ docker compose down -v
 
 ## Dépannage
 
-### `EMFILE: too many open files` (500 sur n'importe quelle page)
+### `EMFILE: too many open files` (500 sur n'importe quelle page) {#dépannage-emfile-too-many-open-files}
 
-Corrigé côté code en **v2.4.23** (`PrismaService` laissait fuir des sockets TCP à chaque reconnexion DB — voir le [changelog](/changelog)). Si ça se reproduit malgré tout, ou sur une version antérieure :
+Deux causes distinctes rencontrées en prod, corrigées séparément :
 
-**Diagnostic** — vérifier la limite de descripteurs réellement appliquée dans le conteneur (le bloc `ulimits: nofile: 200000` du `docker-compose.yml` ci-dessus n'est pas toujours honoré par toutes les plateformes) :
+- **v2.4.23** — `PrismaService` laissait fuir des sockets TCP à chaque reconnexion DB (refaisait `$connect()` sans jamais `$disconnect()` l'ancien client). Une série de coupures DB rapprochées épuisait progressivement les descripteurs.
+- **v2.4.24** — même en excluant la fuite ci-dessus, un **burst de connexions légitimes** (un seul sous-compte lançant des centaines de requêtes/seconde — ex. un outil de check de combos IPTV — chacune faisant courir jusqu'à 5 upstreams en parallèle) peut à lui seul épuiser un plafond de 200 000 descripteurs en quelques secondes. Le `ulimits.nofile` du `docker-compose.yml` a été relevé à `1048576` pour absorber ce genre de pic.
+
+**Diagnostic** — vérifier la limite de descripteurs réellement appliquée dans le conteneur (trouver le nom réel du conteneur dans Coolify : onglet **Logs** de l'application, pas le libellé affiché dans l'URL) :
 
 ```bash
 docker exec <nom_conteneur> sh -c 'ulimit -n'
@@ -223,15 +226,14 @@ docker exec <nom_conteneur> sh -c 'ulimit -n'
 docker exec <nom_conteneur> sh -c 'ls /proc/1/fd | wc -l'
 ```
 
-Si `ulimit -n` renvoie une valeur basse (1024, 4096…) malgré le `docker-compose.yml`, la limite n'est pas appliquée. Sur un VPS Coolify (déploiement **Docker Compose**, voir plus haut), c'est généralement le **daemon Docker de l'hôte** qui plafonne — pas Coolify lui-même. Sur le VPS :
+Si `ulimit -n` renvoie une valeur basse malgré le `docker-compose.yml` à jour, c'est le **daemon Docker de l'hôte** qui plafonne en dessous — pas Coolify lui-même. Sur le VPS :
 
 ```bash
 # Limite max que le daemon Docker peut accorder à un conteneur
-cat /etc/systemd/system/docker.service.d/override.conf 2>/dev/null
 systemctl show docker --property=LimitNOFILE
 ```
 
-Si `LimitNOFILE` est bas (défaut systemd historique : 1024), créer/éditer un override et relancer Docker :
+Si c'est bas, créer/éditer un override et relancer Docker (⚠️ ça redémarre **tous** les conteneurs du VPS, pas juste celui-ci) :
 
 ```bash
 mkdir -p /etc/systemd/system/docker.service.d
@@ -243,8 +245,8 @@ systemctl daemon-reload
 systemctl restart docker
 ```
 
-Puis redéployer l'application depuis Coolify pour que le nouveau conteneur hérite de la limite relevée.
+Puis redéployer l'application depuis Coolify (bouton **Deploy**) pour que le nouveau conteneur hérite du `ulimits.nofile` à jour du `docker-compose.yml` **et** de la limite relevée côté daemon — les deux doivent être cohérents, le plus bas des deux l'emporte toujours.
 
-::: tip Le fix v2.4.23 suffit dans la quasi-totalité des cas
-La fuite de sockets était la cause du problème observé en prod — avec un `ulimit` par défaut (même bas, ex. 1024), il n'y a normalement aucune raison qu'une utilisation normale du panel approche cette limite une fois le fix appliqué. Ne relever `LimitNOFILE` qu'en dernier recours, si `EMFILE` se reproduit malgré une version à jour.
+::: tip Si `EMFILE` revient malgré une version à jour et un ulimit élevé
+C'est le signe d'un usage légitime au-delà de ce que le serveur peut absorber (checker de masse sur un sous-compte, etc.), pas d'une fuite. Envisager de resserrer `threadsLimit` pour ce compte (Sous-utilisateurs → Modifier), ou de le bloquer temporairement.
 :::
