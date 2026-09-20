@@ -176,6 +176,41 @@ GET /api/panel/me/proxies/:id/static-session?count=10&ttl=1800
 
 Chaque ligne renvoyée est un simple `host:port:user:pass` (aucun champ session visible) — mais chaque paire user/pass est **unique**, épinglée sur son propre upstream pendant `ttl` secondes (comme une session sticky), puis expire automatiquement. Utile pour les clients/logiciels qui n'acceptent que le format classique à 4 champs et ne savent pas gérer un champ "session" séparé.
 
+## Domaines bloqués {#domaines-bloqués}
+
+Depuis v2.4.26, chaque compte sous-utilisateur peut avoir une liste de **domaines interdits** — un peu comme la fonctionnalité de blocage de domaines de DataImpulse. Bloque le domaine exact **et** ses sous-domaines (ex. `exemple.com` bloque aussi `api.exemple.com`).
+
+Vérifié en mémoire dès l'établissement de la connexion, **avant même de consommer un slot thread** — CONNECT (HTTPS) comme HTTP en clair, le nom de domaine cible est toujours connu dès la ligne de requête (le moteur n'a pas besoin de voir le contenu chiffré pour ça). Une tentative vers un domaine bloqué reçoit une erreur HTTP 403 immédiate.
+
+Configurable à trois endroits, tous équivalents (même champ en base) :
+
+- **Panel admin** — Sous-utilisateurs → créer/modifier → champ **Domaines bloqués** (un par ligne).
+- **Self-service** — Mes Proxies (compte propriétaire) → Modifier.
+- **API sub-user** (`/api/v1/sub-user`, X-API-Key) :
+
+```http
+POST /api/v1/sub-user/create
+Content-Type: application/json
+
+{ "label": "Client A", "blocked_domains": "exemple.com,autre.net" }
+```
+
+```http
+POST /api/v1/sub-user/update
+Content-Type: application/json
+
+{ "id": "subuser_id", "blocked_domains": "exemple.com,autre.net" }
+```
+
+```http
+POST /api/v1/sub-user/blocked-domains/add
+Content-Type: application/json
+
+{ "id": "subuser_id", "domains": ["troisieme-site.com"] }
+```
+
+`blocked-domains/add` **fusionne** avec la liste existante (comme `allowed-ips/add`) — pratique pour ajouter un domaine sans avoir à relire puis réécrire toute la liste.
+
 ## Toujours en ligne
 
 Une pool peut être marquée **Toujours en ligne** : ses `BackendProxy` ne sont alors jamais testés par le checker (donc jamais marqués KO/morts) — ils restent affichés **OK** dans le Pool de proxies. Ce réglage est **indépendant** des pays/IP en plus ci-dessous : il ne contrôle que le comportement du checker, rien côté stats.

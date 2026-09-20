@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.26 — Fix tracking domaine, domaines bloqués par compte
+- **Fix : le tracker de trafic (top domaines visités) affichait souvent "google.com" au lieu du vrai domaine** — pour CONNECT (HTTPS) sans header `Host` (fréquent, pas obligatoire pour cette méthode), le code repassait par `extractHost()` (pensé pour une URL absolue ou un header Host) au lieu d'utiliser directement `path` (déjà le host:port cible pour CONNECT). Même bug, plus grave, sur le tunnel de secours résidentiel : une requête CONNECT concernée ouvrait le tunnel vers **google.com au lieu de la vraie destination**.
+- **Nouveau : domaines bloqués par compte proxy** — chaque sous-utilisateur peut avoir une liste de domaines interdits (bloque le domaine exact + ses sous-domaines), vérifiée dès la connexion. Configurable en panel admin, en self-service (Mes Proxies), et via l'[API sub-user](/guide/proxy-pools#domaines-bloqués) (`/api/v1/sub-user/create`, `/update`, `/blocked-domains/add`).
+
 ### v2.4.25 — Fix bloat de la table Notification (5,4 Go)
 - **Fix critique : table `Notification` à 5,4 Go / 610k lignes** — l'alerte "🚨 Proxy Hors Ligne" (une par proxy mort détecté, dédupliquée à 1/heure/URL mais sans aucune purge) a suffi à faire grossir la table indéfiniment sur un pool de dizaines de milliers de proxies. Cette alerte n'écrit plus de ligne in-app (les webhooks Discord/Slack restent inchangés).
 - **Nouveau : rétention automatique** (`notificationRetentionDays`, défaut 30 jours) — purge quotidienne, filet de sécurité pour les autres types de notification.
