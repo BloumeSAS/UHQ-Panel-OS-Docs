@@ -125,6 +125,10 @@ Chacun peut charger et traiter jusqu'à ~150 000 proxies — le cumul de RAM/CPU
 - **Défaut :** `12`
 - Ancienneté (en mois) au-delà de laquelle les lignes du journal d'audit sont purgées automatiquement (tâche planifiée quotidienne, depuis v2.4.19). Contrairement au buffer de logs mémoire (2000 entrées) ou aux fichiers de logs (30 jours), le journal d'audit n'avait auparavant aucune rétention.
 
+### `notificationRetentionDays`
+- **Défaut :** `30`
+- Ancienneté (en jours) au-delà de laquelle les notifications in-app sont purgées automatiquement (depuis v2.4.25 — la table avait atteint 5,4 Go sans aucune rétention, voir le [changelog](/changelog)). Un bouton **Purger** (cloche de notifications, admin) permet aussi de vider la table immédiatement.
+
 ::: tip Test de vivacité HTTP (depuis v2.4.2)
 Le checker teste désormais les proxies **HTTP** via un `GET` en forme absolue plutôt qu'un `CONNECT` — beaucoup de proxies HTTP bas de gamme ne supportent que le relais GET et rejettent `CONNECT` (réservé en pratique au tunneling HTTPS), ce qui les faisait auparavant marquer morts à tort. Les proxies SOCKS4/5 utilisent toujours la négociation SOCKS classique, inchangée.
 :::

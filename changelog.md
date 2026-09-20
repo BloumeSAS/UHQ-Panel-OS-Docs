@@ -2,6 +2,15 @@
 
 ## v2.4.x
 
+### v2.4.25 — Fix bloat de la table Notification (5,4 Go)
+- **Fix critique : table `Notification` à 5,4 Go / 610k lignes** — l'alerte "🚨 Proxy Hors Ligne" (une par proxy mort détecté, dédupliquée à 1/heure/URL mais sans aucune purge) a suffi à faire grossir la table indéfiniment sur un pool de dizaines de milliers de proxies. Cette alerte n'écrit plus de ligne in-app (les webhooks Discord/Slack restent inchangés).
+- **Nouveau : rétention automatique** (`notificationRetentionDays`, défaut 30 jours) — purge quotidienne, filet de sécurité pour les autres types de notification.
+- **Nouveau : bouton "Purger"** dans la cloche de notifications (admin) — vide immédiatement toute la table.
+
+::: tip Récupérer l'espace déjà utilisé
+Le fix stoppe la croissance mais ne réduit pas la base déjà accumulée — utiliser le bouton **Purger** (cloche) ou attendre la purge automatique. Après une purge massive, un `VACUUM FULL` côté Postgres peut être nécessaire pour que l'espace disque soit réellement rendu à l'OS (sinon Postgres le garde réservé pour la table).
+:::
+
 ### v2.4.24 — Plafond de descripteurs relevé (1 048 576)
 - **`ulimits.nofile` du container relevé de 200 000 à 1 048 576** dans `docker-compose.yml` — un burst de connexions d'un seul sous-compte (checker de combos IPTV : des centaines de requêtes/seconde, chacune faisant courir jusqu'à 5 upstreams en parallèle) a suffi à épuiser 200 000 descripteurs et redéclencher `EMFILE`, malgré le fix v2.4.23 (qui corrigeait une fuite différente, côté reconnexions Prisma). Voir [Docker & Coolify → Dépannage](/guide/docker#d%C3%A9pannage-emfile-too-many-open-files) — le daemon Docker de l'hôte doit lui aussi autoriser au moins cette valeur (`LimitNOFILE`), sinon le plafond réel reste inchangé malgré ce réglage.
 
