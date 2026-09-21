@@ -2,6 +2,9 @@
 
 ## v2.4.x
 
+### v2.4.35 — Fix critique : plusieurs réglages ne s'enregistraient jamais
+- **Fix critique : `logoUrl`, `connectionIdleTimeout`, `require2faForAdmins`, les 4 réglages de rétention, `poolLowAlertEnabled`/`poolLowThresholdPct`, et les 4 réglages `proxyAuth*` (v2.4.34) ne s'enregistraient jamais depuis Settings**, sans aucune erreur affichée. `ValidationPipe({ whitelist: true })` supprime silencieusement tout champ non déclaré sur le DTO de validation avant qu'il n'atteigne le contrôleur — ces réglages, ajoutés au fil de plusieurs versions récentes, n'avaient jamais été ajoutés à `UpdateSettingsDto`. Tous sont désormais déclarés et s'enregistrent normalement. Si vous aviez modifié l'un de ces champs depuis son ajout, il faut le re-saisir : la valeur restait la valeur par défaut jusqu'ici.
+
 ### v2.4.34 — Anti-brute-force sur le moteur proxy
 - **Nouveau : bannissement automatique après échecs d'auth répétés sur le proxy (port 990)** — jusqu'ici, seul `/auth/login` (panel) était protégé contre les tentatives répétées ; l'authentification Basic-Auth du moteur proxy n'avait aucune limite, une IP pouvait enchaîner des dizaines d'échecs sans friction (observé en prod : 6-7 échecs à la même seconde depuis une IP). Le moteur bannit désormais automatiquement une IP au-delà d'un seuil configurable, en réutilisant le mécanisme existant des IP bannies (visible/révocable depuis Sécurité → IP bannies) + une notification in-app à chaque auto-ban. Réglages dans **Paramètres → Sécurité** : activer/désactiver, seuil d'échecs (défaut 15), fenêtre glissante en secondes (défaut 60s), durée du ban en heures (défaut 24h).
 
