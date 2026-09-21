@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.31 — Graphique de trafic dans le temps, badge "cet appareil"
+- **Nouveau : graphique de trafic dans le temps** (Analytics) — nouvelle table `TrafficSnapshot` (snapshot toutes les 15 min, rétention 7 jours) permettant un vrai historique de volume (envoyé/reçu/requêtes) sur la plage sélectionnée (6h/24h/7j), là où seul le trafic du jour courant était visible auparavant.
+- **Nouveau : badge "cet appareil"** (page Sécurité) — la session en cours est identifiée et mise en avant, son bouton de révocation individuel masqué (pour éviter de se déconnecter soi-même par erreur).
+
 ### v2.4.30 — Analytics enrichi, traductions du journal d'audit
 - **Analytics : bandeau temps réel** (5s) — threads/sessions actifs, volume/requêtes du jour, charge CPU, RAM, latence DB. **Top domaines du jour** et **Comptes actifs** (débit en direct, quota) en plus des graphiques existants.
 - **Fix : noms d'action bruts non traduits dans le journal d'audit** (`notifications.purge`, `banned-ip.create`, `proxy.setCountryFormat`, etc.) — toutes les actions ajoutées récemment (2FA, IP bannies, domaines bloqués, thème, templates...) ont maintenant leur traduction.
