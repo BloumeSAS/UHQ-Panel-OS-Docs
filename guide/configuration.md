@@ -141,6 +141,14 @@ Chacun peut charger et traiter jusqu'à ~150 000 proxies — le cumul de RAM/CPU
 - **Type :** booléen — **Défaut :** `false`
 - Depuis v2.4.29. Voir [2FA obligatoire pour les admins](#s%C3%A9curit%C3%A9-durcissement-v2-4-11-v2-4-12) ci-dessus.
 
+### `poolHealthSnapshotRetentionDays`
+- **Défaut :** `7`
+- Depuis v2.4.32 (auparavant fixé en dur). Durée de conservation de l'historique du graphique **Évolution du pool** (Analytics).
+
+### `trafficSnapshotRetentionDays`
+- **Défaut :** `7`
+- Depuis v2.4.32 (auparavant fixé en dur). Durée de conservation de l'historique du graphique **Volume de trafic** (Analytics).
+
 ::: tip Test de vivacité HTTP (depuis v2.4.2)
 Le checker teste désormais les proxies **HTTP** via un `GET` en forme absolue plutôt qu'un `CONNECT` — beaucoup de proxies HTTP bas de gamme ne supportent que le relais GET et rejettent `CONNECT` (réservé en pratique au tunneling HTTPS), ce qui les faisait auparavant marquer morts à tort. Les proxies SOCKS4/5 utilisent toujours la négociation SOCKS classique, inchangée.
 :::

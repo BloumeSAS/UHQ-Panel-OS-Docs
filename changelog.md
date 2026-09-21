@@ -2,6 +2,12 @@
 
 ## v2.4.x
 
+### v2.4.32 — Filtre par compte, comparaison de période, export PNG/PDF
+- **Nouveau : filtre par sous-utilisateur** (Analytics) — scope le graphique de trafic, le top domaines et une mini bande de stats sur un seul compte. Granularité journalière ; pas de vue de latence par compte (structurellement impossible, proxies partagés/mis en course).
+- **Nouveau : comparaison période sur période** — badge "+12%/-5% vs période précédente" sur le graphique de trafic, sans requête supplémentaire.
+- **Nouveau : export PNG/PDF du dashboard Analytics** (`html2canvas`/`jsPDF`, chargés à la demande).
+- **Nouveau : rétention configurable** pour l'historique santé du pool et trafic (`poolHealthSnapshotRetentionDays`, `trafficSnapshotRetentionDays`) — et `notificationRetentionDays`/`auditLogRetentionMonths` (existants côté API, jamais exposés) sont maintenant éditables depuis Paramètres.
+
 ### v2.4.31 — Graphique de trafic dans le temps, badge "cet appareil"
 - **Nouveau : graphique de trafic dans le temps** (Analytics) — nouvelle table `TrafficSnapshot` (snapshot toutes les 15 min, rétention 7 jours) permettant un vrai historique de volume (envoyé/reçu/requêtes) sur la plage sélectionnée (6h/24h/7j), là où seul le trafic du jour courant était visible auparavant.
 - **Nouveau : badge "cet appareil"** (page Sécurité) — la session en cours est identifiée et mise en avant, son bouton de révocation individuel masqué (pour éviter de se déconnecter soi-même par erreur).
