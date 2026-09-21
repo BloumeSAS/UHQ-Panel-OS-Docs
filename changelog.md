@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.28 — Fix critique 2FA au login, sidebar réorganisée
+- **Fix critique de sécurité : la 2FA n'était jamais vérifiée au login** — `POST /auth/login` émettait un JWT complet dès email+mot de passe validés, sans jamais regarder `totpEnabled`. Activer la 2FA ne protégeait donc rien à la connexion. Corrigé : un compte 2FA reçoit un jeton temporaire (5 min) après le mot de passe et doit valider son code à 6 chiffres via `POST /auth/login/2fa` (limité à 10 tentatives/min/IP) avant d'obtenir une vraie session.
+- **Sidebar groupée en sections** (Gestion / Supervision / Système / Compte côté admin) au lieu d'une longue liste plate.
+- **Profil et Sécurité retirés de la sidebar** — accessibles en cliquant sur la zone email/rôle en haut à droite (→ Profil, qui contient le raccourci vers Sécurité), désormais toujours cliquable et visible à toutes les tailles d'écran (avant : inerte sans extension installée, et masquée sur mobile).
+
 ### v2.4.27 — Retrait/resynchronisation des domaines bloqués (API sub-user)
 - **Nouveau : `POST /api/v1/sub-user/blocked-domains/remove`** — retire des domaines de la liste bloquée d'un compte (l'endpoint `/add` existait depuis v2.4.26, mais aucun moyen de revenir en arrière).
 - **Nouveau : `POST /api/v1/sub-user/blocked-domains/set`** — remplace intégralement la liste en un appel, pour resynchroniser l'état complet côté client sans calculer un diff add/remove.

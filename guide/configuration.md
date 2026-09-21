@@ -46,8 +46,10 @@ L'API déclare (`app.set('trust proxy', 1)` dans `main.ts`) ne faire confiance q
 Barre latérale admin → **IP bannies** (`/banned-ips`) : bannit une ou plusieurs IP (une par ligne) de l'utilisation du moteur proxy, **indépendamment des comptes** — une IP bannie ne peut plus rien faire avec aucun identifiant. Vérifié en mémoire dès l'établissement de la connexion TCP, avant même la lecture de la requête d'auth : l'IP reçoit une erreur HTTP 403 et la connexion est fermée immédiatement. Raison et expiration optionnelles ; débannissement individuel ou par sélection multiple.
 :::
 
-::: tip Activer la 2FA sur un compte admin (depuis v2.4.22)
-Avant v2.4.22, la page `/security` existait déjà côté API et web mais n'était liée nulle part dans le menu admin (bug corrigé). Aujourd'hui : barre latérale → **Sécurité** (ou **Profil** → raccourci) → scanner le QR code avec une app TOTP → saisir le code à 6 chiffres pour confirmer. Une page **Profil** (`/profile`, tous rôles) permet aussi de changer son mot de passe.
+::: tip Activer la 2FA sur un compte admin (depuis v2.4.22, appliquée au login depuis v2.4.28)
+Cliquer sur la zone **email / rôle** en haut à droite du panel → **Profil** → raccourci vers **Sécurité** → scanner le QR code avec une app TOTP → saisir le code à 6 chiffres pour confirmer. Une page **Profil** (`/profile`, tous rôles) permet aussi de changer son mot de passe.
+
+⚠️ **Avant v2.4.28, la 2FA n'était jamais vérifiée à la connexion** — activable dans Sécurité, mais `POST /auth/login` émettait un JWT complet dès le mot de passe validé, sans jamais regarder ce réglage. Un compte 2FA n'importe pas plus de protection réelle qu'un compte sans, tant que le panel n'a pas été mis à jour vers v2.4.28 ou une version ultérieure.
 :::
 
 ---
