@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.33 — Fix captcha Cap, page Rapports améliorée, Settings réorganisés
+- **Fix : captcha Cap cassé (404)** — l'URL CDN pointait vers le mauvais paquet npm et le mauvais chemin. Corrigée et vérifiée.
+- **Rapports : trafic quotidien en vraie courbe** au lieu d'une liste de barres, et **export PNG/PDF** (`html2canvas`/`jsPDF`) à la place de `window.print()`.
+- **Paramètres : nouvel onglet "Sécurité"** — la 2FA obligatoire et les 4 réglages de rétention avaient été ajoutés dans l'onglet "Général" (v2.4.29/v2.4.32) et s'y noyaient ; ils ont maintenant leur propre onglet.
+
 ### v2.4.32 — Filtre par compte, comparaison de période, export PNG/PDF
 - **Nouveau : filtre par sous-utilisateur** (Analytics) — scope le graphique de trafic, le top domaines et une mini bande de stats sur un seul compte. Granularité journalière ; pas de vue de latence par compte (structurellement impossible, proxies partagés/mis en course).
 - **Nouveau : comparaison période sur période** — badge "+12%/-5% vs période précédente" sur le graphique de trafic, sans requête supplémentaire.
