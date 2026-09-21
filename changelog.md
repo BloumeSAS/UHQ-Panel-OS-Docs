@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.30 — Analytics enrichi, traductions du journal d'audit
+- **Analytics : bandeau temps réel** (5s) — threads/sessions actifs, volume/requêtes du jour, charge CPU, RAM, latence DB. **Top domaines du jour** et **Comptes actifs** (débit en direct, quota) en plus des graphiques existants.
+- **Fix : noms d'action bruts non traduits dans le journal d'audit** (`notifications.purge`, `banned-ip.create`, `proxy.setCountryFormat`, etc.) — toutes les actions ajoutées récemment (2FA, IP bannies, domaines bloqués, thème, templates...) ont maintenant leur traduction.
+
 ### v2.4.29 — 2FA obligatoire admin, codes de récupération, pagination serveur
 - **Nouveau : 2FA obligatoire pour les admins** (`require2faForAdmins`, Paramètres → Sécurité) — enferme le compte sur la page Sécurité tant que la 2FA n'est pas activée, sans bloquer le login lui-même.
 - **Nouveau : codes de récupération 2FA** — 10 codes à usage unique à l'activation, repli possible au login si l'appareil TOTP est perdu, régénération protégée par le code actuel.
