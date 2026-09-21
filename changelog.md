@@ -2,6 +2,9 @@
 
 ## v2.4.x
 
+### v2.4.34 — Anti-brute-force sur le moteur proxy
+- **Nouveau : bannissement automatique après échecs d'auth répétés sur le proxy (port 990)** — jusqu'ici, seul `/auth/login` (panel) était protégé contre les tentatives répétées ; l'authentification Basic-Auth du moteur proxy n'avait aucune limite, une IP pouvait enchaîner des dizaines d'échecs sans friction (observé en prod : 6-7 échecs à la même seconde depuis une IP). Le moteur bannit désormais automatiquement une IP au-delà d'un seuil configurable, en réutilisant le mécanisme existant des IP bannies (visible/révocable depuis Sécurité → IP bannies) + une notification in-app à chaque auto-ban. Réglages dans **Paramètres → Sécurité** : activer/désactiver, seuil d'échecs (défaut 15), fenêtre glissante en secondes (défaut 60s), durée du ban en heures (défaut 24h).
+
 ### v2.4.33 — Fix captcha Cap, page Rapports améliorée, Settings réorganisés
 - **Fix : captcha Cap cassé (404)** — l'URL CDN pointait vers le mauvais paquet npm et le mauvais chemin. Corrigée et vérifiée.
 - **Rapports : trafic quotidien en vraie courbe** au lieu d'une liste de barres, et **export PNG/PDF** (`html2canvas`/`jsPDF`) à la place de `window.print()`.

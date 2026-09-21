@@ -58,6 +58,10 @@ Cliquer sur la zone **email / rôle** en haut à droite du panel → **Profil** 
 Réglage `require2faForAdmins` (Paramètres → Sécurité). Une fois activé, tout compte ADMIN sans 2FA est redirigé vers la page Sécurité et n'a accès à rien d'autre (sauf Profil/À propos) tant qu'il ne l'a pas activée — le login lui-même n'est jamais bloqué, pour ne pas enfermer un admin hors du panel.
 :::
 
+::: tip Anti-brute-force sur le moteur proxy (depuis v2.4.34)
+Contrairement à `/auth/login` (protégé depuis v2.4.11, voir plus haut), l'authentification Basic-Auth du moteur proxy (port 990) n'avait aucune limite — une IP pouvait enchaîner des dizaines d'échecs d'auth sans friction. Depuis v2.4.34, l'IP est automatiquement bannie au-delà d'un seuil configurable (réglages `proxyAuthAutoBanEnabled`/`proxyAuthFailBanThreshold`/`proxyAuthFailBanWindowSec`/`proxyAuthAutoBanDurationHours`, Paramètres → Sécurité), via le même mécanisme que le bannissement manuel (voir **IP bannies** ci-dessus) + une notification in-app à chaque déclenchement.
+:::
+
 ---
 
 ## Proxy public
@@ -148,6 +152,22 @@ Chacun peut charger et traiter jusqu'à ~150 000 proxies — le cumul de RAM/CPU
 ### `trafficSnapshotRetentionDays`
 - **Défaut :** `7`
 - Depuis v2.4.32 (auparavant fixé en dur). Durée de conservation de l'historique du graphique **Volume de trafic** (Analytics).
+
+### `proxyAuthAutoBanEnabled`
+- **Type :** booléen — **Défaut :** `true`
+- Depuis v2.4.34. Voir [Anti-brute-force sur le moteur proxy](#s%C3%A9curit%C3%A9-durcissement-v2-4-11-v2-4-12) ci-dessus.
+
+### `proxyAuthFailBanThreshold`
+- **Défaut :** `15`
+- Depuis v2.4.34. Nombre d'échecs d'authentification proxy (par IP) au-delà duquel l'IP est bannie automatiquement.
+
+### `proxyAuthFailBanWindowSec`
+- **Défaut :** `60` (secondes)
+- Depuis v2.4.34. Fenêtre glissante sur laquelle les échecs d'authentification proxy sont comptés.
+
+### `proxyAuthAutoBanDurationHours`
+- **Défaut :** `24` (heures)
+- Depuis v2.4.34. Durée du bannissement automatique déclenché par `proxyAuthFailBanThreshold`.
 
 ::: tip Test de vivacité HTTP (depuis v2.4.2)
 Le checker teste désormais les proxies **HTTP** via un `GET` en forme absolue plutôt qu'un `CONNECT` — beaucoup de proxies HTTP bas de gamme ne supportent que le relais GET et rejettent `CONNECT` (réservé en pratique au tunneling HTTPS), ce qui les faisait auparavant marquer morts à tort. Les proxies SOCKS4/5 utilisent toujours la négociation SOCKS classique, inchangée.
