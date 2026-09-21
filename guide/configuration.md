@@ -50,6 +50,12 @@ Barre latérale admin → **IP bannies** (`/banned-ips`) : bannit une ou plusieu
 Cliquer sur la zone **email / rôle** en haut à droite du panel → **Profil** → raccourci vers **Sécurité** → scanner le QR code avec une app TOTP → saisir le code à 6 chiffres pour confirmer. Une page **Profil** (`/profile`, tous rôles) permet aussi de changer son mot de passe.
 
 ⚠️ **Avant v2.4.28, la 2FA n'était jamais vérifiée à la connexion** — activable dans Sécurité, mais `POST /auth/login` émettait un JWT complet dès le mot de passe validé, sans jamais regarder ce réglage. Un compte 2FA n'importe pas plus de protection réelle qu'un compte sans, tant que le panel n'a pas été mis à jour vers v2.4.28 ou une version ultérieure.
+
+**Codes de récupération (depuis v2.4.29)** — 10 codes à usage unique générés à l'activation, affichés **une seule fois** (à copier ou télécharger). Utilisables à la place du code TOTP sur l'écran de connexion si l'appareil est perdu. Régénérables depuis Sécurité (nécessite le code TOTP actuel — invalide immédiatement les anciens codes).
+:::
+
+::: tip 2FA obligatoire pour les admins (depuis v2.4.29)
+Réglage `require2faForAdmins` (Paramètres → Sécurité). Une fois activé, tout compte ADMIN sans 2FA est redirigé vers la page Sécurité et n'a accès à rien d'autre (sauf Profil/À propos) tant qu'il ne l'a pas activée — le login lui-même n'est jamais bloqué, pour ne pas enfermer un admin hors du panel.
 :::
 
 ---
@@ -130,6 +136,10 @@ Chacun peut charger et traiter jusqu'à ~150 000 proxies — le cumul de RAM/CPU
 ### `notificationRetentionDays`
 - **Défaut :** `30`
 - Ancienneté (en jours) au-delà de laquelle les notifications in-app sont purgées automatiquement (depuis v2.4.25 — la table avait atteint 5,4 Go sans aucune rétention, voir le [changelog](/changelog)). Un bouton **Purger** (cloche de notifications, admin) permet aussi de vider la table immédiatement.
+
+### `require2faForAdmins`
+- **Type :** booléen — **Défaut :** `false`
+- Depuis v2.4.29. Voir [2FA obligatoire pour les admins](#s%C3%A9curit%C3%A9-durcissement-v2-4-11-v2-4-12) ci-dessus.
 
 ::: tip Test de vivacité HTTP (depuis v2.4.2)
 Le checker teste désormais les proxies **HTTP** via un `GET` en forme absolue plutôt qu'un `CONNECT` — beaucoup de proxies HTTP bas de gamme ne supportent que le relais GET et rejettent `CONNECT` (réservé en pratique au tunneling HTTPS), ce qui les faisait auparavant marquer morts à tort. Les proxies SOCKS4/5 utilisent toujours la négociation SOCKS classique, inchangée.

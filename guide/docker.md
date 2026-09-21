@@ -211,6 +211,10 @@ docker compose down -v
 
 ## Dépannage
 
+### Diagnostic rapide sans SSH (depuis v2.4.29)
+
+`GET /api/panel/health/detailed` (JWT admin) renvoie descripteurs de fichiers ouverts, connexions Postgres actives et les 15 plus grosses tables — formalise ce qu'il fallait auparavant vérifier à la main par SSH/psql (voir les sections ci-dessous). Pratique pour du monitoring externe ou un premier coup d'œil avant de se connecter au VPS.
+
 ### `EMFILE: too many open files` (500 sur n'importe quelle page) {#dépannage-emfile-too-many-open-files}
 
 Deux causes distinctes rencontrées en prod, corrigées séparément :
