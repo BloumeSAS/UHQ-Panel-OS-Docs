@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.36 — Anti-VPN par pool, fix UX captcha Cap
+- **Nouveau : option "Anti-VPN" par pool** (Proxy Pools) — refuse et bannit 24h automatiquement toute IP cliente identifiée VPN/hébergeur, via une heuristique sur la base gratuite [DB-IP Lite](https://db-ip.com/db/download/ip-to-asn-lite) (organisation ASN), la même que celle utilisée par [tiagozip/cap](https://github.com/tiagozip/cap). Voir [Proxy Pools → Anti-VPN](/guide/proxy-pools#anti-vpn-depuis-v2-4-36).
+- **Fix : le captcha Cap affichait un message "à refaire" après une résolution pourtant réussie** — le widget `@cap.js/widget` retombe parfois dans un état visuel incohérent après avoir émis son token (déjà valide, le login fonctionnait malgré le message). L'UI du widget est désormais remplacée par une confirmation fixe dès réception du token.
+
 ### v2.4.35 — Fix critique : plusieurs réglages ne s'enregistraient jamais
 - **Fix critique : `logoUrl`, `connectionIdleTimeout`, `require2faForAdmins`, les 4 réglages de rétention, `poolLowAlertEnabled`/`poolLowThresholdPct`, et les 4 réglages `proxyAuth*` (v2.4.34) ne s'enregistraient jamais depuis Settings**, sans aucune erreur affichée. `ValidationPipe({ whitelist: true })` supprime silencieusement tout champ non déclaré sur le DTO de validation avant qu'il n'atteigne le contrôleur — ces réglages, ajoutés au fil de plusieurs versions récentes, n'avaient jamais été ajoutés à `UpdateSettingsDto`. Tous sont désormais déclarés et s'enregistrent normalement. Si vous aviez modifié l'un de ces champs depuis son ajout, il faut le re-saisir : la valeur restait la valeur par défaut jusqu'ici.
 

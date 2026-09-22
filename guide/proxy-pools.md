@@ -359,6 +359,30 @@ Content-Type: application/json
 }
 ```
 
+## Anti-VPN (depuis v2.4.36)
+
+Chaque pool peut activer l'option **Anti-VPN** (`antiVpnEnabled`, panel → Proxy Pools → créer/modifier). Une fois activée, toute connexion authentifiée sur cette pool dont l'**IP cliente** (pas l'upstream — l'IP de la personne qui se connecte à votre proxy) est identifiée comme VPN/hébergeur est :
+1. **Refusée** immédiatement (`403 Forbidden`, avant tout comptage de thread) ;
+2. **Bannie automatiquement 24h**, via la même table `BannedIp` que les autres bannissements (manuel, auto-ban anti-brute-force — voir [Sécurité → IP bannies](/guide/configuration#sécurité-durcissement-v2-4-11-v2-4-12)), donc visible et révocable depuis **IP bannies** ;
+3. Notifiée in-app (🛡️ « IP bannie automatiquement (VPN) »).
+
+### Détection : base DB-IP Lite (gratuite)
+
+DB-IP ne publie pas un flag "VPN" — seulement l'**organisation ASN** propriétaire de chaque plage d'IP. C'est la même base publique que [tiagozip/cap](https://github.com/tiagozip/cap) utilise pour ses propres vérifications d'IP. `VpnDetectionService` :
+- télécharge le fichier `dbip-asn-lite-{année}-{mois}.csv.gz` (gratuit, sans clé API) une fois par mois (cron le 1er à minuit), avec repli automatique sur le mois précédent si le fichier du mois courant n'est pas encore publié ;
+- construit une table triée de plages IP (v4 et v6) en mémoire, recherche binaire à la connexion ;
+- marque une IP comme VPN si le nom de son organisation ASN contient un mot-clé d'une liste codée en dur (hébergeurs connus — OVH, Hetzner, DigitalOcean, AWS, Azure, Google Cloud... — et marques de VPN connues — NordVPN, ExpressVPN, Mullvad, ProtonVPN...).
+
+::: warning Heuristique, pas une vérité absolue
+Un particulier chez un FAI résidentiel (Orange, Free, Comcast...) n'apparaît jamais dans cette liste, donc l'immense majorité du trafic légitime n'est jamais impactée. Mais cette approche a ses limites dans les deux sens : un VPN qui loue de l'IP résidentielle (ou un petit fournisseur mal classé "hosting") peut échapper à la détection ou, inversement, être signalé à tort. N'activez cette option que sur les pools qui en ont vraiment besoin (ex. protection anti-fraude sur une offre ciblée), pas par défaut sur tout le stock.
+:::
+
+::: tip Fail-open si la base est indisponible
+Si le téléchargement échoue (réseau, DB-IP injoignable) ou que le fichier est absent/corrompu, `isVpn()` renvoie `false` plutôt que de bloquer tout le trafic — mieux vaut laisser passer un VPN de temps en temps que de couper l'accès à tout le monde le temps que la base se resynchronise.
+:::
+
+Le fichier téléchargé est mis en cache sur disque (`api/data/geoip/dbip-asn-lite.csv.gz`, ignoré par Git) — un redémarrage ne re-télécharge pas immédiatement si le fichier du mois est déjà présent.
+
 ## Schéma Prisma
 
 ```prisma
@@ -371,6 +395,7 @@ model ProxyPool {
   domain         String?
   alwaysOnline   Boolean  @default(false)
   checkerEnabled Boolean  @default(true)
+  antiVpnEnabled Boolean  @default(false)
   fakeCountries          String?
   fakePriorityCountries  String?
   fakeIpCountMin         Int?
