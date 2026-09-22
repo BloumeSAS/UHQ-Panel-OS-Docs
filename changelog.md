@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.39 — Refonte de la navigation des Paramètres
+- **Nouvelle navigation en sidebar dédiée** — les onglets de Paramètres (Général, Sécurité, Thème, Proxy, Scraper, SMTP, Captcha, Webhooks, Sauvegardes, Clé API...) ne sont plus une barre horizontale mais une deuxième sidebar verticale propre à la page, regroupée par thème (Aperçu / Général / Sécurité / Moteur proxy / Communications / Système), avec une courte description sous chaque libellé.
+- **Chapeau de section** (icône + titre + description) en tête de chaque panneau, pour donner plus de contexte avant les champs. Aucun changement fonctionnel sur les réglages eux-mêmes.
+
 ### v2.4.38 — Fix critique : fuite mémoire (cache anti-VPN)
 - **Fix critique : fuite mémoire, heap passant de ~60 Mo à ~700 Mo en une journée** — le cache des résultats proxycheck.io ajouté en v2.4.37 (`VpnDetectionService.apiCache`) n'était jamais purgé : chaque IP cliente distincte vue sur une pool anti-VPN y ajoutait une entrée permanente, avec un pire cas particulièrement probable (un abus automatisé tournant via des IP de VPN/proxy en rotation — exactement ce que la fonctionnalité cible). Purge périodique (10 min) + plafond dur de 20 000 entrées ajoutés. Un corps de réponse HTTP non consommé sur erreur proxycheck.io (fuite mineure côté undici) est aussi corrigé.
 - **Fix : `proxyDeadCache` (alertes "proxy hors ligne") non purgé** — pré-existant, sans lien avec la v2.4.37, repéré pendant l'audit des caches mémoire suite à l'incident ci-dessus. Même correctif (purge périodique).
