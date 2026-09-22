@@ -363,25 +363,30 @@ Content-Type: application/json
 
 Chaque pool peut activer l'option **Anti-VPN** (`antiVpnEnabled`, panel → Proxy Pools → créer/modifier). Une fois activée, toute connexion authentifiée sur cette pool dont l'**IP cliente** (pas l'upstream — l'IP de la personne qui se connecte à votre proxy) est identifiée comme VPN/hébergeur est :
 1. **Refusée** immédiatement (`403 Forbidden`, avant tout comptage de thread) ;
-2. **Bannie automatiquement 24h**, via la même table `BannedIp` que les autres bannissements (manuel, auto-ban anti-brute-force — voir [Sécurité → IP bannies](/guide/configuration#sécurité-durcissement-v2-4-11-v2-4-12)), donc visible et révocable depuis **IP bannies** ;
+2. **Bannie automatiquement**, via la même table `BannedIp` que les autres bannissements (manuel, auto-ban anti-brute-force — voir [Sécurité → IP bannies](/guide/configuration#sécurité-durcissement-v2-4-11-v2-4-12)), donc visible et révocable depuis **IP bannies**. Durée configurable : réglage `vpnBanDurationHours` (Paramètres → Sécurité → Anti-VPN, défaut 24h, depuis v2.4.37) ;
 3. Notifiée in-app (🛡️ « IP bannie automatiquement (VPN) »).
 
-### Détection : base DB-IP Lite (gratuite)
+### Détection : proxycheck.io + base DB-IP Lite (deux signaux combinés)
 
-DB-IP ne publie pas un flag "VPN" — seulement l'**organisation ASN** propriétaire de chaque plage d'IP. C'est la même base publique que [tiagozip/cap](https://github.com/tiagozip/cap) utilise pour ses propres vérifications d'IP. `VpnDetectionService` :
+`VpnDetectionService` combine deux sources — une IP est considérée VPN si **l'une ou l'autre** la détecte :
+
+**1. [proxycheck.io](https://proxycheck.io) (depuis v2.4.37, signal principal)** — une requête réseau par IP (`GET https://proxycheck.io/v2/{ip}?vpn=1`), résultat mis en cache 6h par IP pour limiter le volume de requêtes. Fonctionne sans clé API (quota gratuit réduit) ; une clé gratuite proxycheck.io peut être renseignée dans **Paramètres → Sécurité → Anti-VPN → Clé API proxycheck.io** (`vpnCheckApiKey`, secret) pour augmenter ce quota.
+
+**2. Base ASN locale DB-IP Lite (gratuite, complément/filet de sécurité)** — DB-IP ne publie pas un flag "VPN", seulement l'**organisation ASN** propriétaire de chaque plage d'IP. C'est la même base publique que [tiagozip/cap](https://github.com/tiagozip/cap) utilise pour ses propres vérifications d'IP.
 - télécharge le fichier `dbip-asn-lite-{année}-{mois}.csv.gz` (gratuit, sans clé API) une fois par mois (cron le 1er à minuit), avec repli automatique sur le mois précédent si le fichier du mois courant n'est pas encore publié ;
 - construit une table triée de plages IP (v4 et v6) en mémoire, recherche binaire à la connexion ;
 - marque une IP comme VPN si le nom de son organisation ASN contient un mot-clé d'une liste codée en dur (hébergeurs connus — OVH, Hetzner, DigitalOcean, AWS, Azure, Google Cloud... — et marques de VPN connues — NordVPN, ExpressVPN, Mullvad, ProtonVPN...).
+- vérifiée en premier (locale, zéro latence réseau) — l'appel à proxycheck.io n'est fait que si elle ne détecte rien, pour économiser le quota API.
 
 ::: warning Heuristique, pas une vérité absolue
-Un particulier chez un FAI résidentiel (Orange, Free, Comcast...) n'apparaît jamais dans cette liste, donc l'immense majorité du trafic légitime n'est jamais impactée. Mais cette approche a ses limites dans les deux sens : un VPN qui loue de l'IP résidentielle (ou un petit fournisseur mal classé "hosting") peut échapper à la détection ou, inversement, être signalé à tort. N'activez cette option que sur les pools qui en ont vraiment besoin (ex. protection anti-fraude sur une offre ciblée), pas par défaut sur tout le stock.
+Avant v2.4.37, la base ASN seule ratait certains VPN dont l'IP n'est pas hébergée chez un fournisseur reconnaissable par son nom (ex. signalé : `212.119.33.19` passait). proxycheck.io couvre beaucoup mieux ce cas, mais aucun des deux signaux n'est infaillible dans les deux sens : un petit fournisseur mal classé peut être signalé à tort, un VPN très discret peut passer. N'activez cette option que sur les pools qui en ont vraiment besoin (ex. protection anti-fraude sur une offre ciblée), pas par défaut sur tout le stock.
 :::
 
-::: tip Fail-open si la base est indisponible
-Si le téléchargement échoue (réseau, DB-IP injoignable) ou que le fichier est absent/corrompu, `isVpn()` renvoie `false` plutôt que de bloquer tout le trafic — mieux vaut laisser passer un VPN de temps en temps que de couper l'accès à tout le monde le temps que la base se resynchronise.
+::: tip Fail-open si les deux signaux sont indisponibles
+Si proxycheck.io est injoignable/en quota dépassé ET que la base ASN locale est absente/corrompue, `isVpn()` renvoie `false` plutôt que de bloquer tout le trafic — mieux vaut laisser passer un VPN de temps en temps que de couper l'accès à tout le monde.
 :::
 
-Le fichier téléchargé est mis en cache sur disque (`api/data/geoip/dbip-asn-lite.csv.gz`, ignoré par Git) — un redémarrage ne re-télécharge pas immédiatement si le fichier du mois est déjà présent.
+Le fichier DB-IP téléchargé est mis en cache sur disque (`api/data/geoip/dbip-asn-lite.csv.gz`, ignoré par Git) — un redémarrage ne re-télécharge pas immédiatement si le fichier du mois est déjà présent.
 
 ## Schéma Prisma
 

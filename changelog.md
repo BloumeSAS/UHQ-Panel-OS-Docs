@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.37 — Anti-VPN : détection via proxycheck.io, durée de ban configurable
+- **Fix : la détection anti-VPN (v2.4.36) reposait uniquement sur l'heuristique ASN locale** et ratait certains VPN dont l'IP n'est pas hébergée chez un fournisseur reconnaissable par son nom. Ajout d'une vérification via [proxycheck.io](https://proxycheck.io) (une requête par IP, cache 6h, fonctionne sans clé) en complément — une IP est bannie si l'un ou l'autre des deux signaux la détecte.
+- **Nouveau : durée du ban anti-VPN configurable** (`vpnBanDurationHours`, Paramètres → Sécurité, défaut 24h) et **clé API proxycheck.io optionnelle** (`vpnCheckApiKey`, augmente le quota gratuit).
+
 ### v2.4.36 — Anti-VPN par pool, fix UX captcha Cap
 - **Nouveau : option "Anti-VPN" par pool** (Proxy Pools) — refuse et bannit 24h automatiquement toute IP cliente identifiée VPN/hébergeur, via une heuristique sur la base gratuite [DB-IP Lite](https://db-ip.com/db/download/ip-to-asn-lite) (organisation ASN), la même que celle utilisée par [tiagozip/cap](https://github.com/tiagozip/cap). Voir [Proxy Pools → Anti-VPN](/guide/proxy-pools#anti-vpn-depuis-v2-4-36).
 - **Fix : le captcha Cap affichait un message "à refaire" après une résolution pourtant réussie** — le widget `@cap.js/widget` retombe parfois dans un état visuel incohérent après avoir émis son token (déjà valide, le login fonctionnait malgré le message). L'UI du widget est désormais remplacée par une confirmation fixe dès réception du token.
