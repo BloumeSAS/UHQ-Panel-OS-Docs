@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### Addons Wallet/Orders v1.1.3 — thème custom + comptes manquants
+- **Wallet et Orders suivent désormais le thème custom du panel** (Paramètres → Thème) via un nouvel endpoint `GET /api/theme` sur chacun — relais serveur-à-serveur (fonctionne embarqué comme en déploiement externe, pas de souci CORS). Repli automatique sur la palette tangerine par défaut si aucun thème custom.
+- **Fix Wallet : "Gestion des soldes" n'affichait pas tous les comptes** — un wallet n'était créé qu'à la première visite de "Mon solde" ou au premier crédit manuel, donc tout compte n'ayant fait ni l'un ni l'autre restait invisible dans la liste admin. Corrigé : la liste fusionne désormais avec tous les comptes panel connus (0€ pour ceux sans wallet).
+- [UHQ-Addon-Wallet v1.1.3](https://github.com/BloumeSAS/UHQ-Addon-Wallet/releases/tag/v1.1.3) · [UHQ-Addon-Orders v1.1.3](https://github.com/BloumeSAS/UHQ-Addon-Orders/releases/tag/v1.1.3) — redéployez le panel pour les récupérer (rebuild automatique depuis GitHub).
+
 ### v2.4.45 — Logs des addons embarqués nettoyés, versions synchronisées
 - **Fix : logs pollués de codes ANSI bruts** (`[32m[Nest] 2379...[39m`) pour tout addon embarqué actif dans le journal du panel — découpés ligne par ligne et nettoyés des codes couleur ; `NO_COLOR=1` injecté dans l'environnement de l'addon pour qu'il arrête d'en émettre.
 - **Versions synchronisées** : le registre `addons/addons.json` affichait encore v1.1.0 pour Wallet/Orders. Bump des deux addons en **v1.1.2** ([Wallet](https://github.com/BloumeSAS/UHQ-Addon-Wallet/releases/tag/v1.1.2), [Orders](https://github.com/BloumeSAS/UHQ-Addon-Orders/releases/tag/v1.1.2)) et registre mis à jour.
