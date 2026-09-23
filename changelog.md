@@ -2,9 +2,18 @@
 
 ## v2.4.x
 
+### Fix complémentaire (addons Wallet/Orders) — page toujours blanche après v2.4.44
+Après le fix v2.4.44 ci-dessous, les assets/CSS chargaient bien (bon MIME, 200), mais la page restait **quand même blanche, sans erreur JS**. Cause réelle, cette fois dans le code des addons eux-mêmes (pas dans le panel) : `<BrowserRouter>` (React Router) n'avait pas de `basename` — `<Routes>` matche le **pathname complet**, donc la route `"/admin"` ne matchait jamais le vrai chemin `"/addon-proxy/wallet/admin"`, et `<Routes>` ne rendait rien du tout.
+
+**Corrigé dans [UHQ-Addon-Wallet](https://github.com/BloumeSAS/UHQ-Addon-Wallet) et [UHQ-Addon-Orders](https://github.com/BloumeSAS/UHQ-Addon-Orders)** : `<BrowserRouter basename={import.meta.env.BASE_URL}>` — cette valeur suit automatiquement le `--base` passé à `vite build` (v2.4.44), et vaut `"/"` par défaut donc **aucun changement pour un déploiement externe classique** à la racine de son propre domaine. Un `web/src/vite-env.d.ts` manquant (types Vite pour `import.meta.env`) a aussi été ajouté dans les deux repos, sans quoi le build `tsc` échoue.
+
+::: tip Aucune nouvelle version du panel nécessaire
+`build-bundled.sh` clone les addons officiels depuis leur dépôt GitHub à chaque build Docker — un simple `docker compose build` (ou redéploiement Coolify) du panel récupère automatiquement ces correctifs, sans changement côté UHQ Panel OS lui-même.
+:::
+
 ### v2.4.44 — Fix : page blanche sur un addon embarqué (assets + appels API en chemin absolu)
 - **Fix** : après v2.4.43, la page d'un addon embarqué activé chargeait mais restait blanche (`Failed to load module script... MIME type "text/html"`). Les addons officiels sont conçus pour être déployés à la racine de leur propre domaine — leurs assets et leurs appels API (`fetch('/api/x')`) utilisent des chemins absolus, qui atterrissaient à la racine du panel une fois embarqués (404 / fallback SPA) au lieu de passer par `/addon-proxy/<slug>/`.
-- Corrigé sans toucher au code des addons (le déploiement externe classique reste inchangé) : le build embarqué passe `--base=/addon-proxy/<slug>/` à Vite (assets), et le proxy interne détecte aussi les appels API absolus via l'en-tête `Referer` (repli, sans élargir la portée au-delà d'un addon réellement embarqué).
+- Corrigé côté panel : le build embarqué passe `--base=/addon-proxy/<slug>/` à Vite (assets), et le proxy interne détecte aussi les appels API absolus via l'en-tête `Referer` (repli, sans élargir la portée au-delà d'un addon réellement embarqué). *(Insuffisant à lui seul — voir le fix complémentaire ci-dessus.)*
 
 ### v2.4.43 — Fix critique : le proxy des addons embarqués (v2.4.42) ne répondait jamais
 - **Fix : `Cannot GET /addon-proxy/<slug>/...`** sur toute page d'un addon embarqué activé — le reverse-proxy enregistré via le mécanisme standard NestJS (`MiddlewareConsumer`) n'était jamais invoqué (cause précise non identifiée, contournée). Monté désormais directement en Express natif dans `main.ts`, avant les autres middlewares — vérifié fonctionnel (chemins imbriqués, query string, slug inconnu → 404 propre).
