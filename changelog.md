@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### Addons Wallet v1.1.5 / Orders v1.2.3 — fix critique thème custom
+- **Le thème custom du panel n'avait en réalité jamais d'effet** — `themeColors` revient de `/api/panel/setup/status` comme une chaîne JSON, jamais parsée côté addon, donc toujours `undefined` en silence. Corrigé dans les deux.
+- **Orders** : les indices de configuration webhook Stripe/NOWPayments affichent maintenant l'URL réelle et copiable, calculée automatiquement, au lieu d'un modèle générique.
+
 ### Addons Wallet v1.1.4 / Orders v1.2.2 — accessibilité
 - **Focus clavier visible** sur boutons/champs/liens (`:focus-visible`) dans les deux addons.
 - **Labels correctement associés** aux champs de formulaire (`htmlFor`/`id`) — crédit/débit Wallet, réglages de paiement Orders.
