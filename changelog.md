@@ -2,10 +2,10 @@
 
 ## v2.4.x
 
-### v2.4.40 — Modules internes activables/désactivables
-- **Nouveau : modules optionnels intégrés à l'image Docker** — activables/désactivables depuis **Système → Modules** (panel). Basculer un module écrit l'état en base puis redémarre le serveur pour l'appliquer (le conteneur redémarre automatiquement via `restart: unless-stopped`) ; un modal indique la progression et se ferme seul une fois le serveur revenu en ligne.
-- **Premier module livré : Export Prometheus** (`GET /metrics`, protégé par clé API, désactivé par défaut) — threads actifs, sessions, proxies fonctionnels, mémoire, charge CPU.
-- Appelé **"Modules"** en français dans le panel pour ne pas se confondre avec les Extensions/Addons existants (services externes via manifest URL).
+### v2.4.41 — Retrait de la page "Modules" (v2.4.40)
+- La page **Système → Modules** et son exemple "Export Prometheus" (v2.4.40) sont retirés — mauvaise approche (nouvelle page séparée + module inventé plutôt que de s'appuyer sur les addons déjà existants dans **Extensions**). Retour propre à l'état v2.4.39 sur ce point.
+
+### ~~v2.4.40 — Modules internes activables/désactivables~~ (retiré en v2.4.41, voir ci-dessus)
 
 ### v2.4.39 — Refonte de la navigation des Paramètres
 - **Nouvelle navigation en sidebar dédiée** — les onglets de Paramètres (Général, Sécurité, Thème, Proxy, Scraper, SMTP, Captcha, Webhooks, Sauvegardes, Clé API...) ne sont plus une barre horizontale mais une deuxième sidebar verticale propre à la page, regroupée par thème (Aperçu / Général / Sécurité / Moteur proxy / Communications / Système), avec une courte description sous chaque libellé.

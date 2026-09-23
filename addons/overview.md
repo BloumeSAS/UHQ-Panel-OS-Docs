@@ -74,10 +74,6 @@ Stocke le manifest en cache (DB)
 
 Ces addons sont **gratuits**, open-source (MIT), publiés par Bloume SAS et visibles directement dans l'onglet **Extensions** du panel (`Admin → Extensions`).
 
-::: tip À ne pas confondre avec "Modules" (depuis v2.4.40)
-Le panel a aussi une page **Système → Modules**, pour des fonctionnalités optionnelles **internes** (déjà compilées dans l'image Docker de l'API, ex. export Prometheus) qu'on active/désactive avec un redémarrage du serveur. Rien à voir avec les addons de cette page : un addon est un **microservice externe séparé** (sa propre URL, son propre déploiement) connecté via manifest — jamais embarqué dans l'image du panel, jamais de redémarrage requis pour l'activer.
-:::
-
 | Addon | Version | Description | Dépend de | Licence |
 |---|---|---|---|---|
 | [Wallet](/addons/official/wallet) | v1.1.0 | Système de solde par compte proxy | — | <span class="badge-free">✓ Gratuit</span> |
