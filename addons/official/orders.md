@@ -61,6 +61,23 @@ Il suffit que les deux addons partagent le même `PANEL_API_KEY`.
 
 ---
 
+## Paiement par carte (Stripe) et crypto (NOWPayments) — depuis v1.2.0
+
+En plus du solde Wallet, Orders peut accepter la carte bancaire (Stripe) et la crypto (NOWPayments). Les deux sont **optionnelles, désactivées par défaut**, à activer depuis **Gestion boutique → Passerelles de paiement** (page admin) :
+
+| Passerelle | Champs requis | Webhook à configurer chez eux |
+|---|---|---|
+| Stripe | Clé publiable, clé secrète, secret webhook | `<domaine de l'addon>/api/payments/stripe/webhook` — événement `checkout.session.completed` |
+| NOWPayments | Clé API, clé IPN | `<domaine de l'addon>/api/payments/nowpayments/webhook` |
+
+Une commande payée par l'une de ces passerelles reste **`pending`** (jamais débitée, jamais livrée) tant que le webhook correspondant n'a pas confirmé le paiement — le solde Wallet, lui, continue de débiter et livrer immédiatement comme avant. Aucune donnée bancaire ne transite par l'addon : le paiement est entièrement géré par Stripe/NOWPayments, seule la confirmation (webhook signé) revient ici.
+
+::: warning Iframe
+Stripe et NOWPayments refusent tous les deux d'afficher leur page de paiement dans une iframe (protection anti-clickjacking de leur côté) — le clic sur "Payer" redirige donc **tout l'onglet du navigateur**, pas seulement l'iframe de l'addon dans le panel. L'acheteur revient sur la page de la boutique une fois le paiement terminé (ou annulé).
+:::
+
+---
+
 ## Docker (Coolify)
 
 1. Nouveau service Docker Compose → coller `docker-compose.coolify.yml`

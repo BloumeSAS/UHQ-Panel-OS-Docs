@@ -2,6 +2,12 @@
 
 ## v2.4.x
 
+### Addon Orders v1.2.1 — paiement par carte (Stripe) et crypto (NOWPayments)
+- **Nouveau : paiement par carte et crypto** en plus du solde Wallet — panneau de réglages repliable sur la page admin (Gestion boutique), clés API stockées comme secrets (masquées, jamais écrasées par une valeur vide). Le panier propose un choix de méthode de paiement dès qu'une passerelle externe est activée.
+- Une commande payée par carte/crypto reste `pending` (jamais débitée, jamais livrée) tant que le paiement n'est pas confirmé par un webhook signé — voir [UHQ-Addon-Orders v1.2.0](https://github.com/BloumeSAS/UHQ-Addon-Orders/releases/tag/v1.2.0) pour le détail de l'intégration.
+- **Fix sécurité (v1.2.1)** : comparaison timing-safe de la signature du callback IPN NOWPayments.
+- Aucune donnée bancaire ne transite par l'addon — géré entièrement par Stripe/NOWPayments.
+
 ### Addons Wallet/Orders v1.1.3 — thème custom + comptes manquants
 - **Wallet et Orders suivent désormais le thème custom du panel** (Paramètres → Thème) via un nouvel endpoint `GET /api/theme` sur chacun — relais serveur-à-serveur (fonctionne embarqué comme en déploiement externe, pas de souci CORS). Repli automatique sur la palette tangerine par défaut si aucun thème custom.
 - **Fix Wallet : "Gestion des soldes" n'affichait pas tous les comptes** — un wallet n'était créé qu'à la première visite de "Mon solde" ou au premier crédit manuel, donc tout compte n'ayant fait ni l'un ni l'autre restait invisible dans la liste admin. Corrigé : la liste fusionne désormais avec tous les comptes panel connus (0€ pour ceux sans wallet).
