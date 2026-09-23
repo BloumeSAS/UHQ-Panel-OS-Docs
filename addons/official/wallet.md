@@ -17,7 +17,15 @@
 
 ---
 
-## Installation
+## Activation en 1 clic (depuis v2.4.42, recommandé)
+
+Wallet est **déjà build dans l'image Docker du panel UHQ Panel OS** (rien à déployer séparément). Depuis le panel : **Extensions → Wallet → Activer**. Le panel démarre Wallet comme un simple processus interne (pas de nouveau conteneur, pas de VPS) et le connecte automatiquement en quelques secondes. **Désactiver** l'arrête proprement.
+
+---
+
+## Installation manuelle (auto-hébergement séparé)
+
+Alternative si vous voulez héberger Wallet sur sa propre infrastructure (VPS dédié, scaling indépendant du panel...) :
 
 ```bash
 git clone https://github.com/BloumeSAS/UHQ-Addon-Wallet

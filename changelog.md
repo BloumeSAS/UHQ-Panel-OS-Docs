@@ -2,6 +2,16 @@
 
 ## v2.4.x
 
+### v2.4.42 — Addons officiels embarqués dans l'image (activation 1 clic)
+- **Nouveau : les addons officiels (Wallet, Orders) sont désormais build directement dans l'image Docker du panel** (nouveau stage `addons-builder`, clone+build automatique depuis `addons/addons.json`) mais ne tournent pas tant qu'on n'a pas cliqué **Activer** sur leur carte (page Extensions → catalogue officiel).
+- **Aucun VPS séparé, aucun accès `docker.sock`** — chaque addon tourne comme un simple processus enfant du panel (port interne jamais publié), atteint depuis le navigateur via un reverse-proxy interne (`/addon-proxy/<slug>/...`) qui passe par le port déjà exposé. Activer démarre le processus (quelques secondes) et le connecte automatiquement, sans redémarrage du panel. Désactiver l'arrête proprement (refusé si un autre addon en dépend). L'état survit aux redémarrages (relance auto au boot).
+- **Futurs addons officiels automatiques** : ajouter une entrée avec `bundlePort` + `repository` dans `addons/addons.json` suffit — le build Docker et le catalogue du panel les prennent en compte sans autre modification.
+- **Fix** : `AddonIframe`/`AddonWidgetSlot`/`AddonPageBar` construisaient l'URL d'un addon avec `new URL(path, baseUrl)`, qui remplace (au lieu d'ajouter) le chemin de `baseUrl` quand `path` commence par `/` — invisible pour un addon externe, aurait cassé le préfixe `/addon-proxy/<slug>` d'un addon embarqué. Corrigé.
+
+::: warning Build Docker non vérifié en conditions réelles
+Introduit sans accès à un démon Docker actif pour valider le build complet — lancez `docker compose build` après mise à jour pour confirmer, et signalez tout souci.
+:::
+
 ### v2.4.41 — Retrait de la page "Modules" (v2.4.40)
 - La page **Système → Modules** et son exemple "Export Prometheus" (v2.4.40) sont retirés — mauvaise approche (nouvelle page séparée + module inventé plutôt que de s'appuyer sur les addons déjà existants dans **Extensions**). Retour propre à l'état v2.4.39 sur ce point.
 

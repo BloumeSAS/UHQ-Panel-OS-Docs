@@ -23,7 +23,15 @@ Tant que le Wallet est indisponible, la boutique affiche un avertissement et le 
 
 ---
 
-## Installation
+## Activation en 1 clic (depuis v2.4.42, recommandé)
+
+Orders est **déjà build dans l'image Docker du panel UHQ Panel OS**. Depuis le panel : **Extensions → Orders → Activer** — nécessite que **Wallet soit déjà activé** (bouton grisé sinon, avec l'info-bulle correspondante). Le panel démarre Orders comme processus interne et le connecte automatiquement.
+
+---
+
+## Installation manuelle (auto-hébergement séparé)
+
+Alternative si vous voulez héberger Orders sur sa propre infrastructure :
 
 ```bash
 git clone https://github.com/BloumeSAS/UHQ-Addon-Orders
