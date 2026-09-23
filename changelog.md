@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.43 — Fix critique : le proxy des addons embarqués (v2.4.42) ne répondait jamais
+- **Fix : `Cannot GET /addon-proxy/<slug>/...`** sur toute page d'un addon embarqué activé — le reverse-proxy enregistré via le mécanisme standard NestJS (`MiddlewareConsumer`) n'était jamais invoqué (cause précise non identifiée, contournée). Monté désormais directement en Express natif dans `main.ts`, avant les autres middlewares — vérifié fonctionnel (chemins imbriqués, query string, slug inconnu → 404 propre).
+- Mettez à jour et relancez votre instance pour appliquer le correctif si vous étiez déjà passé en v2.4.42.
+
 ### v2.4.42 — Addons officiels embarqués dans l'image (activation 1 clic)
 - **Nouveau : les addons officiels (Wallet, Orders) sont désormais build directement dans l'image Docker du panel** (nouveau stage `addons-builder`, clone+build automatique depuis `addons/addons.json`) mais ne tournent pas tant qu'on n'a pas cliqué **Activer** sur leur carte (page Extensions → catalogue officiel).
 - **Aucun VPS séparé, aucun accès `docker.sock`** — chaque addon tourne comme un simple processus enfant du panel (port interne jamais publié), atteint depuis le navigateur via un reverse-proxy interne (`/addon-proxy/<slug>/...`) qui passe par le port déjà exposé. Activer démarre le processus (quelques secondes) et le connecte automatiquement, sans redémarrage du panel. Désactiver l'arrête proprement (refusé si un autre addon en dépend). L'état survit aux redémarrages (relance auto au boot).
