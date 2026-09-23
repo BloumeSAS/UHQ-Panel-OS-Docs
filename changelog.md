@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.46 / Addon Orders v1.2.4 — lien Boutique épinglé dans "Mes proxies"
+- **Nouveau** : une page d'addon peut désormais se marquer `"primary": true` dans son manifeste (`pages[]`) pour être épinglée directement sous "Mes proxies" dans la barre latérale, côté utilisateur standard uniquement — au lieu d'apparaître dans la section générique "Extensions". Mécanisme générique, réutilisable par n'importe quel addon.
+- **Orders v1.2.4** utilise cette option pour sa page Boutique (`/`).
+- [UHQ Panel OS v2.4.46](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.46) · [UHQ-Addon-Orders v1.2.4](https://github.com/BloumeSAS/UHQ-Addon-Orders/releases/tag/v1.2.4)
+
 ### Addons Wallet v1.1.5 / Orders v1.2.3 — fix critique thème custom
 - **Le thème custom du panel n'avait en réalité jamais d'effet** — `themeColors` revient de `/api/panel/setup/status` comme une chaîne JSON, jamais parsée côté addon, donc toujours `undefined` en silence. Corrigé dans les deux.
 - **Orders** : les indices de configuration webhook Stripe/NOWPayments affichent maintenant l'URL réelle et copiable, calculée automatiquement, au lieu d'un modèle générique.
