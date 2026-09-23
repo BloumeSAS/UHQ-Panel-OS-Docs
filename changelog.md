@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### Addons Wallet v1.1.4 / Orders v1.2.2 — accessibilité
+- **Focus clavier visible** sur boutons/champs/liens (`:focus-visible`) dans les deux addons.
+- **Labels correctement associés** aux champs de formulaire (`htmlFor`/`id`) — crédit/débit Wallet, réglages de paiement Orders.
+- **Contrôles auparavant sans nom accessible** (glyphes seuls type "+"/"−") : `aria-label` explicite sur les steppers de quantité, les boutons crédit/débit par ligne, et le bouton "Copier" ; les changements d'état (quantité, confirmation de copie) sont désormais annoncés via `aria-live`.
+
 ### Addon Orders v1.2.1 — paiement par carte (Stripe) et crypto (NOWPayments)
 - **Nouveau : paiement par carte et crypto** en plus du solde Wallet — panneau de réglages repliable sur la page admin (Gestion boutique), clés API stockées comme secrets (masquées, jamais écrasées par une valeur vide). Le panier propose un choix de méthode de paiement dès qu'une passerelle externe est activée.
 - Une commande payée par carte/crypto reste `pending` (jamais débitée, jamais livrée) tant que le paiement n'est pas confirmé par un webhook signé — voir [UHQ-Addon-Orders v1.2.0](https://github.com/BloumeSAS/UHQ-Addon-Orders/releases/tag/v1.2.0) pour le détail de l'intégration.
