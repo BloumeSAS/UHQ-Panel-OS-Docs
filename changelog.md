@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.45 — Logs des addons embarqués nettoyés, versions synchronisées
+- **Fix : logs pollués de codes ANSI bruts** (`[32m[Nest] 2379...[39m`) pour tout addon embarqué actif dans le journal du panel — découpés ligne par ligne et nettoyés des codes couleur ; `NO_COLOR=1` injecté dans l'environnement de l'addon pour qu'il arrête d'en émettre.
+- **Versions synchronisées** : le registre `addons/addons.json` affichait encore v1.1.0 pour Wallet/Orders. Bump des deux addons en **v1.1.2** ([Wallet](https://github.com/BloumeSAS/UHQ-Addon-Wallet/releases/tag/v1.1.2), [Orders](https://github.com/BloumeSAS/UHQ-Addon-Orders/releases/tag/v1.1.2)) et registre mis à jour.
+
 ### Fix complémentaire (addons Wallet/Orders) — page toujours blanche après v2.4.44
 Après le fix v2.4.44 ci-dessous, les assets/CSS chargaient bien (bon MIME, 200), mais la page restait **quand même blanche, sans erreur JS**. Cause réelle, cette fois dans le code des addons eux-mêmes (pas dans le panel) : `<BrowserRouter>` (React Router) n'avait pas de `basename` — `<Routes>` matche le **pathname complet**, donc la route `"/admin"` ne matchait jamais le vrai chemin `"/addon-proxy/wallet/admin"`, et `<Routes>` ne rendait rien du tout.
 
