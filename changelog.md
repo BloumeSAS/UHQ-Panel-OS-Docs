@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.44 — Fix : page blanche sur un addon embarqué (assets + appels API en chemin absolu)
+- **Fix** : après v2.4.43, la page d'un addon embarqué activé chargeait mais restait blanche (`Failed to load module script... MIME type "text/html"`). Les addons officiels sont conçus pour être déployés à la racine de leur propre domaine — leurs assets et leurs appels API (`fetch('/api/x')`) utilisent des chemins absolus, qui atterrissaient à la racine du panel une fois embarqués (404 / fallback SPA) au lieu de passer par `/addon-proxy/<slug>/`.
+- Corrigé sans toucher au code des addons (le déploiement externe classique reste inchangé) : le build embarqué passe `--base=/addon-proxy/<slug>/` à Vite (assets), et le proxy interne détecte aussi les appels API absolus via l'en-tête `Referer` (repli, sans élargir la portée au-delà d'un addon réellement embarqué).
+
 ### v2.4.43 — Fix critique : le proxy des addons embarqués (v2.4.42) ne répondait jamais
 - **Fix : `Cannot GET /addon-proxy/<slug>/...`** sur toute page d'un addon embarqué activé — le reverse-proxy enregistré via le mécanisme standard NestJS (`MiddlewareConsumer`) n'était jamais invoqué (cause précise non identifiée, contournée). Monté désormais directement en Express natif dans `main.ts`, avant les autres middlewares — vérifié fonctionnel (chemins imbriqués, query string, slug inconnu → 404 propre).
 - Mettez à jour et relancez votre instance pour appliquer le correctif si vous étiez déjà passé en v2.4.42.
