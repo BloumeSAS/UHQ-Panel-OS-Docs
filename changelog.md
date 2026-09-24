@@ -2,6 +2,13 @@
 
 ## v2.4.x
 
+### v2.4.52 — Sécurité : clés API à portée réduite pouvaient accéder à tous les comptes proxy
+- **Important** : une clé API auto-générée par un compte utilisateur standard (page "Clés API") pouvait lire/modifier **tous** les comptes proxy du panel — y compris les identifiants en clair — via `/api/v1/sub-user/*`, route censée être réservée à la clé maître admin. Corrigé : ces routes (ainsi que `/api/v1/user/balance` et `/api/v1/stats/*`, hors agrégats globaux) exigent désormais explicitement la clé maître.
+- `/api/v1/me/*` (l'équivalent sûr, filtré par propriétaire) gagne les actions d'écriture légitimes pour un utilisateur sur ses propres comptes : IPs autorisées, domaines bloqués.
+- La page Clés API n'affiche plus aux comptes non-admin que les scopes réellement sûrs et utiles, avec une nouvelle documentation intégrée expliquant chaque scope.
+- Correction rétroactive : les clés déjà créées restent utilisables mais ne peuvent plus atteindre les routes globales, sans action requise.
+- [UHQ Panel OS v2.4.52](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.52)
+
 ### v2.4.51 — Fix : onglet Extensions toujours vide malgré Boutique activée
 - **Paramètres → Extensions n'affichait jamais rien**, même avec l'addon Boutique (Orders) activé : la détection comparait l'identifiant interne (UUID Prisma) de l'addon à la chaîne `"orders"`, qui ne correspond jamais — le panneau de réglages Stripe/NOWPayments ne pouvait donc jamais apparaître. Corrigé : la détection se fait désormais sur l'URL interne de l'addon, fixée de façon fiable par le panel lui-même à l'activation.
 - [UHQ Panel OS v2.4.51](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.51)
