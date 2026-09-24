@@ -2,6 +2,12 @@
 
 ## v2.4.x
 
+### Addon Wallet v1.2.0 — refonte "Gestion des soldes" : email, recherche, graphiques, historique
+- **"Gestion des soldes" (admin)** : colonne email (résolue depuis le panel), barre de recherche (email ou ID), stats en un coup d'œil (total des soldes, comptes actifs, solde moyen), et un mini graphique "Top comptes".
+- **Historique par compte** : dérouler l'historique complet, supprimer une transaction individuellement, en sélectionner plusieurs pour une suppression groupée, ou vider tout l'historique (confirmation requise). Ne touche jamais au solde — nettoyage de l'affichage, pas une correction comptable.
+- **"Mon solde" (utilisateur)** : graphique d'évolution du solde reconstruit depuis l'historique, sans dépendance ajoutée.
+- [UHQ-Addon-Wallet v1.2.0](https://github.com/BloumeSAS/UHQ-Addon-Wallet/releases/tag/v1.2.0)
+
 ### v2.4.48 / Addon Orders v1.2.6 — produit en modal + catégorie de livraison
 - **Ajouter/modifier un produit** (Orders) s'ouvre désormais dans un modal (fermeture au clic hors modal, Échap, ou bouton ✕) au lieu d'un formulaire poussé dans le flux de la page.
 - **Livraison : sélection de catégorie** — un produit peut restreindre le compte proxy livré à une catégorie (pool) précise du panel plutôt que tout le pool partagé. Ignoré si une liste de proxies privés est renseignée (même précédence que côté panel).
