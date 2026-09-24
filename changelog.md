@@ -2,6 +2,12 @@
 
 ## v2.4.x
 
+### v2.4.48 / Addon Orders v1.2.6 — produit en modal + catégorie de livraison
+- **Ajouter/modifier un produit** (Orders) s'ouvre désormais dans un modal (fermeture au clic hors modal, Échap, ou bouton ✕) au lieu d'un formulaire poussé dans le flux de la page.
+- **Livraison : sélection de catégorie** — un produit peut restreindre le compte proxy livré à une catégorie (pool) précise du panel plutôt que tout le pool partagé. Ignoré si une liste de proxies privés est renseignée (même précédence que côté panel).
+- **Nouvel endpoint API legacy `GET /api/v1/common/pools`** (scope `read:pool`) : liste les catégories déclarées, pour toute intégration API-key — pas seulement Orders.
+- [UHQ Panel OS v2.4.48](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.48) · [UHQ-Addon-Orders v1.2.6](https://github.com/BloumeSAS/UHQ-Addon-Orders/releases/tag/v1.2.6)
+
 ### v2.4.47 / Addon Orders v1.2.5 — passerelles de paiement déplacées dans le panel
 - **Nouvel onglet "Extensions" dans Paramètres** : réglages spécifiques aux addons embarqués actifs. La Boutique (Orders) y expose ses passerelles de paiement (Stripe, NOWPayments), à la place du panneau qui vivait sur la page admin de l'addon lui-même — cohérent avec le reste du panel (un seul endroit pour la config).
 - Les secrets (clés API, clés webhook) suivent le même mécanisme que le reste de Paramètres : masqués, révélables uniquement après confirmation du mot de passe du compte admin courant. Techniquement : le panel vérifie le mot de passe puis relaie l'appel server-to-server vers le port interne de l'addon (jamais exposé publiquement).
