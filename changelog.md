@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.50 — Fix : widgets d'addon vides + captcha CAP qui semblait se réinitialiser
+- **Widgets d'addon vides** sur le tableau de bord (ex. "Soldes des comptes" et "Commandes" sous l'onglet Comptes actifs) : `AddonPageBar`/`AddonWidgetSlot` lisaient le JWT depuis la mauvaise clé de `localStorage` (`token` au lieu de `uhq_token`), donc l'iframe du widget se chargeait sans authentification et restait vide. Corrigé — les widgets d'addon embarqués s'affichent maintenant correctement partout.
+- **Captcha CAP page de connexion** : le widget CAP réaffiche parfois sa case à cocher juste après l'avoir validée, comme si rien n'avait été résolu (le jeton déjà capturé restait pourtant valide en interne). La confirmation "Vérification réussie" est désormais pilotée par l'état React plutôt qu'une manipulation du DOM, qu'un re-rendu pouvait écraser.
+- [UHQ Panel OS v2.4.50](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.50)
+
 ### v2.4.49 — Page À propos : lien GitHub + historique des versions
 - La page **À propos** affiche désormais le lien officiel vers le dépôt GitHub, avec une courte présentation du projet (open-source, maintenu par Bloume SAS).
 - Nouveau bouton **"Voir tous les changelogs"** : ouvre une timeline de toutes les versions publiées (GitHub Releases), avec date et notes de version pour chacune. Nouvel endpoint `GET /api/panel/about/releases`, mis en cache 5 minutes côté serveur.
