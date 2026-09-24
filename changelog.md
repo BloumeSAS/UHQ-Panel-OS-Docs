@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.58 — Sécurité : validation stricte des couleurs de thème sur /docs
+- Le sync de thème de `/docs` (v2.4.57) interpolait les valeurs HSL du thème custom sans validation dans un littéral JS — corrigé, chaque composant est désormais strictement validé avant interpolation.
+- [UHQ Panel OS v2.4.58](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.58)
+
 ### v2.4.57 — Fix boutons Démarrer/Arrêter, thème /docs synchronisé, exemples de réponse API
 - **Checker / Scraper** : le bouton "Arrêter" pouvait s'afficher avant même que la boucle automatique ait réellement démarré (état désiré vs état réel confondus). Corrigé.
 - **`/docs`** ne suivait pas le thème custom du panel (palette tangerine figée en dur) — même bug déjà corrigé côté addons. Corrigé.
