@@ -2,6 +2,16 @@
 
 ## v2.4.x
 
+### v2.4.56 / Wallet v1.2.2 — Extensions au tableau de bord, scraper stop/live, captcha CAP réécrit
+- **Tableau de bord** : les widgets d'addon ne s'affichent plus sous "Comptes actifs" — nouvel onglet **Extensions** dédié.
+- **Scraper** : boutons Démarrer/Arrêter pour la boucle automatique + modale "Stats en direct" (progression du cycle en cours).
+- **Logs → Historique fichiers** : recherche, compteur fichiers/taille, bouton rafraîchir, bandeau expliquant le besoin d'un volume Docker persistant.
+- **Captcha CAP réécrit** pour correspondre à l'implémentation de référence (uhq.monster) : `@cap.js/widget` en vraie dépendance npm montée déclarativement, au lieu d'un `<script>` CDN + DOM manuel.
+- **Modale "Historique des versions"** : élargie, texte qui revient à la ligne.
+- **Page Checker** : la carte de statut ne chevauche plus ses boutons sur écran étroit.
+- **Wallet** : "Voir l'historique" en modale paginée, tableau des comptes paginé.
+- [UHQ Panel OS v2.4.56](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.56) · [UHQ-Addon-Wallet v1.2.2](https://github.com/BloumeSAS/UHQ-Addon-Wallet/releases/tag/v1.2.2)
+
 ### v2.4.55 / Wallet v1.2.1 / Orders v1.2.7 — Fin des boîtes de dialogue navigateur natives
 - **Dernières confirmations "brutes" du navigateur remplacées par des modales thémées**, dans le panel et les deux addons officiels : Catégories proxies (vider/supprimer — le dialogue signalé par capture d'écran), Extensions, Pool, Sources scraper, Utilisateurs, Paramètres (restaurer/supprimer sauvegarde, régénérer clé API), Boutique (suppression produit), Wallet (suppression transaction/historique).
 - Le panel et les addons n'affichent plus aucune fenêtre `window.confirm()` — tout passe désormais par une modale cohérente avec le thème (clair/sombre).
