@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.51 — Fix : onglet Extensions toujours vide malgré Boutique activée
+- **Paramètres → Extensions n'affichait jamais rien**, même avec l'addon Boutique (Orders) activé : la détection comparait l'identifiant interne (UUID Prisma) de l'addon à la chaîne `"orders"`, qui ne correspond jamais — le panneau de réglages Stripe/NOWPayments ne pouvait donc jamais apparaître. Corrigé : la détection se fait désormais sur l'URL interne de l'addon, fixée de façon fiable par le panel lui-même à l'activation.
+- [UHQ Panel OS v2.4.51](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.51)
+
 ### v2.4.50 — Fix : widgets d'addon vides + captcha CAP qui semblait se réinitialiser
 - **Widgets d'addon vides** sur le tableau de bord (ex. "Soldes des comptes" et "Commandes" sous l'onglet Comptes actifs) : `AddonPageBar`/`AddonWidgetSlot` lisaient le JWT depuis la mauvaise clé de `localStorage` (`token` au lieu de `uhq_token`), donc l'iframe du widget se chargeait sans authentification et restait vide. Corrigé — les widgets d'addon embarqués s'affichent maintenant correctement partout.
 - **Captcha CAP page de connexion** : le widget CAP réaffiche parfois sa case à cocher juste après l'avoir validée, comme si rien n'avait été résolu (le jeton déjà capturé restait pourtant valide en interne). La confirmation "Vérification réussie" est désormais pilotée par l'état React plutôt qu'une manipulation du DOM, qu'un re-rendu pouvait écraser.
