@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.60 — Sécurité : en-têtes HTTP (CSP, X-Frame-Options, HSTS…)
+- Ajout des en-têtes de sécurité HTTP manquants (signalés par un scan nuclei, sévérité "info") : `Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Cross-Origin-Opener-Policy`, `Cross-Origin-Resource-Policy`, `Strict-Transport-Security`, `X-Permitted-Cross-Domain-Policies`.
+- CSP configurée sur mesure (autorise `/docs`, les fournisseurs captcha, flagcdn.com — bloque le reste).
+- [UHQ Panel OS v2.4.60](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.60)
+
 ### v2.4.59 — Réglage démarrage auto scraper, fix traductions Journal d'audit, note setup local
 - **Scraper** : nouveau réglage "Démarrage automatique au boot" (pendant du réglage Checker) — jusqu'ici la boucle démarrait toujours 30s après le boot sans possibilité de l'en empêcher.
 - **Assistant de configuration** : note ajoutée — un environnement local permet de tester l'interface, mais le moteur proxy nécessite un vrai domaine (DNS) pour fonctionner en dehors des tests locaux.
