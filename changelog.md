@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.54 — Sécurité : confiance en l'en-tête Cloudflare désormais explicite
+- Le fix "tracking IP Cloudflare" de la v2.4.53 faisait confiance à `CF-Connecting-IP` sans condition — falsifiable si l'origine reste joignable en direct. Nouveau réglage **"Faire confiance à l'en-tête Cloudflare"** (Paramètres → Sécurité), désactivé par défaut ; à n'activer que si l'origine est strictement fermée à Cloudflare.
+- [UHQ Panel OS v2.4.54](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.54)
+
 ### v2.4.53 — Markdown changelog, scrollbars thématisées, checker start/stop, fix IP Cloudflare
 - **Changelog en Markdown** : la modale "Historique des versions" (À propos) rend désormais les notes de version GitHub en vrai Markdown au lieu de texte brut.
 - **Scrollbars fines et thématisées** partout sur le site (verticales et horizontales).
