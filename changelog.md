@@ -2,6 +2,12 @@
 
 ## v2.4.x
 
+### v2.4.62 — Fix régression : les addons embarqués étaient cassés depuis la v2.4.60
+- Le durcissement des en-têtes de sécurité (v2.4.60) posait `Referrer-Policy: no-referrer`, qui supprimait l'en-tête `Referer` sur toutes les requêtes — y compris les appels API internes des addons embarqués (Wallet, Orders), dont le routage (`AddonProxyMiddleware`) repose entièrement sur cet en-tête. Résultat : "Cannot GET /api/wallet/all" et équivalent pour Orders, addons inutilisables.
+- Corrigé avec `strict-origin-when-cross-origin` (valeur par défaut moderne des navigateurs) — envoie l'URL complète en same-origin (ce dont le proxy a besoin), rien de plus en cross-origin.
+- Vérifié en direct : Wallet et Orders s'affichent de nouveau correctement.
+- [UHQ Panel OS v2.4.62](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.62)
+
 ### v2.4.61 — CSP durcie (0 finding nuclei), fix définitif bouton Arrêter Checker/Scraper
 - **CSP** : `script-src` sans `'unsafe-inline'` (nonce par requête pour `/docs`), `Cross-Origin-Embedder-Policy: credentialless`, ajout de `Permissions-Policy`. Vérifié avec nuclei : 11 → 3 → **0** finding.
 - **Checker / Scraper** : confirmé en direct que le scraper pouvait afficher "Arrêter" en rouge avec `running: false` (aucun cycle en cours, juste en attente du prochain cycle planifié). Remplacé le bouton Démarrer/Arrêter par un toggle explicite "Boucle automatique", séparé de l'indicateur "cycle en cours" — élimine l'ambiguïté.
