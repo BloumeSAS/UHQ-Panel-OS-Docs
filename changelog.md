@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.61 — CSP durcie (0 finding nuclei), fix définitif bouton Arrêter Checker/Scraper
+- **CSP** : `script-src` sans `'unsafe-inline'` (nonce par requête pour `/docs`), `Cross-Origin-Embedder-Policy: credentialless`, ajout de `Permissions-Policy`. Vérifié avec nuclei : 11 → 3 → **0** finding.
+- **Checker / Scraper** : confirmé en direct que le scraper pouvait afficher "Arrêter" en rouge avec `running: false` (aucun cycle en cours, juste en attente du prochain cycle planifié). Remplacé le bouton Démarrer/Arrêter par un toggle explicite "Boucle automatique", séparé de l'indicateur "cycle en cours" — élimine l'ambiguïté.
+- [UHQ Panel OS v2.4.61](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.61)
+
 ### v2.4.60 — Sécurité : en-têtes HTTP (CSP, X-Frame-Options, HSTS…)
 - Ajout des en-têtes de sécurité HTTP manquants (signalés par un scan nuclei, sévérité "info") : `Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Cross-Origin-Opener-Policy`, `Cross-Origin-Resource-Policy`, `Strict-Transport-Security`, `X-Permitted-Cross-Domain-Policies`.
 - CSP configurée sur mesure (autorise `/docs`, les fournisseurs captcha, flagcdn.com — bloque le reste).
