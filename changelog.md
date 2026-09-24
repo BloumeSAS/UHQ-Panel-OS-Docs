@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.55 / Wallet v1.2.1 / Orders v1.2.7 — Fin des boîtes de dialogue navigateur natives
+- **Dernières confirmations "brutes" du navigateur remplacées par des modales thémées**, dans le panel et les deux addons officiels : Catégories proxies (vider/supprimer — le dialogue signalé par capture d'écran), Extensions, Pool, Sources scraper, Utilisateurs, Paramètres (restaurer/supprimer sauvegarde, régénérer clé API), Boutique (suppression produit), Wallet (suppression transaction/historique).
+- Le panel et les addons n'affichent plus aucune fenêtre `window.confirm()` — tout passe désormais par une modale cohérente avec le thème (clair/sombre).
+- [UHQ Panel OS v2.4.55](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.55) · [UHQ-Addon-Wallet v1.2.1](https://github.com/BloumeSAS/UHQ-Addon-Wallet/releases/tag/v1.2.1) · [UHQ-Addon-Orders v1.2.7](https://github.com/BloumeSAS/UHQ-Addon-Orders/releases/tag/v1.2.7)
+
 ### v2.4.54 — Sécurité : confiance en l'en-tête Cloudflare désormais explicite
 - Le fix "tracking IP Cloudflare" de la v2.4.53 faisait confiance à `CF-Connecting-IP` sans condition — falsifiable si l'origine reste joignable en direct. Nouveau réglage **"Faire confiance à l'en-tête Cloudflare"** (Paramètres → Sécurité), désactivé par défaut ; à n'activer que si l'origine est strictement fermée à Cloudflare.
 - [UHQ Panel OS v2.4.54](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.54)
