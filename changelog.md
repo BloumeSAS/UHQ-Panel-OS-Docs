@@ -2,6 +2,15 @@
 
 ## v2.4.x
 
+### v2.4.53 — Markdown changelog, scrollbars thématisées, checker start/stop, fix IP Cloudflare
+- **Changelog en Markdown** : la modale "Historique des versions" (À propos) rend désormais les notes de version GitHub en vrai Markdown au lieu de texte brut.
+- **Scrollbars fines et thématisées** partout sur le site (verticales et horizontales).
+- **Sidebar admin réorganisée** : "Gestion" séparée en "Gestion" (comptes/pools) et "Collecte & sécurité" (scraper/checker/IP bannies).
+- **IP bannies** et **sources scraper** : recherche + pagination.
+- **Checker** : réglages "Démarrage automatique au boot" et "Prioriser les pays inconnus" ; la boucle automatique peut être arrêtée/redémarrée depuis la page Checker.
+- **Fix** : le suivi des IP de connexion ne distinguait pas les visiteurs derrière Cloudflare (toutes les connexions semblaient venir d'IP Cloudflare). Priorité désormais à l'en-tête `CF-Connecting-IP`.
+- [UHQ Panel OS v2.4.53](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.53)
+
 ### v2.4.52 — Sécurité : clés API à portée réduite pouvaient accéder à tous les comptes proxy
 - **Important** : une clé API auto-générée par un compte utilisateur standard (page "Clés API") pouvait lire/modifier **tous** les comptes proxy du panel — y compris les identifiants en clair — via `/api/v1/sub-user/*`, route censée être réservée à la clé maître admin. Corrigé : ces routes (ainsi que `/api/v1/user/balance` et `/api/v1/stats/*`, hors agrégats globaux) exigent désormais explicitement la clé maître.
 - `/api/v1/me/*` (l'équivalent sûr, filtré par propriétaire) gagne les actions d'écriture légitimes pour un utilisateur sur ses propres comptes : IPs autorisées, domaines bloqués.
