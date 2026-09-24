@@ -2,6 +2,12 @@
 
 ## v2.4.x
 
+### v2.4.57 — Fix boutons Démarrer/Arrêter, thème /docs synchronisé, exemples de réponse API
+- **Checker / Scraper** : le bouton "Arrêter" pouvait s'afficher avant même que la boucle automatique ait réellement démarré (état désiré vs état réel confondus). Corrigé.
+- **`/docs`** ne suivait pas le thème custom du panel (palette tangerine figée en dur) — même bug déjà corrigé côté addons. Corrigé.
+- **Documentation API `/api/v1`** : exemples de réponse ajoutés sur tous les endpoints (sub-user, me, user, stats, common) — remplace le "No Body" affiché jusqu'ici.
+- [UHQ Panel OS v2.4.57](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.57)
+
 ### v2.4.56 / Wallet v1.2.2 — Extensions au tableau de bord, scraper stop/live, captcha CAP réécrit
 - **Tableau de bord** : les widgets d'addon ne s'affichent plus sous "Comptes actifs" — nouvel onglet **Extensions** dédié.
 - **Scraper** : boutons Démarrer/Arrêter pour la boucle automatique + modale "Stats en direct" (progression du cycle en cours).
