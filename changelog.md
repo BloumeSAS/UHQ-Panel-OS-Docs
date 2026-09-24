@@ -2,6 +2,12 @@
 
 ## v2.4.x
 
+### v2.4.59 — Réglage démarrage auto scraper, fix traductions Journal d'audit, note setup local
+- **Scraper** : nouveau réglage "Démarrage automatique au boot" (pendant du réglage Checker) — jusqu'ici la boucle démarrait toujours 30s après le boot sans possibilité de l'en empêcher.
+- **Assistant de configuration** : note ajoutée — un environnement local permet de tester l'interface, mais le moteur proxy nécessite un vrai domaine (DNS) pour fonctionner en dehors des tests locaux.
+- **Journal d'audit** : le tableau de détail (Clé/Avant/Après) était du texte français figé, jamais traduit — corrigé.
+- [UHQ Panel OS v2.4.59](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.59)
+
 ### v2.4.58 — Sécurité : validation stricte des couleurs de thème sur /docs
 - Le sync de thème de `/docs` (v2.4.57) interpolait les valeurs HSL du thème custom sans validation dans un littéral JS — corrigé, chaque composant est désormais strictement validé avant interpolation.
 - [UHQ Panel OS v2.4.58](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.58)
