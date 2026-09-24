@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.49 — Page À propos : lien GitHub + historique des versions
+- La page **À propos** affiche désormais le lien officiel vers le dépôt GitHub, avec une courte présentation du projet (open-source, maintenu par Bloume SAS).
+- Nouveau bouton **"Voir tous les changelogs"** : ouvre une timeline de toutes les versions publiées (GitHub Releases), avec date et notes de version pour chacune. Nouvel endpoint `GET /api/panel/about/releases`, mis en cache 5 minutes côté serveur.
+- [UHQ Panel OS v2.4.49](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.49)
+
 ### Addon Wallet v1.2.0 — refonte "Gestion des soldes" : email, recherche, graphiques, historique
 - **"Gestion des soldes" (admin)** : colonne email (résolue depuis le panel), barre de recherche (email ou ID), stats en un coup d'œil (total des soldes, comptes actifs, solde moyen), et un mini graphique "Top comptes".
 - **Historique par compte** : dérouler l'historique complet, supprimer une transaction individuellement, en sélectionner plusieurs pour une suppression groupée, ou vider tout l'historique (confirmation requise). Ne touche jamais au solde — nettoyage de l'affichage, pas une correction comptable.
