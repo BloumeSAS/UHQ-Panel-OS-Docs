@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.67 — Multiplicateur de consommation par catégorie
+- Nouvelle option **Multiplicateur de consommation** dans Catégories proxies : chaque octet des comptes de la catégorie compte ×N (conso, quota, historique). Exemple ×2 : 500 Mo réels = 1 Go consommé.
+- Défaut ×1 ; décimales acceptées ; une valeur inférieure à 1 fait une remise. Le graphique global de bande passante reste en trafic réel.
+- [UHQ Panel OS v2.4.67](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.67)
+
 ### v2.4.66 — Tableau des soldes retiré de la page Comptes proxy
 - L'extension Wallet (v1.2.3) n'affiche plus le tableau « Soldes des comptes » sur la page Comptes proxy. Les soldes restent gérables depuis « Gestion des soldes ».
 - Les extensions embarquées rechargent leur manifest au démarrage du panel : une mise à jour d'extension s'applique immédiatement, et non plus après l'actualisation horaire.
