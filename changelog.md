@@ -2,6 +2,13 @@
 
 ## v2.4.x
 
+### v2.4.64 — Consommation alignée sur la facturation du reseller
+- Les octets d'un compte sont mesurés sur la connexion avec le proxy upstream, là où le reseller mesure. Négociation CONNECT/SOCKS et tentatives échouées incluses. Vérifié contre un reseller simulé : **écart 0 octet** en HTTP, en tunnel HTTPS et en parallèle.
+- La limite de débit (`bandwidthLimit`) s'applique au compte entier, plus à chaque connexion.
+- HTTP non chiffré : une requête par connexion (attribution par domaine exacte, blocage de domaines non contournable).
+- Le graphique global du trafic ne perd plus de données après un reset ou la suppression d'un compte.
+- [UHQ Panel OS v2.4.64](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.64)
+
 ### v2.4.63 — Comptage de bande passante exact par compte, quota appliqué en direct
 - **Facturation à la livraison** : un octet n'est compté qu'une fois réellement transmis au client (contrôle de flux + fermeture propre). Avant, un client lent pouvait recevoir 0,5 Mo d'un fichier de 8 Mo (téléchargement tronqué) tout en étant facturé 8 Mo, et un téléchargement annulé était facturé en entier.
 - **Octets jusqu'ici non comptés** : en-têtes de la requête proxy et réponse `200 Connection established` des tunnels HTTPS.
