@@ -2,6 +2,15 @@
 
 ## v2.4.x
 
+### v2.4.63 — Comptage de bande passante exact par compte, quota appliqué en direct
+- **Facturation à la livraison** : un octet n'est compté qu'une fois réellement transmis au client (contrôle de flux + fermeture propre). Avant, un client lent pouvait recevoir 0,5 Mo d'un fichier de 8 Mo (téléchargement tronqué) tout en étant facturé 8 Mo, et un téléchargement annulé était facturé en entier.
+- **Octets jusqu'ici non comptés** : en-têtes de la requête proxy et réponse `200 Connection established` des tunnels HTTPS.
+- **Quota en temps réel** : vérifié à la connexion et à chaque paquet ; les tunnels ouverts d'un compte sont coupés dès que son quota est atteint, ou qu'il est bloqué, expiré ou supprimé (avant : contrôle uniquement à la connexion, sur un cache vieux de jusqu'à 60 s).
+- **Plus de trafic perdu** : retry en cas de raté de la base, écriture atomique par compte, écriture finale à l'arrêt/redéploiement ; chaque octet est daté du jour où il a été consommé.
+- Débit live sur une vraie fenêtre glissante ; le reset n'ajoute plus le trafic pré-reset ; Rapports sans décalage d'un jour ; « Mes proxies » agrégé sur toute la période ; threads des sessions statiques comptés sur le vrai compte.
+- Vérifié de bout en bout : compteurs en base identiques à l'octet près aux octets échangés par le client.
+- [UHQ Panel OS v2.4.63](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.63)
+
 ### v2.4.62 — Fix régression : les addons embarqués étaient cassés depuis la v2.4.60
 - Le durcissement des en-têtes de sécurité (v2.4.60) posait `Referrer-Policy: no-referrer`, qui supprimait l'en-tête `Referer` sur toutes les requêtes — y compris les appels API internes des addons embarqués (Wallet, Orders), dont le routage (`AddonProxyMiddleware`) repose entièrement sur cet en-tête. Résultat : "Cannot GET /api/wallet/all" et équivalent pour Orders, addons inutilisables.
 - Corrigé avec `strict-origin-when-cross-origin` (valeur par défaut moderne des navigateurs) — envoie l'URL complète en same-origin (ce dont le proxy a besoin), rien de plus en cross-origin.
