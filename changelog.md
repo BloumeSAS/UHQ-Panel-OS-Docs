@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.66 — Tableau des soldes retiré de la page Comptes proxy
+- L'extension Wallet (v1.2.3) n'affiche plus le tableau « Soldes des comptes » sur la page Comptes proxy. Les soldes restent gérables depuis « Gestion des soldes ».
+- Les extensions embarquées rechargent leur manifest au démarrage du panel : une mise à jour d'extension s'applique immédiatement, et non plus après l'actualisation horaire.
+- [UHQ Panel OS v2.4.66](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.66)
+
 ### v2.4.65 — Connexion ~5× plus rapide, Go décimal sans changer l'affichage
 - **Connexion plus rapide** : le choix du proxy lisait la latence (en millisecondes) comme des secondes. Les proxies fraîchement scrapés, souvent morts, passaient donc devant les proxies éprouvés, et chaque connexion perdait ~1,5 s. C'est corrigé, avec en plus : course continue (remplacement immédiat + renforts toutes les 300 ms), proxy en échec retiré tout de suite, latence apprise en direct, cache DNS, protocole mémorisé pour les listes privées. En local : tunnel prêt en 0,30 s (médiane) au lieu de ~1,5-2 s.
 - **Proxies qui interceptent le HTTPS** (faux certificat) : détectés, mis hors service, puis blacklistés.
