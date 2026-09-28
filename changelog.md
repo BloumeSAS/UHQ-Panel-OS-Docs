@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.69 — Captcha CAP : fin du blocage sur « Verifying… »
+- Le script de vérification exécuté par CAP dans une iframe isolée était bloqué par la CSP, faute de nonce. Chaque page du panel reçoit maintenant le nonce CSP de la réponse (`<meta name="csp-nonce">`), que le widget transmet à CAP (`window.CAP_SCRIPT_NONCE`). Les scripts inline sans nonce restent bloqués.
+- [UHQ Panel OS v2.4.69](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.69)
+
 ### v2.4.68 — Captcha CAP de nouveau fonctionnel
 - Depuis le durcissement des en-têtes de sécurité (v2.4.60), la CSP bloquait le captcha CAP : instance auto-hébergée refusée, Web Worker `blob:` bloqué, WebAssembly bloqué.
 - L'URL de l'instance CAP configurée dans Paramètres est désormais autorisée automatiquement ; ajout de `worker-src 'self' blob:` et `'wasm-unsafe-eval'` (WebAssembly uniquement : le `eval()` JavaScript reste bloqué).
