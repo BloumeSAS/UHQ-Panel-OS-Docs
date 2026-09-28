@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.68 — Captcha CAP de nouveau fonctionnel
+- Depuis le durcissement des en-têtes de sécurité (v2.4.60), la CSP bloquait le captcha CAP : instance auto-hébergée refusée, Web Worker `blob:` bloqué, WebAssembly bloqué.
+- L'URL de l'instance CAP configurée dans Paramètres est désormais autorisée automatiquement ; ajout de `worker-src 'self' blob:` et `'wasm-unsafe-eval'` (WebAssembly uniquement : le `eval()` JavaScript reste bloqué).
+- [UHQ Panel OS v2.4.68](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.68)
+
 ### v2.4.67 — Multiplicateur de consommation par catégorie
 - Nouvelle option **Multiplicateur de consommation** dans Catégories proxies : chaque octet des comptes de la catégorie compte ×N (conso, quota, historique). Exemple ×2 : 500 Mo réels = 1 Go consommé.
 - Défaut ×1 ; décimales acceptées ; une valeur inférieure à 1 fait une remise. Le graphique global de bande passante reste en trafic réel.
