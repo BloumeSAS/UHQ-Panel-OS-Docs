@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.70 — Captcha CAP : instrumentation débloquée (unsafe-eval)
+- Le défi d'instrumentation de CAP évalue du JavaScript dans une iframe qui hérite de la CSP du panel : il était bloqué (« Instrumentation timeout », puis 429 sur `/redeem`). `'unsafe-eval'` est ajouté à `script-src` **uniquement quand le captcha actif est CAP** ; avec les autres captchas ou sans captcha, la CSP reste stricte.
+- ⚠ Cette version affichait encore « v2.4.69 » dans le pied de page (numéro de version non mis à jour) : utiliser la v2.4.71, qui contient le même correctif.
+- [UHQ Panel OS v2.4.70](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.70)
+
 ### v2.4.69 — Captcha CAP : fin du blocage sur « Verifying… »
 - Le script de vérification exécuté par CAP dans une iframe isolée était bloqué par la CSP, faute de nonce. Chaque page du panel reçoit maintenant le nonce CSP de la réponse (`<meta name="csp-nonce">`), que le widget transmet à CAP (`window.CAP_SCRIPT_NONCE`). Les scripts inline sans nonce restent bloqués.
 - [UHQ Panel OS v2.4.69](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.69)
