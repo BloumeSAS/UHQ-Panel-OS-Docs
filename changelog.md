@@ -2,6 +2,13 @@
 
 ## v2.4.x
 
+### v2.4.71 — Version corrective (numéro de version) + script de publication
+- Version corrective : la v2.4.70 affichait encore « v2.4.69 » dans le pied de page (numéro de version non mis à jour). Contenu identique à la v2.4.70, avec la version 2.4.71 partout.
+- Nouveau script de publication `npm run release` : versions, commit, push, tag, release GitHub et changelog de la doc en une seule commande, avec vérification finale.
+- [UHQ Panel OS v2.4.71](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.71)
+
+## v2.4.x
+
 ### v2.4.70 — Captcha CAP : instrumentation débloquée (unsafe-eval)
 - Le défi d'instrumentation de CAP évalue du JavaScript dans une iframe qui hérite de la CSP du panel : il était bloqué (« Instrumentation timeout », puis 429 sur `/redeem`). `'unsafe-eval'` est ajouté à `script-src` **uniquement quand le captcha actif est CAP** ; avec les autres captchas ou sans captcha, la CSP reste stricte.
 - ⚠ Cette version affichait encore « v2.4.69 » dans le pied de page (numéro de version non mis à jour) : utiliser la v2.4.71, qui contient le même correctif.
