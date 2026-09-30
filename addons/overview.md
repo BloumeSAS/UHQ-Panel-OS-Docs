@@ -78,10 +78,11 @@ Ces addons sont **gratuits**, open-source (MIT), publiés par Bloume SAS et visi
 |---|---|---|---|---|
 | [Wallet](/addons/official/wallet) | v1.1.0 | Système de solde par compte proxy | — | <span class="badge-free">✓ Gratuit</span> |
 | [Orders](/addons/official/orders) | v1.1.0 | Boutique interne — commandes et livraison automatique de proxies | Wallet | <span class="badge-free">✓ Gratuit</span> |
+| [Analytics](/addons/official/analytics) | v1.0.0 | Analyse complète du panel — statistiques par compte, catégorie, pool, checker, scraper et heures/jours les plus actifs | — | <span class="badge-free">✓ Gratuit</span> |
 
 ### Déploiement
 
-**Depuis v2.4.42 (recommandé)** : Wallet et Orders sont déjà build dans l'image Docker du panel — un bouton **Activer** sur leur carte (Extensions → catalogue officiel) suffit. Le panel les démarre comme de simples processus internes (pas de nouveau conteneur, pas de VPS séparé, pas d'accès au socket Docker), accessibles via un reverse-proxy interne à travers le port déjà exposé. Voir [Wallet](/addons/official/wallet#activation-en-1-clic-depuis-v2-4-42-recommand%C3%A9) / [Orders](/addons/official/orders#activation-en-1-clic-depuis-v2-4-42-recommand%C3%A9).
+**Depuis v2.4.42 (recommandé)** : Wallet, Orders et Analytics sont déjà build dans l'image Docker du panel — un bouton **Activer** sur leur carte (Extensions → catalogue officiel) suffit. Le panel les démarre comme de simples processus internes (pas de nouveau conteneur, pas de VPS séparé, pas d'accès au socket Docker), accessibles via un reverse-proxy interne à travers le port déjà exposé. Voir [Wallet](/addons/official/wallet#activation-en-1-clic-depuis-v2-4-42-recommand%C3%A9) / [Orders](/addons/official/orders#activation-en-1-clic-depuis-v2-4-42-recommand%C3%A9).
 
 Alternative — auto-hébergement séparé : chaque addon est aussi livré avec un `Dockerfile` et un `docker-compose.coolify.yml` prêts à l'emploi. Déployez sur Coolify (ou tout hôte Docker), configurez les variables d'environnement, puis connectez l'URL depuis le panel.
 
