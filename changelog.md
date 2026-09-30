@@ -2,6 +2,12 @@
 
 ## v2.4.x
 
+### v2.4.72 — Base de l'addon Analytics : historique horaire et API de statistiques
+- **Base de l'addon Analytics** : le panel enregistre désormais la consommation de chaque compte **par heure** (heure de pointe, jours les plus actifs, fenêtre la plus calme) et l'**historique des cycles** du checker et du scraper. Rétention de 90 jours, purge automatique.
+- **Nouvelle API de statistiques en lecture seule** : `/api/panel/analytics/*` (rôles ADMIN et SUPPORT) et `/api/panel/me/proxies/:id/activity` (un utilisateur ne voit que ses propres comptes).
+- L'historique horaire se constitue à partir de cette version ; les jours de la semaine et la tendance journalière couvrent déjà tout l'historique.
+- [UHQ Panel OS v2.4.72](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.72)
+
 ### v2.4.71 — Version corrective (numéro de version) + script de publication
 - Version corrective : la v2.4.70 affichait encore « v2.4.69 » dans le pied de page (numéro de version non mis à jour). Contenu identique à la v2.4.70, avec la version 2.4.71 partout.
 - Nouveau script de publication `npm run release` : versions, commit, push, tag, release GitHub et changelog de la doc en une seule commande, avec vérification finale.
