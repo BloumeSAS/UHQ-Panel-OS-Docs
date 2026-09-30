@@ -2,6 +2,12 @@
 
 ## v2.4.x
 
+### v2.4.75 — Durcissement de sécurité d'Analytics et synchro du thème vérifiée
+- **Sécurité des statistiques** : un utilisateur SUPPORT ne voit plus les e-mails des propriétaires de comptes ni les IP bannies (réservés aux ADMIN), et ne peut plus les sonder par la recherche.
+- **Addon Analytics 1.1.1** : cache indexé par l'empreinte du jeton complet (un jeton forgé ne peut plus lire les réponses d'un autre utilisateur), jeton refusé en query string, CORS désactivé, conteneur non-root. Audit vérifié par 36 contrôles automatisés.
+- Synchronisation du thème panel / addon vérifiée (clair, sombre, bascule en direct, couleurs personnalisées).
+- [UHQ Panel OS v2.4.75](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.75)
+
 ### v2.4.74 — Analytics 1.1.0 : navigation façon Paramètres et traduction complète
 - **Addon Analytics 1.1.0** : navigation reprenant la structure de la page Paramètres (menu latéral groupé, chapeau de section) et traduction complète français / anglais, y compris les valeurs renvoyées par le panel (pays, motifs d'erreur, motifs de bannissement).
 - L'API de statistiques du panel ne renvoie plus de libellés en français dans ses données.
