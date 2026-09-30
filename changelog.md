@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.73 — Nouvel addon officiel Analytics (70+ graphiques)
+- **Nouvel addon officiel : Analytics** (gratuit), embarqué dans l'image : **Extensions → Analytics → Activer**. Plus de 70 graphiques, 8 sections d'analyse, heures et jours les plus actifs, constats automatiques, page « Mon activité » pour chaque utilisateur. Voir [la page de l'addon](/addons/official/analytics).
+- L'API de statistiques du panel (`/api/panel/analytics/*`) est enrichie : comparaison avec la période précédente, chronologie horaire, répartitions, hausses et baisses, tranches de la journée, semaine / week-end.
+- [UHQ Panel OS v2.4.73](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.73)
+
 ### v2.4.72 — Base de l'addon Analytics : historique horaire et API de statistiques
 - **Base de l'addon Analytics** : le panel enregistre désormais la consommation de chaque compte **par heure** (heure de pointe, jours les plus actifs, fenêtre la plus calme) et l'**historique des cycles** du checker et du scraper. Rétention de 90 jours, purge automatique.
 - **Nouvelle API de statistiques en lecture seule** : `/api/panel/analytics/*` (rôles ADMIN et SUPPORT) et `/api/panel/me/proxies/:id/activity` (un utilisateur ne voit que ses propres comptes).
