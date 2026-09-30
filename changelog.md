@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.74 — Analytics 1.1.0 : navigation façon Paramètres et traduction complète
+- **Addon Analytics 1.1.0** : navigation reprenant la structure de la page Paramètres (menu latéral groupé, chapeau de section) et traduction complète français / anglais, y compris les valeurs renvoyées par le panel (pays, motifs d'erreur, motifs de bannissement).
+- L'API de statistiques du panel ne renvoie plus de libellés en français dans ses données.
+- [UHQ Panel OS v2.4.74](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.74)
+
 ### v2.4.73 — Nouvel addon officiel Analytics (70+ graphiques)
 - **Nouvel addon officiel : Analytics** (gratuit), embarqué dans l'image : **Extensions → Analytics → Activer**. Plus de 70 graphiques, 8 sections d'analyse, heures et jours les plus actifs, constats automatiques, page « Mon activité » pour chaque utilisateur. Voir [la page de l'addon](/addons/official/analytics).
 - L'API de statistiques du panel (`/api/panel/analytics/*`) est enrichie : comparaison avec la période précédente, chronologie horaire, répartitions, hausses et baisses, tranches de la journée, semaine / week-end.
