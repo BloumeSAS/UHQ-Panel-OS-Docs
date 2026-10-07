@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.76 — Restauration d'une sauvegarde depuis /setup
+- Restauration d'une sauvegarde complète (.tar.gz PostgreSQL 16) directement depuis la page `/setup`
+- Envoi par morceaux avec reprise, restauration atomique, verrouillée après l'installation
+- [UHQ Panel OS v2.4.76](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.76)
+
 ### v2.4.75 — Durcissement de sécurité d'Analytics et synchro du thème vérifiée
 - **Sécurité des statistiques** : un utilisateur SUPPORT ne voit plus les e-mails des propriétaires de comptes ni les IP bannies (réservés aux ADMIN), et ne peut plus les sonder par la recherche.
 - **Addon Analytics 1.1.1** : cache indexé par l'empreinte du jeton complet (un jeton forgé ne peut plus lire les réponses d'un autre utilisateur), jeton refusé en query string, CORS désactivé, conteneur non-root. Audit vérifié par 36 contrôles automatisés.
