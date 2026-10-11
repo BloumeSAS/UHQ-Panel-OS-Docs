@@ -2,6 +2,12 @@
 
 ## v2.4.x
 
+### v2.4.77 — Redémarrage serveur : attente de la base (thème, clé API, addons conservés)
+- Démarrage : le panel attend que PostgreSQL soit prêt (fini le thème/clé API/addons perdus après un redémarrage du serveur)
+- La clé API n'est jamais régénérée si les réglages n'ont pas pu être lus
+- Identifiants des proxys masqués dans les alertes « proxy mort »
+- [UHQ Panel OS v2.4.77](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.77)
+
 ### v2.4.76 — Restauration d'une sauvegarde depuis /setup
 - Restauration d'une sauvegarde complète (.tar.gz PostgreSQL 16) directement depuis la page `/setup`
 - Envoi par morceaux avec reprise, restauration atomique, verrouillée après l'installation
