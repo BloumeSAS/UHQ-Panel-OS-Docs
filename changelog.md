@@ -2,6 +2,12 @@
 
 ## v2.4.x
 
+### v2.4.78 — Restauration JSON depuis /setup + import de tous les réglages
+- Restauration depuis /setup : acceptation des sauvegardes JSON du panel (en plus du .tar.gz PostgreSQL 16)
+- Import de réglages : tous les réglages (secrets et clé API compris), formats plat / export / sauvegarde complète
+- Restauration d'un fichier partiel : seules les tables présentes sont remplacées
+- [UHQ Panel OS v2.4.78](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.78)
+
 ### v2.4.77 — Redémarrage serveur : attente de la base (thème, clé API, addons conservés)
 - Démarrage : le panel attend que PostgreSQL soit prêt (fini le thème/clé API/addons perdus après un redémarrage du serveur)
 - La clé API n'est jamais régénérée si les réglages n'ont pas pu être lus
