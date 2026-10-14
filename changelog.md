@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.82 — Sécurité : jeton d'installation aussi si l'état est inconnu
+- Sécurité : le jeton d'installation est aussi généré quand l'état de l'installation ne peut pas être vérifié au démarrage (base injoignable)
+- [UHQ Panel OS v2.4.82](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.82)
+
 ### v2.4.81 — Jeton d'installation généré automatiquement
 - Jeton d'installation généré automatiquement et affiché dans les logs (TOKEN D'INSTALLATION) ; supprimé après l'installation
 - Un panel déjà installé n'est pas concerné ; SETUP_TOKEN impose une valeur, SETUP_TOKEN=off désactive
