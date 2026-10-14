@@ -36,11 +36,13 @@ L'erreur du proxy amont est masquée pour les requêtes HTTP sans corps (GET, HE
 
 ## Fallback par catégorie
 
-Chaque catégorie (**Catégories**) peut avoir son propre fallback, ou n'en avoir aucun :
+Il n'y a **plus de fallback global**. Le proxy de secours se règle **par catégorie**, dans **Paramètres → Scraper → Fallback par catégorie** (une ligne par catégorie : URL + interrupteur).
 
-- **Fallback de secours (interrupteur)** : désactivé = cette catégorie n'utilise **jamais** de fallback, même si un fallback global existe. Le client reçoit alors `UHQ_NO_UPSTREAM`.
-- **Fallback propre** : URL du proxy de secours de la catégorie (`http://user:pass@hôte:port`, `socks5://…`). Vide = utilise le **fallback global** (Paramètres → Scraper).
-- Le gabarit de pays (`{user}__country__{country}`…) reste réglable par catégorie.
+- **URL** : `http://user:pass@hôte:port` ou `socks5://…`. Vide = aucune solution de secours pour cette catégorie : quand aucun proxy ne répond, le client reçoit `UHQ_NO_UPSTREAM`.
+- **Interrupteur « Activé »** : désactivé = la catégorie n'utilise pas son fallback (l'URL est conservée).
+- Le gabarit de pays (`{user}__country__{country}`) reste réglable dans la catégorie.
+- L'URL contient des identifiants : elle est **masquée** (••••••••) ; laisser le masque inchangé conserve la valeur.
 
-Ordre de décision : interrupteur désactivé → aucun ; sinon fallback propre ; sinon fallback global ; sinon aucun.
-L'URL contient des identifiants : elle est **masquée** dans le panel et l'API (••••••••) ; laisser le masque inchangé conserve la valeur.
+::: warning Mise à jour depuis une version précédente
+L'ancien réglage « Proxy de secours (fallback) » n'est plus utilisé comme fallback. Il devient **« Proxy sortant du scraper »** (utilisé seulement pour récupérer les listes de sources). Pour garder un fallback, saisissez son URL dans chaque catégorie concernée.
+:::
