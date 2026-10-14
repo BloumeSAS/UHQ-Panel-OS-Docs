@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.89 — Afficher le jeton du webhook de mise à jour
+- Paramètres : le jeton d'API du webhook de mise à jour peut de nouveau être affiché
+- [UHQ Panel OS v2.4.89](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.89)
+
 ### v2.4.88 — Mise à jour auto : jeton de webhook invalide
 - Mise à jour automatique : jeton d'API nettoyé et vérifié, messages clairs pour un jeton ou une URL de webhook invalide
 - [UHQ Panel OS v2.4.88](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.88)
