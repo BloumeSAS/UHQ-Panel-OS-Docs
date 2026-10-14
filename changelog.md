@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.84 — Test de connexion : bon port et diagnostic précis
+- Test de connexion : utilise le port dédié du compte ou de sa catégorie, diagnostique les comptes bloqués/expirés/quota/IP autorisées
+- Moteur : les connexions du serveur lui-même (test) ne sont plus auto-bannies
+- [UHQ Panel OS v2.4.84](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.84)
+
 ### v2.4.83 — Mise à jour automatique depuis À propos (progression et reconnexion)
 - Bouton « Mettre à jour maintenant » dans À propos : déclenche le webhook de déploiement (Coolify), progression et reconnexion automatique
 - Réglages Paramètres → Général → Mise à jour automatique ; sauvegarde avant mise à jour en option ; /health expose la version
