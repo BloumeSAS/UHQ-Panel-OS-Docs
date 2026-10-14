@@ -75,16 +75,33 @@ Vous pouvez y ajouter un **message** (maintenance, incident en cours…). La pag
 
 ---
 
-## Protéger l'installation (`SETUP_TOKEN`)
+## Protéger l'installation (jeton automatique)
 
-Tant que l'installation n'est pas terminée, la page `/setup` est ouverte : le premier qui y accède devient administrateur. Sur un serveur exposé à Internet, protégez-la avec un **jeton** :
+Tant que l'installation n'est pas terminée, la page `/setup` est ouverte : le premier qui y accède deviendrait administrateur. Pour l'éviter, le panel **génère automatiquement un jeton d'installation** au premier démarrage et l'**affiche dans les logs** :
 
-```yaml
-# docker-compose.yml / variables d'environnement Coolify
-SETUP_TOKEN: "choisissez-un-jeton-secret"
+```
+══════════════════════════════════════════════════════════════
+  INSTALLATION À FAIRE — l'écran /setup est protégé.
+  TOKEN D'INSTALLATION : Xk3b9...
+══════════════════════════════════════════════════════════════
 ```
 
-Les écrans d'installation (base de données, création du compte administrateur, restauration) affichent alors un champ **Jeton d'installation** à remplir. Sans le bon jeton, le serveur répond « 401 ». Sans la variable, rien ne change. Le jeton n'est plus utilisé une fois l'installation terminée.
+1. Ouvrez les **logs** du conteneur (Coolify → votre application → *Logs*, ou `docker logs <conteneur>`).
+2. Copiez la valeur de **TOKEN D'INSTALLATION**.
+3. Collez-la dans le champ **Jeton d'installation** des écrans d'installation (base de données, création du compte administrateur, restauration).
+
+Détails :
+- Le jeton est **conservé dans le dossier de données** : il reste le même si le conteneur redémarre (et il est réaffiché dans les logs à chaque démarrage tant que l'installation n'est pas faite).
+- Il est **supprimé dès que l'installation est terminée**.
+- **Un panel déjà installé n'est pas concerné** : aucun jeton n'est généré ni demandé, rien à refaire lors d'une mise à jour.
+- Sans le bon jeton, le serveur répond « 401 » aux routes d'installation.
+
+### Options (variables d'environnement)
+| Variable | Effet |
+|---|---|
+| *(rien)* | jeton généré automatiquement (recommandé) |
+| `SETUP_TOKEN=votre-valeur` | impose **votre** jeton à la place |
+| `SETUP_TOKEN=off` | désactive la protection (déconseillé sur un serveur exposé) |
 
 ---
 

@@ -113,7 +113,7 @@ L'écran `/setup` propose deux onglets :
 - **Nouvelle installation** : nom du site, hôte et port publics du proxy, puis le compte administrateur (e-mail + mot de passe).
 - **Restaurer une sauvegarde** : envoyez un `backup-db-….json` du panel ou un `.tar.gz` du dossier de données PostgreSQL 16. Voir [Sauvegardes et restauration](/guide/sauvegardes).
 
-Sur un serveur exposé, protégez cet écran avec la variable `SETUP_TOKEN` (voir [Mise en service](/guide/mise-en-service#proteger-l-installation-setup-token)).
+Cet écran est protégé par un **jeton d'installation généré automatiquement** : relevez la ligne `TOKEN D'INSTALLATION` dans les logs du conteneur et saisissez-la dans le champ prévu (voir [Mise en service](/guide/mise-en-service#proteger-l-installation-jeton-automatique)). Un panel déjà installé n'est pas concerné.
 
 Une fois l'installation terminée, le panel lance sa [visite guidée](/guide/visite-guidee), et le tableau de bord affiche la checklist « Premiers pas ».
 
