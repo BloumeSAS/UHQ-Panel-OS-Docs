@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.86 — Mise à jour automatique : plus de coupure Cloudflare (tâche de fond)
+- Mise à jour automatique : le déclenchement (sauvegarde + webhook) est une tâche de fond suivie à l'écran, ce qui évite les coupures Cloudflare (520/524) sur les grosses bases
+- [UHQ Panel OS v2.4.86](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.86)
+
 ### v2.4.85 — Tableau de bord synchronisé, alertes de surveillance, durcissement du moteur
 - Tableau de bord : un seul instantané cohérent pour toutes les valeurs en direct, indicateur d'état, détection de flux figé, secours HTTP
 - Surveillance : alertes moteur/base/disque/sauvegardes (cloche, Discord/Slack/BloumeChat, e-mail) et heartbeat externe
