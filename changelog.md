@@ -2,6 +2,13 @@
 
 ## v2.4.x
 
+### v2.4.87 — Outils clients, support et installation guidée
+- Générateur de lignes de connexion (host:port:user:pass, curl, Python, Node, Playwright…) pour les admins et les clients
+- « Pourquoi ça ne marche pas ? » : journal des refus de connexion par compte, avec la cause et la solution
+- Alertes e-mail aux clients (quota 80 %/100 %, expiration) ; infos de support sans secret ; fenêtre « Nouveautés » ; mode démo ; page Aide
+- Installation guidée (vérification domaine/port 990/Cloudflare) et vérification d'une sauvegarde avant restauration
+- [UHQ Panel OS v2.4.87](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.87)
+
 ### v2.4.86 — Mise à jour automatique : plus de coupure Cloudflare (tâche de fond)
 - Mise à jour automatique : le déclenchement (sauvegarde + webhook) est une tâche de fond suivie à l'écran, ce qui évite les coupures Cloudflare (520/524) sur les grosses bases
 - [UHQ Panel OS v2.4.86](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.86)
