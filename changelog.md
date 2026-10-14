@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.88 — Mise à jour auto : jeton de webhook invalide
+- Mise à jour automatique : jeton d'API nettoyé et vérifié, messages clairs pour un jeton ou une URL de webhook invalide
+- [UHQ Panel OS v2.4.88](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.88)
+
 ### v2.4.87 — Outils clients, support et installation guidée
 - Générateur de lignes de connexion (host:port:user:pass, curl, Python, Node, Playwright…) pour les admins et les clients
 - « Pourquoi ça ne marche pas ? » : journal des refus de connexion par compte, avec la cause et la solution
