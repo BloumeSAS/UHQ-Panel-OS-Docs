@@ -58,6 +58,7 @@ export default defineConfig({
             { text: 'Surveillance & alertes', link: '/guide/surveillance' },
             { text: 'Sauvegardes & restauration', link: '/guide/sauvegardes' },
             { text: 'Clients & support', link: '/guide/clients-et-support' },
+            { text: 'Erreurs & fallback', link: '/guide/erreurs-et-fallback' },
             { text: 'Trafic, quotas & multiplicateur', link: '/guide/trafic' },
             { text: 'Mises à jour & redémarrages', link: '/guide/mises-a-jour' },
             { text: 'Mise à jour automatique', link: '/guide/mise-a-jour-automatique' },
