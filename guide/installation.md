@@ -103,18 +103,17 @@ npm run dev              # Vite :5173 (proxy → :8000)
 
 ## Premier démarrage
 
-Au premier accès sur `/`, le wizard de configuration s'affiche :
+Au premier accès sur `/`, l'assistant s'affiche :
 
 **Étape 1 — Base de données**
-Si vous utilisez le `docker-compose.yml` fourni, la base PostgreSQL embarquée est détectée automatiquement — cliquer simplement sur **Continuer avec la base intégrée**. Pour une base externe, saisir l'URL PostgreSQL.
+Avec le `docker-compose.yml` fourni, la base PostgreSQL embarquée est détectée automatiquement : cliquez sur **Continuer avec la base intégrée**. Pour une base externe, saisissez l'URL PostgreSQL (`postgresql://utilisateur:motdepasse@hôte:5432/base`) ; la base est créée si besoin et le schéma appliqué.
 
-**Étape 2 — Compte administrateur**
-Définir le mot de passe du compte `admin`.
+**Étape 2 — Nouvelle installation ou restauration**
+L'écran `/setup` propose deux onglets :
+- **Nouvelle installation** : nom du site, hôte et port publics du proxy, puis le compte administrateur (e-mail + mot de passe).
+- **Restaurer une sauvegarde** : envoyez un `backup-db-….json` du panel ou un `.tar.gz` du dossier de données PostgreSQL 16. Voir [Sauvegardes et restauration](/guide/sauvegardes).
 
-**Étape 3 — Paramètres publics**
-Configurer `publicProxyHost` (domaine ou IP du serveur proxy) et `publicProxyPort` (port affiché aux clients).
-
-Après le wizard, le panel est pleinement opérationnel.
+Une fois l'installation terminée, le panel lance sa [visite guidée](/guide/visite-guidee).
 
 ---
 

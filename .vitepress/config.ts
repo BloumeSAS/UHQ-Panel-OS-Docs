@@ -1,4 +1,15 @@
 import { defineConfig } from 'vitepress';
+import { readFileSync } from 'node:fs';
+
+// Dernière version publiée = première entrée "### vX.Y.Z" du changelog (mise à jour à chaque release).
+const latestVersion = (() => {
+  try {
+    const m = readFileSync(new URL('../changelog.md', import.meta.url), 'utf8').match(/^### (v\d+\.\d+\.\d+)/m);
+    return m ? m[1] : 'Changelog';
+  } catch {
+    return 'Changelog';
+  }
+})();
 
 export default defineConfig({
   vite: {
@@ -25,7 +36,7 @@ export default defineConfig({
       { text: 'Addons', link: '/addons/overview' },
       { text: 'API', link: '/api/manifest' },
       {
-        text: 'v2.4.45',
+        text: latestVersion,
         items: [
           { text: 'Changelog', link: '/changelog' },
           { text: 'GitHub', link: 'https://github.com/bloumesas/uhq-panel-os' },
@@ -42,6 +53,9 @@ export default defineConfig({
             { text: 'Installation', link: '/guide/installation' },
             { text: 'Configuration', link: '/guide/configuration' },
             { text: 'Visite guidée', link: '/guide/visite-guidee' },
+            { text: 'Sauvegardes & restauration', link: '/guide/sauvegardes' },
+            { text: 'Trafic, quotas & multiplicateur', link: '/guide/trafic' },
+            { text: 'Mises à jour & redémarrages', link: '/guide/mises-a-jour' },
             { text: 'Docker & Coolify', link: '/guide/docker' },
             { text: 'Proxy Pools (catégories)', link: '/guide/proxy-pools' },
           ],
