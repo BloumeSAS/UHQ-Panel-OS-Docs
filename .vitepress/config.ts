@@ -51,11 +51,13 @@ export default defineConfig({
           items: [
             { text: 'Introduction', link: '/guide/introduction' },
             { text: 'Installation', link: '/guide/installation' },
+            { text: 'Installer en 5 minutes', link: '/guide/installer-en-5-minutes' },
             { text: 'Configuration', link: '/guide/configuration' },
             { text: 'Visite guidée', link: '/guide/visite-guidee' },
             { text: 'Mise en service', link: '/guide/mise-en-service' },
             { text: 'Surveillance & alertes', link: '/guide/surveillance' },
             { text: 'Sauvegardes & restauration', link: '/guide/sauvegardes' },
+            { text: 'Clients & support', link: '/guide/clients-et-support' },
             { text: 'Trafic, quotas & multiplicateur', link: '/guide/trafic' },
             { text: 'Mises à jour & redémarrages', link: '/guide/mises-a-jour' },
             { text: 'Mise à jour automatique', link: '/guide/mise-a-jour-automatique' },
