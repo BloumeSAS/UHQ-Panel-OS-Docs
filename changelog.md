@@ -2,6 +2,12 @@
 
 ## v2.4.x
 
+### v2.4.85 — Tableau de bord synchronisé, alertes de surveillance, durcissement du moteur
+- Tableau de bord : un seul instantané cohérent pour toutes les valeurs en direct, indicateur d'état, détection de flux figé, secours HTTP
+- Surveillance : alertes moteur/base/disque/sauvegardes (cloche, Discord/Slack/BloumeChat, e-mail) et heartbeat externe
+- Moteur proxy : plafond de connexions non authentifiées, en-têtes bornés, amonts internes refusés (ALLOW_PRIVATE_UPSTREAMS)
+- [UHQ Panel OS v2.4.85](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.85)
+
 ### v2.4.84 — Test de connexion : bon port et diagnostic précis
 - Test de connexion : utilise le port dédié du compte ou de sa catégorie, diagnostique les comptes bloqués/expirés/quota/IP autorisées
 - Moteur : les connexions du serveur lui-même (test) ne sont plus auto-bannies
