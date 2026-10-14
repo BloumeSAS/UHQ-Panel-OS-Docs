@@ -2,6 +2,12 @@
 
 ## v2.4.x
 
+### v2.4.80 — Mise en service : checklist, diagnostic, test de connexion, page d'état, jeton d'installation
+- Mise en service : checklist « Premiers pas », bandeau de sauvegarde, diagnostic (DNS/Cloudflare, ports, HTTPS…), test de connexion d'un compte
+- Page d'état publique /status et jeton d'installation SETUP_TOKEN pour protéger /setup
+- Sécurité : liens e-mail construits depuis la configuration (URL publique du panel), limites de débit sur l'inscription et la réinitialisation
+- [UHQ Panel OS v2.4.80](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.80)
+
 ### v2.4.79 — Visite guidée du panel (tutoriel de A à Z)
 - Visite guidée interactive du panel (≈45 étapes), lancée à la fin de l'installation et relançable via l'icône ?
 - Couvre l'installation, l'architecture, les ports, chaque page et chaque onglet des Paramètres (FR/EN, mobile, clavier)
