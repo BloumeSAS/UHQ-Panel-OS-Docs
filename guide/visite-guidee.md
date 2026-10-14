@@ -32,7 +32,7 @@ Sur téléphone, le menu latéral s'ouvre automatiquement quand la visite le pr�
 
 | Rôle | Étapes vues |
 |---|---|
-| **Administrateur** | Toutes (45 étapes) : installation, architecture, chaque page, chaque onglet des Paramètres. |
+| **Administrateur** | Toutes (une cinquantaine d'étapes) : installation, architecture, chaque page, chaque onglet des Paramètres. |
 | **Support** | Fonctionnement, interface, supervision (tableau de bord, pool, analytics, journaux, rapports, audit), compte. |
 | **Utilisateur** | Son espace : ses proxies, ses clés API, profil, sécurité du compte. |
 
@@ -54,8 +54,8 @@ Menu latéral, recherche globale, langue, thème clair/sombre, densité des tabl
 ### 3. Les pages
 | Étape | Page | Ce que vous y apprenez |
 |---|---|---|
-| Tableau de bord | `/` | Threads, sessions, santé du pool, consommation du jour, domaines les plus utilisés. |
-| Comptes proxy | `/subusers` | Création d'un compte : quota, threads, bande passante, expiration, filtres, port/domaine dédié, liste privée, listes sticky. |
+| Tableau de bord | `/` | Threads, sessions, santé du pool, consommation du jour, domaines les plus utilisés, carte « Premiers pas » et bandeau de sauvegarde. |
+| Comptes proxy | `/subusers` | Création d'un compte : quota, threads, bande passante, expiration, filtres, port/domaine dédié, liste privée, listes sticky, et bouton « Tester la connexion ». |
 | Utilisateurs | `/users` | Rôles Admin / Support / Utilisateur, invitations, 2FA, assignation de comptes. |
 | Pool de proxies | `/pool` | Import, filtres, test de latence, blacklist, proxy de secours. |
 | Catégories | `/proxy-pools` | Port/domaine dédiés, « toujours en ligne », multiplicateur de consommation, anti-VPN. |
@@ -66,6 +66,7 @@ Menu latéral, recherche globale, langue, thème clair/sombre, densité des tabl
 | Journaux | `/logs` | Logs en direct, filtre par niveau, pause. |
 | Rapports | `/reports` | Usage par période, par compte et par utilisateur. |
 | Journal d'audit | `/audit` | Qui a fait quoi, quand. |
+| Diagnostic | `/diagnostics` | Vérifications automatiques : moteur, domaine/Cloudflare, ports, HTTPS, sauvegardes, 2FA. Voir [Mise en service](/guide/mise-en-service). |
 | Extensions | `/addons-manage` | Addons officiels en un clic, addons externes par manifest. |
 | Guide développeur | `/addon-docs` | Créer sa propre extension. |
 | Documentation API | `/docs` | Swagger/Scalar de l'API REST. |

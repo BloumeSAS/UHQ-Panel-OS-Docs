@@ -53,6 +53,7 @@ export default defineConfig({
             { text: 'Installation', link: '/guide/installation' },
             { text: 'Configuration', link: '/guide/configuration' },
             { text: 'Visite guidée', link: '/guide/visite-guidee' },
+            { text: 'Mise en service', link: '/guide/mise-en-service' },
             { text: 'Sauvegardes & restauration', link: '/guide/sauvegardes' },
             { text: 'Trafic, quotas & multiplicateur', link: '/guide/trafic' },
             { text: 'Mises à jour & redémarrages', link: '/guide/mises-a-jour' },
