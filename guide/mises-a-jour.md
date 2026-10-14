@@ -1,7 +1,12 @@
 # Mises à jour et redémarrages
 
 ## Mettre à jour le panel
-Avec Coolify (build depuis GitHub) :
+
+::: tip Bouton « Mettre à jour maintenant »
+Depuis la v2.4.83, la page **À propos** peut déclencher la mise à jour en un clic, avec progression et reconnexion automatique : voir [Mise à jour automatique](/guide/mise-a-jour-automatique).
+:::
+
+À la main, avec Coolify (build depuis GitHub) :
 1. Une nouvelle version est publiée sur GitHub (voir le [changelog](/changelog)).
 2. Dans Coolify, cliquez sur **Redeploy**.
 3. Vérifiez que le **numéro de version dans le pied de page** du panel est celui de la dernière release (aussi visible dans **À propos**).
