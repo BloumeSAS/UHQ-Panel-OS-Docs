@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.81 — Jeton d'installation généré automatiquement
+- Jeton d'installation généré automatiquement et affiché dans les logs (TOKEN D'INSTALLATION) ; supprimé après l'installation
+- Un panel déjà installé n'est pas concerné ; SETUP_TOKEN impose une valeur, SETUP_TOKEN=off désactive
+- [UHQ Panel OS v2.4.81](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.81)
+
 ### v2.4.80 — Mise en service : checklist, diagnostic, test de connexion, page d'état, jeton d'installation
 - Mise en service : checklist « Premiers pas », bandeau de sauvegarde, diagnostic (DNS/Cloudflare, ports, HTTPS…), test de connexion d'un compte
 - Page d'état publique /status et jeton d'installation SETUP_TOKEN pour protéger /setup
