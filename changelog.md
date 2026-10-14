@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.79 — Visite guidée du panel (tutoriel de A à Z)
+- Visite guidée interactive du panel (≈45 étapes), lancée à la fin de l'installation et relançable via l'icône ?
+- Couvre l'installation, l'architecture, les ports, chaque page et chaque onglet des Paramètres (FR/EN, mobile, clavier)
+- [UHQ Panel OS v2.4.79](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.79)
+
 ### v2.4.78 — Restauration JSON depuis /setup + import de tous les réglages
 - Restauration depuis /setup : acceptation des sauvegardes JSON du panel (en plus du .tar.gz PostgreSQL 16)
 - Import de réglages : tous les réglages (secrets et clé API compris), formats plat / export / sauvegarde complète
