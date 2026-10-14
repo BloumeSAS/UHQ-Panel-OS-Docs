@@ -115,3 +115,9 @@ Définir le mot de passe du compte `admin`.
 Configurer `publicProxyHost` (domaine ou IP du serveur proxy) et `publicProxyPort` (port affiché aux clients).
 
 Après le wizard, le panel est pleinement opérationnel.
+
+---
+
+## Et ensuite ?
+
+À la fin de l'installation, le panel lance une [visite guidée](/guide/visite-guidee) qui présente chaque page et chaque réglage. Vous pouvez la relancer à tout moment avec l'icône **?** en haut à droite.

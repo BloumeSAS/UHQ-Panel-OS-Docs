@@ -41,6 +41,7 @@ export default defineConfig({
             { text: 'Introduction', link: '/guide/introduction' },
             { text: 'Installation', link: '/guide/installation' },
             { text: 'Configuration', link: '/guide/configuration' },
+            { text: 'Visite guidée', link: '/guide/visite-guidee' },
             { text: 'Docker & Coolify', link: '/guide/docker' },
             { text: 'Proxy Pools (catégories)', link: '/guide/proxy-pools' },
           ],
