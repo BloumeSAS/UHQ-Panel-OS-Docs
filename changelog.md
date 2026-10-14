@@ -2,6 +2,11 @@
 
 ## v2.4.x
 
+### v2.4.83 — Mise à jour automatique depuis À propos (progression et reconnexion)
+- Bouton « Mettre à jour maintenant » dans À propos : déclenche le webhook de déploiement (Coolify), progression et reconnexion automatique
+- Réglages Paramètres → Général → Mise à jour automatique ; sauvegarde avant mise à jour en option ; /health expose la version
+- [UHQ Panel OS v2.4.83](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.83)
+
 ### v2.4.82 — Sécurité : jeton d'installation aussi si l'état est inconnu
 - Sécurité : le jeton d'installation est aussi généré quand l'état de l'installation ne peut pas être vérifié au démarrage (base injoignable)
 - [UHQ Panel OS v2.4.82](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.82)
