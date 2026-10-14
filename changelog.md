@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.91 — Fallback par catégorie dans les paramètres (plus de fallback global)
+- Fallback global retiré : fallback réglé par catégorie dans Paramètres → Scraper ; l'ancien réglage devient « Proxy sortant du scraper »
+- [UHQ Panel OS v2.4.91](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.91)
+
 ### v2.4.90 — Fallback par catégorie, erreurs JSON, fiche des codes d'erreur
 - Fallback propre ou désactivé par catégorie ; erreurs JSON uniformes (l'erreur réelle d'un proxy amont n'est jamais montrée) ; fiche « Codes d'erreur » dans le panel
 - [UHQ Panel OS v2.4.90](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.90)
