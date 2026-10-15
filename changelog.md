@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.92 — Nouvel addon UHQ.Monster Reseller
+- Nouvel addon officiel UHQ.Monster Reseller (achat de proxies, ajout/retrait de Go, import automatique dans une catégorie) ; la page Pool accueille les widgets d'addons
+- [UHQ Panel OS v2.4.92](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.92)
+
 ### v2.4.91 — Fallback par catégorie dans les paramètres (plus de fallback global)
 - Fallback global retiré : fallback réglé par catégorie dans Paramètres → Scraper ; l'ancien réglage devient « Proxy sortant du scraper »
 - [UHQ Panel OS v2.4.91](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.91)
