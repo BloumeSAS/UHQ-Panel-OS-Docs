@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.94 — Pool : Go et mot de passe UHQ.Monster en un clic
+- Page Pool : fenêtre UHQ.Monster par proxy (ajouter/retirer des Go, réinitialiser le mot de passe) ; addon Reseller 1.2.0
+- [UHQ Panel OS v2.4.94](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.94)
+
 ### v2.4.93 — Clé API du Reseller dans Paramètres → Extensions
 - Addon UHQ.Monster Reseller : la clé API se règle dans Paramètres → Extensions du panel
 - [UHQ Panel OS v2.4.93](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.93)
