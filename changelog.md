@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.95 — Reseller : clés API uhq_ et UHQ- acceptées
+- Addon Reseller : les clés API commençant par uhq_ ou UHQ- sont acceptées (v1.2.1)
+- [UHQ Panel OS v2.4.95](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.95)
+
 ### v2.4.94 — Pool : Go et mot de passe UHQ.Monster en un clic
 - Page Pool : fenêtre UHQ.Monster par proxy (ajouter/retirer des Go, réinitialiser le mot de passe) ; addon Reseller 1.2.0
 - [UHQ Panel OS v2.4.94](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.94)
