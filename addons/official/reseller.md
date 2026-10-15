@@ -20,7 +20,7 @@
 
 | | |
 |---|---|
-| UHQ Panel OS | **2.4.94 ou plus** |
+| UHQ Panel OS | **2.4.95 ou plus** |
 | Compte | **revendeur approuvé** sur uhq.monster, avec une clé API (*Revendeur → API*) |
 
 ---
@@ -29,7 +29,7 @@
 
 L'addon est **déjà build dans l'image Docker du panel** : **Extensions → UHQ.Monster Reseller → Activer**.
 
-Puis, dans le panel : **Paramètres → Extensions → UHQ.Monster Reseller** : collez votre **clé API revendeur** (dashboard UHQ.Monster → *Revendeur → API*). Elle est vérifiée auprès d'UHQ.Monster avant d'être enregistrée, puis jamais ré-affichée.
+Puis, dans le panel : **Paramètres → Extensions → UHQ.Monster Reseller** : collez votre **clé API revendeur** (dashboard UHQ.Monster → *Revendeur → API*, elle commence par `uhq_` ou `UHQ-`). Elle est vérifiée auprès d'UHQ.Monster avant d'être enregistrée, puis jamais ré-affichée.
 
 ---
 
