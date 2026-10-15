@@ -20,7 +20,7 @@
 
 | | |
 |---|---|
-| UHQ Panel OS | **2.4.93 ou plus** |
+| UHQ Panel OS | **2.4.94 ou plus** |
 | Compte | **revendeur approuvé** sur uhq.monster, avec une clé API (*Revendeur → API*) |
 
 ---
@@ -48,6 +48,11 @@ Une passerelle résidentielle (un seul hôte:port qui change d'IP) doit être im
 ### Ajouter ou reprendre des Go
 Dans **Mes proxies** : **+ Go** débite votre portefeuille ; **− Go** reprend **toute** la bande passante restante et la rembourse selon la politique du produit (`full`, `min_1gb` — remboursé seulement s'il reste au moins 1 Go — ou `none`).
 
+### Depuis la page Pool
+Sur la page **Pool de proxies**, chaque proxy importé à la main (fournisseur « Manual ») a un bouton **UHQ.Monster** (icône sac) qui ouvre une petite fenêtre : **ajouter des Go**, **reprendre les Go** (avec remboursement) et **réinitialiser le mot de passe**. Le proxy est retrouvé chez UHQ.Monster par hôte + port + identifiant ; s'il n'a pas été acheté avec votre compte revendeur, la fenêtre l'indique et rien n'est modifié.
+
+La réinitialisation du mot de passe est faite par UHQ.Monster (vous ne choisissez pas la valeur) : l'ancien cesse de fonctionner tout de suite, et la ligne du pool est **remplacée** par la nouvelle, dans la même catégorie. Le nouveau mot de passe s'affiche une seule fois dans la fenêtre.
+
 ### Supprimer un proxy
 La suppression est **définitive et sans remboursement** : il faut retaper le libellé du proxy. Reprenez d'abord la bande passante pour récupérer votre crédit. Le proxy est aussi retiré du panel s'il a été importé dans une catégorie.
 
@@ -66,7 +71,7 @@ Cet addon **dépense de l'argent** : il est durci en conséquence.
 
 ## Limites
 
-- Réinitialisation du mot de passe, liste d'IP autorisées et changement de pays d'un proxy existant ne sont pas exposés pour le moment.
+- La liste d'IP autorisées et le changement de pays d'un proxy existant ne sont pas exposés pour le moment.
 - Pour retirer automatiquement du panel un proxy supprimé, il doit avoir été importé dans une **catégorie** (sinon retirez-le dans **Pool**).
 - Après une restauration du panel, **ressaisissez la clé API** (elle n'est pas sauvegardée).
 
