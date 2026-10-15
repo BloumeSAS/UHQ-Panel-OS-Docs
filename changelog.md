@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.93 — Clé API du Reseller dans Paramètres → Extensions
+- Addon UHQ.Monster Reseller : la clé API se règle dans Paramètres → Extensions du panel
+- [UHQ Panel OS v2.4.93](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.93)
+
 ### v2.4.92 — Nouvel addon UHQ.Monster Reseller
 - Nouvel addon officiel UHQ.Monster Reseller (achat de proxies, ajout/retrait de Go, import automatique dans une catégorie) ; la page Pool accueille les widgets d'addons
 - [UHQ Panel OS v2.4.92](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.92)
