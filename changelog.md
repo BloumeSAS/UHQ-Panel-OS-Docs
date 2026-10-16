@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.97 — Les proxies achetés apparaissent dans Mes proxies
+- Boutique : le compte proxy livré est rattaché à l'acheteur (visible dans « Mes proxies »), avec réparation automatique des livraisons précédentes ; API v1 : owner_id
+- [UHQ Panel OS v2.4.97](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.97)
+
 ### v2.4.96 — Sécurité Wallet/Orders et interface pro
 - Sécurité : Wallet et Orders vérifient désormais les jetons auprès du panel (v1.3.0) — mise à jour recommandée ; correctif de création de produit avec catégorie ; nouvelle interface Wallet et Boutique
 - [UHQ Panel OS v2.4.96](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.96)
