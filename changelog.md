@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.96 — Sécurité Wallet/Orders et interface pro
+- Sécurité : Wallet et Orders vérifient désormais les jetons auprès du panel (v1.3.0) — mise à jour recommandée ; correctif de création de produit avec catégorie ; nouvelle interface Wallet et Boutique
+- [UHQ Panel OS v2.4.96](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.96)
+
 ### v2.4.95 — Reseller : clés API uhq_ et UHQ- acceptées
 - Addon Reseller : les clés API commençant par uhq_ ou UHQ- sont acceptées (v1.2.1)
 - [UHQ Panel OS v2.4.95](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.95)
