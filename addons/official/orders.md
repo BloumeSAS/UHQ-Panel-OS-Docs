@@ -12,14 +12,17 @@ Tant que le Wallet est indisponible, la boutique affiche un avertissement et le 
 
 ## Fonctionnalités
 
-- 🛍️ Catalogue de produits (CRUD admin : nom, description, prix, stock, actif/inactif)
-- 💳 Paiement avec le solde Wallet (débit automatique à la commande)
-- 📦 Gestion du stock (décrémenté à la commande, illimité si non renseigné)
-- 🧾 Suivi des commandes (payée / honorée / annulée) — l'annulation rembourse automatiquement
-- 📊 Widget KPIs sur le Dashboard
-- 🛒 Raccourci « Boutique » dans le dropdown topbar
-- 💾 Backup automatique inclus (produits + commandes)
-- 🌍 Français et anglais
+- 🛍️ **Boutique cliente** : catalogue avec recherche/tri et indicateurs de stock, **panier** avec solde après commande et montant manquant, choix du moyen de paiement (Wallet, carte, crypto), **confirmation avant paiement**, accès livrés (mot de passe masqué, copie, téléchargement .txt), suivi des commandes avec frise, rafraîchissement automatique des paiements en attente, états vides explicatifs
+- 🧰 **Gestion admin** : indicateurs (chiffre d'affaires, commandes à traiter, stock faible), produits (**formulaire guidé avec validation et aperçu client**, duplication, activation en un clic, stock illimité ou limité), commandes (recherche, filtres, pagination, détail, **annulation/remboursement avec explication**), état des moyens de paiement, export CSV
+- ⚡ Livraison automatique d'un compte proxy du panel (catégorie, limites, expiration…), via Wallet
+- 💳 Paiement par carte (Stripe) et crypto (NOWPayments)
+
+::: warning Sécurité — mettez à jour vers la v1.3.0 (avec le Wallet)
+- Les jetons sont **vérifiés par le panel** (avant : simplement décodés, donc falsifiables).
+- Les clients **ne voient plus** la configuration de livraison (listes de proxies privés).
+- Stock **réservé immédiatement** (plus de survente simultanée) ; annulation d'une commande payée **refusée si le Wallet est injoignable** ; transitions de statut contrôlées ; livraison partielle → comptes bloqués puis remboursement.
+- Correction : la création d'un produit avec une **catégorie** échouait (`delivery.account.property pool should not exist`).
+:::
 
 ---
 

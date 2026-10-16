@@ -7,13 +7,16 @@
 
 ## Fonctionnalités
 
-- 💳 Solde individuel par compte proxy
-- ➕ Crédit / débit par l'admin
-- 📊 Widget KPIs sur le Dashboard
-- 📋 Widget tableau sur la page Sous-utilisateurs
-- 💰 Raccourci "Mon solde" dans le dropdown topbar
+- 💳 **Page client « Mon portefeuille »** : solde en grand, cumuls crédité/dépensé, **courbe d'évolution interactive** (7 j / 30 j / 90 j / tout), historique **filtrable** (entrées/sorties), recherche, pagination, origine de chaque opération (administrateur, achat boutique, remboursement), solde après chaque opération, **export CSV**
+- ➕ **Gestion admin** : indicateurs (total, comptes approvisionnés, solde moyen, comptes à zéro), classement, recherche + filtre + tri + pagination, **fenêtre de crédit/débit** (montants rapides, motifs, aperçu du nouveau solde), historique par compte (filtres, suppression, export), export CSV des comptes
+- 📊 Widget Dashboard (admin : totaux ; utilisateur : son solde)
+- 💰 Raccourci « Mon solde » dans le dropdown topbar
 - 💾 Backup automatique inclus
 - 🌍 Français et anglais
+
+::: warning Sécurité — mettez à jour vers la v1.3.0
+Avant la 1.3.0, l'addon se contentait de **décoder** le jeton de connexion sans le vérifier : un jeton falsifié « administrateur » permettait de créditer n'importe quel wallet. Depuis la 1.3.0, **chaque appel est vérifié par le panel**, le jeton n'est lu que dans l'en-tête `Authorization`, la clé `X-Panel-Key` (appels internes, sauvegarde) est **obligatoire** et comparée à temps constant, et le fichier de données illisible n'est jamais écrasé (conservé en `*.corrupt-<date>`).
+:::
 
 ---
 
