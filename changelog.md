@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.6.x
+
+### v2.6.0 — Codes promo, recharge du solde, vente au Go, assistant d'installation
+- Nouvel addon **Codes promo** (codes cadeau, bonus de recharge, réductions boutique) ; **Wallet 1.4** : recharge en ligne (offres, min/max, bonus par palier) ; **Orders 1.5** : vente au Go et codes promo dans le panier.
+- Modèles d'e-mails utilisés par les addons (boutique, solde, codes promo) ; envoi réservé à la clé API maître.
+- Documentation : assistant « Commencer l'installation », page E-mails, FAQ du jeton d'installation.
+- [UHQ Panel OS v2.6.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.6.0)
+
 ## v2.5.x
 
 ### v2.5.0 — E-mails complets, statut addons, diagnostic DNS, mises à jour multi-plateformes
