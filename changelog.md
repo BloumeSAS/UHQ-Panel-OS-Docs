@@ -1,5 +1,16 @@
 # Changelog
 
+## v2.5.x
+
+### v2.5.0 — E-mails complets, statut addons, diagnostic DNS, mises à jour multi-plateformes
+- E-mails : 21 modèles activables, prévisualisables, testables et personnalisables (FR/EN) ; en-tête = nom + logo du site ; envoi par les addons via /api/v1/mail/send.
+- Page /status : état des addons et des ports.
+- Diagnostic : enregistrement DNS à créer (IP, type, nom) pour le domaine principal et ceux des catégories.
+- Mise à jour automatique : préconfigurations Coolify, Dokploy, CapRover, Portainer, Watchtower, Render, Railway, Heroku, Vercel, Netlify, Pterodactyl.
+- Sécurité : vraie IP du visiteur derrière Cloudflare dans « Sessions actives ».
+- Audit : actions manquantes journalisées et traduites.
+- [UHQ Panel OS v2.5.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.5.0)
+
 ## v2.4.x
 
 ### v2.4.99 — Suivi de mise à jour en pastille
