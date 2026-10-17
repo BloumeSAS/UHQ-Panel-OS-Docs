@@ -12,6 +12,10 @@ Depuis la **v2.4.79**, UHQ Panel OS inclut une **visite guidée interactive** : 
 | **À tout moment** | Cliquez sur l'icône **?** en haut à droite (barre du haut) pour la relancer. |
 | **Panel déjà installé / restauré** | Elle ne se lance pas automatiquement : utilisez l'icône **?**. |
 
+### Relire une seule catégorie
+
+Le bouton **?** ouvre un menu : **Visite complète** ou une catégorie au choix — *Premiers pas, Interface, Comptes & utilisateurs, Pool & catégories de proxies, Supervision & diagnostic, Paramètres, Extensions, Mon compte*. Idéal pour revoir uniquement le pool de proxies ou les paramètres sans refaire les 50 étapes. La page **Aide** affiche les mêmes catégories sous forme de cartes. Seules les catégories utiles à votre rôle apparaissent.
+
 ### Navigation
 
 | Action | Bouton | Clavier |

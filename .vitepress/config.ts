@@ -33,6 +33,16 @@ export default defineConfig({
 
     nav: [
       { text: '🚀 Installer', link: '/guide/commencer' },
+      {
+        text: '🌍 Hébergeurs',
+        items: [
+          { text: 'Choisir son hébergeur', link: '/guide/hebergeurs/' },
+          { text: 'Coolify (Docker Compose)', link: '/guide/hebergeurs/coolify' },
+          { text: 'Dokploy', link: '/guide/hebergeurs/dokploy' },
+          { text: 'VPS + Docker Compose', link: '/guide/hebergeurs/vps' },
+          { text: 'Vercel, Netlify, Heroku…', link: '/guide/hebergeurs/serverless' },
+        ],
+      },
       { text: 'Guide', link: '/guide/introduction' },
       { text: 'Addons', link: '/addons/overview' },
       { text: 'API', link: '/api/manifest' },
@@ -47,6 +57,19 @@ export default defineConfig({
 
     sidebar: {
       '/guide/': [
+        {
+          text: '🌍 Hébergeurs',
+          items: [
+            { text: 'Choisir son hébergeur', link: '/guide/hebergeurs/' },
+            { text: 'Coolify (Docker Compose) ⭐', link: '/guide/hebergeurs/coolify' },
+            { text: 'Dokploy', link: '/guide/hebergeurs/dokploy' },
+            { text: 'VPS + Docker Compose', link: '/guide/hebergeurs/vps' },
+            { text: 'Portainer', link: '/guide/hebergeurs/portainer' },
+            { text: 'CapRover', link: '/guide/hebergeurs/caprover' },
+            { text: 'Railway', link: '/guide/hebergeurs/railway' },
+            { text: 'Vercel, Netlify, Render, Heroku', link: '/guide/hebergeurs/serverless' },
+          ],
+        },
         {
           text: '🚀 Démarrage',
           items: [

@@ -1,13 +1,12 @@
 # Installer en 5 minutes (Coolify)
 
-1. **Coolify → New Resource → Docker Compose** (ou Dockerfile) depuis le dépôt GitHub `BloumeSAS/UHQ-Panel-OS`.
-2. Ajoutez une base **PostgreSQL 16** (ressource Coolify) ; copiez son URL interne.
-3. Variables d'environnement :
+::: tip Pas Coolify ?
+Dokploy, Portainer, VPS nu… voir [Choisir son hébergeur](/guide/hebergeurs/).
+:::
 
-| Variable | Valeur |
-| --- | --- |
-| `DATABASE_URL` | URL PostgreSQL de l'étape 2 |
-| `SETUP_TOKEN` | *(facultatif)* généré automatiquement et affiché dans les logs ; `off` pour désactiver |
+1. **Coolify → New Resource → Public Repository** → `BloumeSAS/UHQ-Panel-OS`, **Build Pack : Docker Compose** (`/docker-compose.yml`). Pas « Dockerfile » ni « Docker Image » : seul le compose crée aussi PostgreSQL, les volumes et le port 990. [Détails](/guide/hebergeurs/coolify)
+2. La base **PostgreSQL 16** est incluse dans le compose : rien à ajouter.
+3. Variables d'environnement : **aucune obligatoire** (`SETUP_TOKEN` facultatif : généré automatiquement et affiché dans les logs ; `off` pour désactiver).
 
 4. **Domaine** : pointez votre domaine sur l'application, port **8000** (HTTPS géré par Coolify/Traefik).
 5. **Port proxy** : publiez le **990/TCP** sur l'hôte (ce n'est pas un port HTTP : il ne passe pas par Traefik ni Cloudflare orange).
