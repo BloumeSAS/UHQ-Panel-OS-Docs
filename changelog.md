@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.7.x
+
+### v2.7.0 — Rôle vérifié par le serveur, visite par catégorie, nouveaux guides d'hébergement
+- Sécurité : rôle administrateur confirmé par le serveur (`/auth/staff-check`), pages d'administration chargées à la demande ; `GET /setup/db-probe` ne divulgue plus l'URL de la base une fois installé.
+- Visite guidée **par catégorie** : relisez uniquement le pool de proxies, les paramètres, etc. depuis le bouton ? ou la page Aide.
+- Documentation : nouveau design, guides d'hébergement (Coolify Docker Compose, Dokploy, VPS, Portainer, CapRover, Railway, pourquoi pas Vercel/Netlify/Heroku).
+- [UHQ Panel OS v2.7.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.7.0)
+
 ## v2.6.x
 
 ### v2.6.0 — Codes promo, recharge du solde, vente au Go, assistant d'installation
