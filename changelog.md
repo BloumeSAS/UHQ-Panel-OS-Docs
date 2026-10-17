@@ -2,6 +2,13 @@
 
 ## v2.7.x
 
+### v2.7.1 — Logo externe, diagnostic DNS, sections repliables
+- Logo/icône du panel externes (CDN) enfin affichés ; nom + icône utilisés pour l'onglet du navigateur et /status (footer et À propos inchangés).
+- Diagnostic : « Relancer » met à jour le DNS immédiatement (résolution sans cache).
+- Pastille « mise à jour en cours » en bas à droite.
+- Paramètres et Extensions : sections repliables (clic pour afficher les champs) ; Wallet 1.4.1 : recharge repliable.
+- [UHQ Panel OS v2.7.1](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.7.1)
+
 ### v2.7.0 — Rôle vérifié par le serveur, visite par catégorie, nouveaux guides d'hébergement
 - Sécurité : rôle administrateur confirmé par le serveur (`/auth/staff-check`), pages d'administration chargées à la demande ; `GET /setup/db-probe` ne divulgue plus l'URL de la base une fois installé.
 - Visite guidée **par catégorie** : relisez uniquement le pool de proxies, les paramètres, etc. depuis le bouton ? ou la page Aide.
