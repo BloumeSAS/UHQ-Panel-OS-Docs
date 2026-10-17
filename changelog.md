@@ -2,6 +2,10 @@
 
 ## v2.4.x
 
+### v2.4.99 — Suivi de mise à jour en pastille
+- Mise à jour du panel : « Masquer » réduit le suivi en pastille en bas à gauche (clic pour rouvrir) ; le suivi persiste après fermeture de l'onglet.
+- [UHQ Panel OS v2.4.99](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.4.99)
+
 ### v2.4.98 — Orders 1.4 : validation, renouvellement, PayPal F&F, factures PDF
 - **Orders 1.4.0** : validation manuelle des commandes, renouvellement automatique (solde Wallet), paiement PayPal Amis & Famille (IPN), factures et reçus PDF, caractéristiques des produits en boutique.
 - **Mes proxies** refait (statistiques, bande passante, expiration, commandes en attente de validation).
