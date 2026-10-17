@@ -40,6 +40,8 @@ Tout service qui déclenche un déploiement par **URL** convient (Portainer webh
 
 Vous pouvez **recharger la page** pendant la mise à jour : le suivi reprend automatiquement.
 
+**Masquer le suivi** : le bouton **Masquer** réduit la fenêtre en une pastille **« Mise à jour en cours… »** (spinner + temps écoulé) en bas à gauche ; un clic la rouvre. Le suivi survit même à la **fermeture de l'onglet** (retrouvé à la réouverture du panel, dans la limite d'une heure) et la fenêtre se rouvre seule en cas d'erreur, de délai dépassé ou de fin.
+
 ### Si quelque chose ne va pas
 | Message | Cause probable |
 |---|---|
