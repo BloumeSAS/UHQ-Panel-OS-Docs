@@ -9,6 +9,8 @@
 
 - 💳 **Page client « Mon portefeuille »** : solde en grand, cumuls crédité/dépensé, **courbe d'évolution interactive** (7 j / 30 j / 90 j / tout), historique **filtrable** (entrées/sorties), recherche, pagination, origine de chaque opération (administrateur, achat boutique, remboursement), solde après chaque opération, **export CSV**
 - ➕ **Gestion admin** : indicateurs (total, comptes approvisionnés, solde moyen, comptes à zéro), classement, recherche + filtre + tri + pagination, **fenêtre de crédit/débit** (montants rapides, motifs, aperçu du nouveau solde), historique par compte (filtres, suppression, export), export CSV des comptes
+- 🔌 **Recharge en ligne** (depuis la v1.4.0, avec l'addon **Orders**) : le client recharge son solde par carte, PayPal ou crypto. Tout est configurable dans **Gestion des soldes → Recharges** : interrupteur général, **offres** en un clic (montant, bonus %, libellé, « populaire »), **montant libre** avec **minimum / maximum**, **bonus par palier** (ex. +10 % dès 100 €), autorisation des **codes bonus**
+- 🎁 **Codes cadeau** (addon Codes promo) : un champ « Appliquer un code cadeau » sur la page « Mon solde »
 - 📊 Widget Dashboard (admin : totaux ; utilisateur : son solde)
 - 💰 Raccourci « Mon solde » dans le dropdown topbar
 - 💾 Backup automatique inclus
@@ -17,6 +19,22 @@
 ::: warning Sécurité — mettez à jour vers la v1.3.0
 Avant la 1.3.0, l'addon se contentait de **décoder** le jeton de connexion sans le vérifier : un jeton falsifié « administrateur » permettait de créditer n'importe quel wallet. Depuis la 1.3.0, **chaque appel est vérifié par le panel**, le jeton n'est lu que dans l'en-tête `Authorization`, la clé `X-Panel-Key` (appels internes, sauvegarde) est **obligatoire** et comparée à temps constant, et le fichier de données illisible n'est jamais écrasé (conservé en `*.corrupt-<date>`).
 :::
+
+---
+
+## Recharge en ligne (v1.4.0)
+
+La recharge est payée via les moyens configurés dans **Paramètres → Extensions** du panel (Stripe, PayPal Amis & Famille, NOWPayments) : **le solde n'est crédité qu'à la confirmation du paiement**.
+
+| Réglage | Effet |
+|---|---|
+| **Activer les recharges en ligne** | interrupteur général |
+| **Offres de recharge** | boutons de montants prédéfinis ; chaque offre peut avoir son bonus % et être activée / mise en avant |
+| **Montant libre** | le client saisit un montant entre un minimum et un maximum |
+| **Bonus par palier** | « dès X € rechargés : +Y % » — le plus avantageux (offre ou palier) s'applique, jamais cumulés |
+| **Codes bonus** | autorise un code promo « bonus de recharge » en plus (cumulé avec l'offre / le palier) |
+
+Le client voit en direct **ce qu'il paie** et **ce qu'il reçoit**. Le Wallet recontrôle tout côté serveur (montant, offre, bornes) : le navigateur ne peut pas choisir son crédit. Une recharge payée ne peut pas être annulée depuis la boutique : ajustez le solde dans la gestion du Wallet si besoin.
 
 ---
 

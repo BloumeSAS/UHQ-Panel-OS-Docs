@@ -16,6 +16,9 @@ Tant que le Wallet est indisponible, la boutique affiche un avertissement et le 
 - 🧰 **Gestion admin** : indicateurs (chiffre d'affaires, commandes à traiter, stock faible), produits (**formulaire guidé avec validation et aperçu client**, duplication, activation en un clic, stock illimité ou limité), commandes (recherche, filtres, pagination, détail, **annulation/remboursement avec explication**), état des moyens de paiement, export CSV
 - ⚡ Livraison automatique d'un compte proxy du panel (catégorie, limites, expiration…), via Wallet
 - 💳 Paiement par carte (Stripe), crypto (NOWPayments) et **PayPal Amis & Famille** (v1.4.0)
+- 📦 **Vente au Go** (v1.5.0) : le client choisit la quantité de Go ; prix = prix du Go × quantité, avec **minimum**, **maximum** et **pas** de sélection
+- 🎟️ **Codes promo** (v1.5.0, addon Codes promo) : réductions saisies dans le panier, contrôlées côté serveur
+- 💳 **Recharges du solde** (v1.5.0) : l'addon Wallet s'appuie sur les passerelles d'Orders pour les recharges en ligne
 - 📊 **Caractéristiques en boutique** (v1.4.0) : chaque produit livré affiche bande passante, threads, débit, validité et pays — `0` = « Illimité »
 - ✅ **Validation par un admin** (v1.4.0) : option par produit
 - 🔁 **Renouvellement automatique** sur solde Wallet (v1.4.0)
@@ -29,6 +32,19 @@ Tant que le Wallet est indisponible, la boutique affiche un avertissement et le 
 :::
 
 ---
+
+## Vente au Go (v1.5.0)
+
+Dans le formulaire produit, **Mode de vente → Vente au Go** (livraison « compte proxy » requise) :
+
+- le **prix** du produit devient le **prix d'un Go** (ex. 1 Go = 1 €) ;
+- **Minimum de Go**, **Maximum de Go** (vide = pas de plafond) et **pas de sélection** (1 = de Go en Go, 0,5 = par demi-Go) ;
+- le client règle la quantité avec un champ, des boutons − / + et un curseur ; le prix se met à jour en direct ;
+- le compte livré reçoit **exactement** la quantité commandée (et un renouvellement ajoute cette même quantité).
+
+## Codes promo dans le panier (v1.5.0)
+
+Avec l'addon **Codes promo**, un champ « Code promo » apparaît dans le panier. Le total remisé est recalculé **côté serveur** ; la réduction figure sur la commande et la facture. Si la commande échoue ou est annulée, l'utilisation du code est rendue. Les renouvellements se font au prix d'origine (hors code promo).
 
 ## Livraison après validation d'un admin (v1.4.0)
 

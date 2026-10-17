@@ -34,7 +34,8 @@ Menu **Système → Diagnostic** : une série de vérifications automatiques, ch
 | Moteur proxy | le moteur écoute bien sur son port (990 par défaut) |
 | Base de données | connexion et temps de réponse |
 | Hôte public | un hôte personnalisé est défini |
-| **Domaine (DNS)** | le domaine se résout ; il pointe sur **ce serveur** ; il **ne passe pas par Cloudflare** (nuage orange), qui ne transmet pas le trafic proxy TCP |
+| **Domaine (DNS)** | le domaine se résout ; il pointe sur **ce serveur** ; il **ne passe pas par Cloudflare** (nuage orange). Si ce n'est pas le cas, le panel affiche l'**enregistrement à créer** (type, nom, valeur = IP publique du serveur, « DNS seul ») |
+| **Domaines des catégories** | chaque catégorie avec un **domaine personnalisé** est contrôlée de la même façon (DNS, Cloudflare, port dédié), avec l'enregistrement DNS à créer |
 | Port proxy public | `hôte:port` est joignable *depuis le serveur* |
 | Panel en HTTPS | le panel est servi en HTTPS |
 | Pool | au moins un proxy fonctionnel |
@@ -71,7 +72,9 @@ Quelques octets de trafic sont comptés sur le compte testé. Le test part de `1
 | **Dégradé** | base et moteur fonctionnent, mais plus aucun proxy fonctionnel |
 | **Panne** | base ou moteur indisponible |
 
-Vous pouvez y ajouter un **message** (maintenance, incident en cours…). La page n'expose **aucun chiffre ni détail interne**, seulement des états.
+La page affiche aussi l'état des **extensions activées** (Wallet, Orders…) et des **ports de connexion** (port partagé et ports dédiés des catégories) ; une extension arrêtée ou un port qui ne répond pas passe le service en **Dégradé**.
+
+Vous pouvez y ajouter un **message** (maintenance, incident en cours…). La page n'expose **aucun chiffre ni détail interne** (pas de port interne, pas d'URL), seulement des états et les ports que vos clients utilisent déjà.
 
 ---
 

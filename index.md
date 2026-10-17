@@ -10,7 +10,10 @@ hero:
     alt: UHQ Panel OS
   actions:
     - theme: brand
-      text: Démarrer →
+      text: 🚀 Commencer l'installation
+      link: /guide/commencer
+    - theme: alt
+      text: Lire le guide
       link: /guide/introduction
     - theme: alt
       text: Créer un addon

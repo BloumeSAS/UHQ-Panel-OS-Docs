@@ -387,3 +387,9 @@ Ces paramètres ne sont **pas** gérés par le panel — ils doivent être défi
 | `LOG_DIR` | `/app/logs` | Répertoire des fichiers de logs journaliers |
 | `LOG_LEVEL` | `log` | Seuil de verbosité (`verbose`, `debug`, `log`, `warn`, `error`, `fatal`) — `error` toujours émis quel que soit le seuil (depuis v2.4.19) |
 | `TZ` | `Europe/Paris` | Fuseau horaire |
+
+---
+
+## Vraie IP des visiteurs derrière Cloudflare
+
+Quand le **panel web** passe par Cloudflare (nuage orange) devant Coolify/Traefik, les connexions arrivent d'IP Cloudflare. Le panel **détecte automatiquement** ce cas : si la requête provient bien d'une IP Cloudflare officielle (plages IPv4 et IPv6), il lit l'en-tête `CF-Connecting-IP` ; sinon l'en-tête est ignoré (un visiteur qui contournerait Cloudflare ne peut pas falsifier son IP). Résultat : **Sécurité → Sessions actives**, le journal d'audit, les limites de débit et les alertes « nouvelle IP » affichent l'IP réelle du visiteur, sans réglage.

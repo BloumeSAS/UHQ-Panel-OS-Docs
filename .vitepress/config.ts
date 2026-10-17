@@ -32,6 +32,7 @@ export default defineConfig({
     siteTitle: 'UHQ Panel OS',
 
     nav: [
+      { text: '🚀 Installer', link: '/guide/commencer' },
       { text: 'Guide', link: '/guide/introduction' },
       { text: 'Addons', link: '/addons/overview' },
       { text: 'API', link: '/api/manifest' },
@@ -50,12 +51,14 @@ export default defineConfig({
           text: '🚀 Démarrage',
           items: [
             { text: 'Introduction', link: '/guide/introduction' },
+            { text: '🚀 Commencer l’installation', link: '/guide/commencer' },
             { text: 'Installation', link: '/guide/installation' },
             { text: 'Installer en 5 minutes', link: '/guide/installer-en-5-minutes' },
             { text: 'Configuration', link: '/guide/configuration' },
             { text: 'Visite guidée', link: '/guide/visite-guidee' },
             { text: 'Mise en service', link: '/guide/mise-en-service' },
             { text: 'Surveillance & alertes', link: '/guide/surveillance' },
+            { text: 'E-mails & modèles', link: '/guide/emails' },
             { text: 'Sauvegardes & restauration', link: '/guide/sauvegardes' },
             { text: 'Clients & support', link: '/guide/clients-et-support' },
             { text: 'Erreurs & fallback', link: '/guide/erreurs-et-fallback' },
@@ -105,6 +108,7 @@ export default defineConfig({
           items: [
             { text: 'Wallet (gratuit)', link: '/addons/official/wallet' },
             { text: 'Orders (gratuit)', link: '/addons/official/orders' },
+            { text: 'Codes promo (gratuit)', link: '/addons/official/promocodes' },
             { text: 'Analytics (gratuit)', link: '/addons/official/analytics' },
             { text: 'UHQ.Monster Reseller (gratuit)', link: '/addons/official/reseller' },
           ],

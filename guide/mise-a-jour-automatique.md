@@ -19,6 +19,30 @@ Un conteneur ne peut pas se reconstruire lui-même. Le bouton demande donc à vo
    - **Méthode HTTP** : `GET` (Coolify).
 4. Enregistrez.
 
+### Préconfigurations (un clic)
+
+**Paramètres → Général → Mise à jour automatique → Plateforme de déploiement** remplit méthode, en-tête du jeton, en-têtes et corps de la requête :
+
+| Plateforme | Méthode | Jeton | Où trouver l'URL |
+|---|---|---|---|
+| **Coolify** | POST | Bearer (jeton API, droit `deploy`) | Application → Webhooks → Deploy Webhook |
+| **Dokploy** | POST | — | Application → Deployments → Webhook URL |
+| **CapRover** | POST | dans l'URL | App → Deployment → Webhook (`triggerbuild`) |
+| **Portainer** | POST | — | Stack → Webhook (redéploiement depuis Git) |
+| **Watchtower** | GET | Bearer (`WATCHTOWER_HTTP_API_TOKEN`) | `http://watchtower:8080/v1/update` |
+| **Render** | POST | dans l'URL | Service → Settings → Deploy Hook |
+| **Railway** | POST | Bearer (jeton) | API GraphQL, remplacer `SERVICE_ID` / `ENV_ID` dans le corps |
+| **Heroku** | POST | Bearer | `…/apps/NOM_APP/builds`, corps = archive GitHub du dépôt |
+| **Vercel** / **Netlify** | POST | — | Deploy Hook / Build hook |
+| **Pterodactyl** | POST | Bearer (clé API client) | `…/api/client/servers/ID/power` → signal `restart` |
+| **Personnalisé** | au choix | au choix | tout service déclenché par URL |
+
+Dans **Avancé** : nom de l'en-tête du jeton (`Authorization`, `X-API-Key`…), préfixe (`Bearer` ou vide), **en-têtes supplémentaires** et **corps JSON**.
+
+::: warning Plateformes sans port TCP
+Le moteur proxy écoute sur un **port TCP** (990 par défaut). Heroku, Vercel et Netlify ne publient que du HTTP : le panel web y fonctionnerait, mais pas le proxy. Pterodactyl nécessite une allocation de port et un egg qui récupère la dernière version au démarrage.
+:::
+
 ### Autres plateformes
 Tout service qui déclenche un déploiement par **URL** convient (Portainer webhook, Watchtower HTTP API, Dokploy, CapRover…) : renseignez son URL, la méthode (`GET` ou `POST`) et, si besoin, un jeton Bearer.
 

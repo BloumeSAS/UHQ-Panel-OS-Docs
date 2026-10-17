@@ -119,6 +119,20 @@ Une fois l'installation terminée, le panel lance sa [visite guidée](/guide/vis
 
 ---
 
+## FAQ — Où trouver le jeton d'installation ?
+
+Le jeton **n'est pas écrit dans un fichier `.env`** : il est **généré automatiquement** au premier démarrage tant que l'installation n'est pas terminée, puis **supprimé** une fois le panel installé. Pour le lire :
+
+| Où | Comment |
+|---|---|
+| **Coolify** | votre application → onglet **Logs** → ligne `TOKEN D'INSTALLATION` |
+| **Docker Compose** | `docker compose logs app \| grep -A1 "TOKEN"` |
+| **Docker seul** | `docker logs <conteneur> \| grep -A1 "TOKEN"` |
+
+Vous préférez le choisir vous-même ? Définissez `SETUP_TOKEN=votre-valeur` (variable d'environnement). `SETUP_TOKEN=off` désactive la protection (déconseillé sur Internet). Le jeton est régénéré à chaque redémarrage tant que l'installation n'est pas faite : copiez toujours la **dernière** ligne des logs.
+
+---
+
 ## Et ensuite ?
 
 À la fin de l'installation, le panel lance une [visite guidée](/guide/visite-guidee) qui présente chaque page et chaque réglage. Vous pouvez la relancer à tout moment avec l'icône **?** en haut à droite.
