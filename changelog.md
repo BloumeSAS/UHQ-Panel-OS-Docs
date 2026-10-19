@@ -2,6 +2,10 @@
 
 ## v2.8.x
 
+### v2.8.2 — Vitrine : admin thémée et aperçu intégré
+- Vitrine 1.2.0 : page d'administration synchronisée avec le thème du panel ; aperçu intégré ordinateur / mobile.
+- [UHQ Panel OS v2.8.2](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.8.2)
+
 ### v2.8.1 — Correctif page blanche, vitrine thémée et animée
 - Correctif : page blanche après un clic depuis la vitrine (navigation confondue avec un appel d'addon) ; Vitrine 1.1.1 : thème du panel respecté + animations modernes.
 - [UHQ Panel OS v2.8.1](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.8.1)
