@@ -46,3 +46,11 @@ Il n'y a **plus de fallback global**. Le proxy de secours se règle **par catég
 ::: warning Mise à jour depuis une version précédente
 L'ancien réglage « Proxy de secours (fallback) » n'est plus utilisé comme fallback. Il devient **« Proxy sortant du scraper »** (utilisé seulement pour récupérer les listes de sources). Pour garder un fallback, saisissez son URL dans chaque catégorie concernée.
 :::
+
+## Codes HTTP des sites visités (303, 403, 429…)
+
+La page **Codes d'erreur** du panel a un second onglet, **Codes HTTP des sites** : tous les codes courants (2xx à 5xx, y compris Cloudflare 520/522/524/525) avec, pour chacun, ce qu'il veut dire, **pourquoi le client le voit et pas vous**, quoi faire et une **réponse prête à envoyer**.
+
+Ces codes ne viennent **pas** du panel : ils sont renvoyés par le site visité (ou son CDN) et le proxy les transmet tels quels. **Règle simple : si l'en-tête `X-UHQ-Error` est présent, l'erreur vient du panel ; s'il est absent, elle vient du site.**
+
+Exemple — **303 See Other** : le site demande de récupérer la suite avec un GET à l'adresse `Location` (typique après un POST de connexion ou de formulaire). Un navigateur enchaîne tout seul ; un script qui ne suit pas les redirections reste sur le 303. L'IP ou le pays de sortie peuvent aussi changer la destination (page de vérification, page pays).
