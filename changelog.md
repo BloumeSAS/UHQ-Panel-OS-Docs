@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.8.x
+
+### v2.8.0 — Addon Vitrine (page d'accueil publique)
+- Nouvel addon officiel **Vitrine** (v1.0.0) : page d'accueil publique pour les visiteurs non connectés — catalogue par catégorie (Orders), pays disponibles, simulateur de prix, FAQ et contacts. Orders 1.5.1.
+- [UHQ Panel OS v2.8.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.8.0)
+
 ## v2.7.x
 
 ### v2.7.1 — Logo externe, diagnostic DNS, sections repliables
