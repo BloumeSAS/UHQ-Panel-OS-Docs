@@ -2,6 +2,10 @@
 
 ## v2.8.x
 
+### v2.8.3 — Codes d'erreur : codes HTTP des sites expliqués
+- Page Codes d'erreur : nouvel onglet « Codes HTTP des sites » (303, 403, 429, Cloudflare…) avec explications et réponses prêtes pour les clients ; règle X-UHQ-Error présent = panel, absent = site.
+- [UHQ Panel OS v2.8.3](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.8.3)
+
 ### v2.8.2 — Vitrine : admin thémée et aperçu intégré
 - Vitrine 1.2.0 : page d'administration synchronisée avec le thème du panel ; aperçu intégré ordinateur / mobile.
 - [UHQ Panel OS v2.8.2](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.8.2)
