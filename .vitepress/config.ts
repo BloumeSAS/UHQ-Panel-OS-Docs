@@ -132,6 +132,7 @@ export default defineConfig({
             { text: 'Wallet (gratuit)', link: '/addons/official/wallet' },
             { text: 'Orders (gratuit)', link: '/addons/official/orders' },
             { text: 'Codes promo (gratuit)', link: '/addons/official/promocodes' },
+            { text: 'Vitrine (gratuit)', link: '/addons/official/vitrine' },
             { text: 'Analytics (gratuit)', link: '/addons/official/analytics' },
             { text: 'UHQ.Monster Reseller (gratuit)', link: '/addons/official/reseller' },
           ],

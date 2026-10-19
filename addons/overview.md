@@ -79,6 +79,7 @@ Ces addons sont **gratuits**, open-source (MIT), publiés par Bloume SAS et visi
 | [Wallet](/addons/official/wallet) | v1.4.0 | Système de solde par compte proxy, recharge en ligne, codes cadeau | — | <span class="badge-free">✓ Gratuit</span> |
 | [Orders](/addons/official/orders) | v1.5.0 | Boutique interne — vente au Go, codes promo, validation admin, renouvellement, PayPal, factures PDF | Wallet |
 | [Codes promo](/addons/official/promocodes) | v1.0.0 | Codes cadeau, bonus de recharge, réductions boutique, 100 % personnalisables | Wallet | <span class="badge-free">✓ Gratuit</span> | <span class="badge-free">✓ Gratuit</span> |
+| [Vitrine](/addons/official/vitrine) | v1.0.0 | Page d’accueil publique : catalogue par catégorie, pays, simulateur de prix | Orders (recommandé) | <span class="badge-free">✓ Gratuit</span> | <span class="badge-free">✓ Gratuit</span> |
 | [Analytics](/addons/official/analytics) | v1.0.0 | Analyse complète du panel — statistiques par compte, catégorie, pool, checker, scraper et heures/jours les plus actifs | — | <span class="badge-free">✓ Gratuit</span> |
 | [UHQ.Monster Reseller](/addons/official/reseller) | v1.2.1 | Achetez et gérez vos proxies UHQ.Monster depuis le panel, avec import automatique dans vos catégories | — | <span class="badge-free">✓ Gratuit</span> |
 
