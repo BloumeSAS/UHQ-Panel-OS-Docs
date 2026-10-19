@@ -2,6 +2,10 @@
 
 ## v2.8.x
 
+### v2.8.1 — Correctif page blanche, vitrine thémée et animée
+- Correctif : page blanche après un clic depuis la vitrine (navigation confondue avec un appel d'addon) ; Vitrine 1.1.1 : thème du panel respecté + animations modernes.
+- [UHQ Panel OS v2.8.1](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.8.1)
+
 ### v2.8.0 — Addon Vitrine (page d'accueil publique)
 - Nouvel addon officiel **Vitrine** (v1.0.0) : page d'accueil publique pour les visiteurs non connectés — catalogue par catégorie (Orders), pays disponibles, simulateur de prix, FAQ et contacts. Orders 1.5.1.
 - [UHQ Panel OS v2.8.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.8.0)
