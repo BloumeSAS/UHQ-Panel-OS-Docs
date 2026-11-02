@@ -2,6 +2,10 @@
 
 ## v2.8.x
 
+### v2.8.4 — Pays dans le username des proxies d'une catégorie (passerelles dc-{country})
+- Catégorie « passerelle » : nouvelle case « Appliquer ce format aux proxies de la catégorie » — le pays du compte est injecté dans le username (ex. `dc-{country}` → `dc-fr`) au lieu d'un pays aléatoire.
+- [UHQ Panel OS v2.8.4](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.8.4)
+
 ### v2.8.3 — Codes d'erreur : codes HTTP des sites expliqués
 - Page Codes d'erreur : nouvel onglet « Codes HTTP des sites » (303, 403, 429, Cloudflare…) avec explications et réponses prêtes pour les clients ; règle X-UHQ-Error présent = panel, absent = site.
 - [UHQ Panel OS v2.8.3](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.8.3)
