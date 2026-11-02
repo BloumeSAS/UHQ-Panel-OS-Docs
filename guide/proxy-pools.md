@@ -414,3 +414,15 @@ model ProxyPool {
 Le champ `pool String?` est ajouté sur `BackendProxy`, `UserProxy` et `ScraperSource`. C'est une **dénormalisation intentionnelle** (le nom est stocké directement, sans FK) pour simplifier les requêtes et les filtres du moteur.
 
 Le champ `port Int? @unique` est ajouté sur `ProxyPool` **et** `UserProxy` (port dédié — voir [Ports dédiés](#ports-dédiés) ci-dessus). `domain String?` (sans contrainte d'unicité) y est également ajouté — voir [Domaine dédié](#domaine-dédié) ci-dessus. `alwaysOnline`/`checkerEnabled`/`fakeCountries`/`fakePriorityCountries`/`fakeIpCountMin`/`fakeIpCountMax`/`fakeIpCountByCountry`/`fakeIpRotateSeconds` sont spécifiques à `ProxyPool` — voir [Toujours en ligne](#toujours-en-ligne), [Checker actif](#checker-actif), [Pays et nombre d'IP en plus](#pays-et-nombre-d-ip-en-plus-stats-simulées), [Mode rotatif](#mode-rotatif) et [Pays prioritaires](#pays-prioritaires) ci-dessus. `null`/`false`/`{}` = pas de valeur dédiée, fallback sur les settings globaux. `fakeIpCountByCountry` est une map `{ "FR": 12345, "DE": 8901 }` (clé = code pays, valeur = IP tirée pour CE pays) — recalculée par pays, jamais comme un total partagé ; ignorée si `fakeIpRotateSeconds` est actif (la valeur est alors calculée à la volée, pas lue en base). `fakePriorityCountries` est un sous-ensemble (mêmes codes) de `fakeCountries`.
+
+## Pays dans le username (passerelles `dc-{country}`)
+
+Certains fournisseurs servent plusieurs pays avec **une seule adresse** : le pays se choisit dans le username (`dc-fr`, `user-country-fr`…). Deux endroits, deux rôles :
+
+| Réglage | Concerne |
+|---|---|
+| **Format du username par pays** (dialogue de la catégorie) | le **proxy de secours** (fallback) de la catégorie, et — si l'option ci-dessous est cochée — ses proxies |
+| **Appliquer ce format aux proxies de la catégorie** (case à cocher, depuis la v2.8.4) | tous les proxies **avec identifiants** de la catégorie qui n'ont pas leur propre format |
+| **Proxies « pays sélectionnable »** (Importer / Pool) | un format **par proxy ou par lot importé** (prioritaire sur celui de la catégorie) |
+
+Exemple : catégorie *Mobile Lite*, format `dc-{country}`, case cochée, compte avec le pays **FR** → le proxy reçoit le username `dc-fr` (avec le mot de passe du proxy). À laisser décoché si la catégorie contient des proxies à pays fixe avec identifiants.
