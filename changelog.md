@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.14.x
+
+### v2.14.0 — VPN : imports illimités
+- VPN : imports sans limite (0 = tout importer), import par lots (10 850 configurations en 3 s).
+- [UHQ Panel OS v2.14.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.14.0)
+
 ## v2.13.x
 
 ### v2.13.0 — Sécurité : NestJS 11, Express 5, React Router 7 (0 vulnérabilité)
