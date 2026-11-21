@@ -17,6 +17,7 @@ Le `docker-compose.yml` du dépôt ajoute déjà `cap_add: NET_ADMIN` et `device
 **Pool de proxies → Ajouter des VPN** :
 
 - **VPNGate (automatique)** : choisissez le **ou les pays** (liste en direct avec le nombre de serveurs), le nombre de serveurs par pays (les meilleurs par score), la catégorie. Cochez **« Garder à jour automatiquement »** pour que le panel remplace les serveurs morts (resynchronisation toutes les 30 minutes).
+- **URL / abonnement** (v2.10.0) : adresse https d'une page, d'un fichier texte ou d'un **abonnement** (liste de liens `vless://` `vmess://` `trojan://` `ss://` `hy2://`, liste encodée en base64, configuration WireGuard / OpenVPN). Aperçu (nombre de configurations par protocole), nombre maximum de VPN, **mise à jour automatique** (les VPN morts de la source sont remplacés). Seules les adresses publiques en https sont lues (réseau interne et redirections vers lui refusés). Testé sur une liste publique de 9 003 liens : VLESS, VMess et Shadowsocks établis avec de vraies IP de sortie.
 - **Import manuel** : collez un `.ovpn`, un `.conf` WireGuard ou une liste de liens (un par ligne), avec la catégorie et, facultativement, le pays (sinon détecté à partir de l'IP de sortie).
 - **Sources & état** : sources automatiques (activer/supprimer, synchroniser maintenant) et état des tunnels (actif, IP de sortie, latence, erreur).
 
@@ -30,7 +31,8 @@ Le `docker-compose.yml` du dépôt ajoute déjà `cap_add: NET_ADMIN` et `device
 
 - **Pas de rotation d'IP sur un même VPN** : une IP fixe par VPN. Pour plus de rotation, ajoutez plus de VPN.
 - **VPN gratuits** (VPNGate…) : publics, instables, souvent bloqués par les sites, débit variable. Idéal pour tester ; pour des clients payants, préférez des VPN/proxies de fournisseurs.
-- Les pages d'annonces de configurations protégées par un contrôle anti-robot (ex. ipspeed.info, VPNBook) ne peuvent pas être récupérées automatiquement : copiez-collez les configurations dans l'**import manuel**.
+- **Sites qui ne se lisent pas automatiquement** : ipspeed.info (contrôle anti-robot), VPNBook (fichiers servis par JavaScript avec identifiants partagés) et VPNJantit (un compte est créé par visiteur sur chaque serveur). Le panel ne contourne pas les contrôles anti-robot et ne crée pas de comptes en masse sur un service tiers : copiez-collez leurs configurations dans l'**import manuel**.
+- Le protocole affiché dans le Pool est celui du VPN (`openvpn`, `wireguard`, `vless`, `vmess`, `trojan`, `ss`, `hy2`) ; en interne chaque tunnel est servi comme un proxy local.
 - Mémoire : environ 10 à 30 Mo par tunnel.
 
 ## Sécurité
