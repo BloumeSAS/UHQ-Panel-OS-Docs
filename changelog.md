@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.11.x
+
+### v2.11.0 — VPN : expiration, plafond réglable, SSH et TUIC
+- VPN : durée de vie (expiration automatique), nombre maximum de tunnels réglable (1 à 100), protocoles SSH et TUIC.
+- [UHQ Panel OS v2.11.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.11.0)
+
 ## v2.10.x
 
 ### v2.10.0 — VPN : source URL / abonnement, protocole réel affiché
