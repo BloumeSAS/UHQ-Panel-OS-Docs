@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.12.x
+
+### v2.12.0 — VPN : rotation sur tout le pool, réglages dans Paramètres
+- VPN : rotation des tunnels pour utiliser tout le pool (même des milliers de VPN), découverte rapide des vivants, réglages dans Paramètres → Scraper → VPN.
+- [UHQ Panel OS v2.12.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.12.0)
+
 ## v2.11.x
 
 ### v2.11.1 — VPN : sources suggérées et renouvellement automatique
