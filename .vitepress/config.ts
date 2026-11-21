@@ -90,6 +90,7 @@ export default defineConfig({
             { text: 'Mise à jour automatique', link: '/guide/mise-a-jour-automatique' },
             { text: 'Docker & Coolify', link: '/guide/docker' },
             { text: 'Proxy Pools (catégories)', link: '/guide/proxy-pools' },
+            { text: 'VPN dans les catégories', link: '/guide/vpn' },
           ],
         },
       ],
