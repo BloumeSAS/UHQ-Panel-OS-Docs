@@ -2,6 +2,10 @@
 
 ## v2.9.x
 
+### v2.9.2 — Correctif de build : aide VPN publiée
+- Correctif de build (Coolify) : le fichier de l'aide VPN n'était pas publié ; il l'est maintenant.
+- [UHQ Panel OS v2.9.2](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.9.2)
+
 ### v2.9.1 — Sécurité VPN : liste blanche des directives OpenVPN
 - Sécurité VPN : configurations OpenVPN filtrées par liste blanche (côté panel ET dans l'aide privilégiée) — mise à jour recommandée si vous utilisez la 2.9.0.
 - [UHQ Panel OS v2.9.1](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.9.1)
