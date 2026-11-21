@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.10.x
+
+### v2.10.0 — VPN : source URL / abonnement, protocole réel affiché
+- VPN : nouvelle source « URL / abonnement » (liens V2Ray, listes base64, WireGuard, OpenVPN) avec mise à jour automatique ; le Pool affiche le vrai protocole (openvpn, wireguard, vless…).
+- [UHQ Panel OS v2.10.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.10.0)
+
 ## v2.9.x
 
 ### v2.9.2 — Correctif de build : aide VPN publiée
