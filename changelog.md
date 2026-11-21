@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.13.x
+
+### v2.13.0 — Sécurité : NestJS 11, Express 5, React Router 7 (0 vulnérabilité)
+- Sécurité : migration vers NestJS 11 / Express 5 et React Router 7 ; `npm audit` des dépendances de production = 0 vulnérabilité (API et web).
+- [UHQ Panel OS v2.13.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.13.0)
+
 ## v2.12.x
 
 ### v2.12.1 — Sécurité : dépendances mises à jour
