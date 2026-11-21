@@ -2,6 +2,10 @@
 
 ## v2.12.x
 
+### v2.12.1 — Sécurité : dépendances mises à jour
+- Sécurité : dépendances mises à jour (API 23 → 3 vulnérabilités de production, web corrigé) ; reste NestJS 11 / react-router 7 (migrations majeures).
+- [UHQ Panel OS v2.12.1](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.12.1)
+
 ### v2.12.0 — VPN : rotation sur tout le pool, réglages dans Paramètres
 - VPN : rotation des tunnels pour utiliser tout le pool (même des milliers de VPN), découverte rapide des vivants, réglages dans Paramètres → Scraper → VPN.
 - [UHQ Panel OS v2.12.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.12.0)
