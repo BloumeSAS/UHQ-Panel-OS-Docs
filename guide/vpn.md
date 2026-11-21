@@ -33,11 +33,18 @@ Le `docker-compose.yml` du dépôt ajoute déjà `cap_add: NET_ADMIN` et `device
 
 **Tous** les VPN du pool sont supervisés de la même façon — importés à la main, par URL ou par VPNGate : démarrage, test réel de l'IP de sortie et de la latence **toutes les minutes**, passage en « hors ligne » après 3 échecs, relance avec délai croissant. La différence avec une **source automatique** est seulement le **remplacement** : une source ajoute les nouveaux serveurs et retire ses VPN morts ; un VPN importé à la main reste jusqu'à ce que vous le supprimiez (ou qu'il expire).
 
-### Nombre maximum de tunnels : pourquoi une limite ?
+### Tunnels actifs et rotation : utiliser TOUS les VPN du pool
 
-Chaque VPN actif est un **processus qui tourne en permanence** (10 à 30 Mo de mémoire, un peu de CPU, un périphérique réseau et une règle de routage pour OpenVPN). Sans plafond, un import de milliers de liens pourrait saturer le serveur. Le plafond est **réglable** dans *Ajouter des VPN → Sources & état → Tunnels simultanés maximum* (défaut **15**, maximum **100** : limite des tables de routage). Les VPN au-delà de la limite **restent dans le pool** mais ne démarrent pas ; les plus fiables démarrent en premier. Comptez environ 1 Go de mémoire pour 40 tunnels.
+Un VPN actif est un **processus qui tourne en permanence** (10 à 30 Mo de mémoire, un peu de CPU) : on ne peut donc pas en faire tourner des milliers en même temps. Le panel fait **tourner** un nombre limité de tunnels et les **remplace régulièrement**, de sorte que **tous les VPN vivants du pool servent à tour de rôle**, même s'il y en a 5 000 :
 
-Le nombre de VPN **importés** par source (« Nombre maximum de VPN », jusqu'à 200) est un autre réglage : il limite ce que la source ajoute au pool.
+- **Tunnels simultanés maximum** (défaut **15**, maximum **100**, limite des tables de routage) ;
+- **Rotation toutes les N minutes** (défaut **10**, `0` = pas de rotation) : une partie des tunnels actifs (**34 %** par défaut) est remplacée par ceux qui n'ont pas servi depuis le plus longtemps — les derniers connus vivants d'abord, puis ceux jamais essayés ;
+- **Découverte** : en plus des tunnels actifs, quelques démarrages sont tentés en parallèle pour trouver les VPN vivants parmi les milliers importés (un essai réussi au-delà du plafond est marqué « vivant » puis arrêté, il servira à son tour par la rotation) ; les morts sont retentés avec un délai croissant et en dernier ;
+- **Un client** voit ses connexions réparties sur les tunnels actifs à l'instant T ; dans le temps, il est servi par **tous** les VPN vivants. Les connexions en cours dans un tunnel remplacé sont coupées : évitez un pourcentage très élevé avec une rotation courte.
+
+Ces trois réglages sont dans **Paramètres → Scraper → VPN**. Le « nombre maximum de VPN » d'une source (jusqu'à 200) est un autre réglage : il limite ce que la source ajoute au pool. Comptez environ 1 Go de mémoire pour 40 tunnels simultanés.
+
+*Exemple mesuré* : 40 serveurs VPNGate (Japon, Corée), 5 tunnels simultanés, rotation à la minute : 18 serveurs vivants trouvés en 2 minutes et **7 IP de sortie différentes** vues par un client en 5 minutes (plus que les 5 tunnels).
 
 ### Expiration des VPN (abonnements, listes gratuites)
 
