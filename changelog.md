@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.9.x
+
+### v2.9.0 — VPN dans les catégories de proxies (VPNGate, OpenVPN, WireGuard, V2Ray)
+- Nouveau : **VPN dans les catégories de proxies** — OpenVPN, WireGuard et V2Ray (VLESS, VMess, Trojan, Shadowsocks, Hysteria2), source automatique VPNGate avec choix du pays, import manuel. Chaque VPN est un proxy de la catégorie (IP fixe par VPN).
+- [UHQ Panel OS v2.9.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.9.0)
+
 ## v2.8.x
 
 ### v2.8.5 — Sauvegardes automatiques : planification fiabilisée
