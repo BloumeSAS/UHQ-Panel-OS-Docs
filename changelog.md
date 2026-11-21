@@ -2,6 +2,10 @@
 
 ## v2.9.x
 
+### v2.9.1 — Sécurité VPN : liste blanche des directives OpenVPN
+- Sécurité VPN : configurations OpenVPN filtrées par liste blanche (côté panel ET dans l'aide privilégiée) — mise à jour recommandée si vous utilisez la 2.9.0.
+- [UHQ Panel OS v2.9.1](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.9.1)
+
 ### v2.9.0 — VPN dans les catégories de proxies (VPNGate, OpenVPN, WireGuard, V2Ray)
 - Nouveau : **VPN dans les catégories de proxies** — OpenVPN, WireGuard et V2Ray (VLESS, VMess, Trojan, Shadowsocks, Hysteria2), source automatique VPNGate avec choix du pays, import manuel. Chaque VPN est un proxy de la catégorie (IP fixe par VPN).
 - [UHQ Panel OS v2.9.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.9.0)
