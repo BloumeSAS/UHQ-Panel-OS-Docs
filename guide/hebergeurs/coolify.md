@@ -71,6 +71,10 @@ curl -x http://IDENTIFIANT:MOT_DE_PASSE@panel.exemple.fr:990 https://api.ipify.o
 
 Voir [Mise à jour automatique](/guide/mise-a-jour-automatique).
 
+::: info VPN dans les catégories
+Pour utiliser OpenVPN, le compose doit donner `NET_ADMIN` et `/dev/net/tun` au service (déjà le cas dans le `docker-compose.yml` du dépôt). Détails : [VPN dans les catégories](/guide/vpn).
+:::
+
 ## Dépannage
 
 | Symptôme | Cause probable |

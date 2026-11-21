@@ -426,3 +426,7 @@ Certains fournisseurs servent plusieurs pays avec **une seule adresse** : le pay
 | **Proxies « pays sélectionnable »** (Importer / Pool) | un format **par proxy ou par lot importé** (prioritaire sur celui de la catégorie) |
 
 Exemple : catégorie *Mobile Lite*, format `dc-{country}`, case cochée, compte avec le pays **FR** → le proxy reçoit le username `dc-fr` (avec le mot de passe du proxy). À laisser décoché si la catégorie contient des proxies à pays fixe avec identifiants.
+
+## VPN comme proxies
+
+Un VPN (OpenVPN, WireGuard, V2Ray) peut être ajouté à une catégorie comme un proxy, avec une source automatique VPNGate et le choix du pays : voir [VPN dans les catégories](/guide/vpn).

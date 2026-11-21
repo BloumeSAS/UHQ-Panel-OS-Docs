@@ -35,4 +35,22 @@ Le `docker-compose.yml` du dépôt ajoute déjà `cap_add: NET_ADMIN` et `device
 
 ## Sécurité
 
-Les configurations OpenVPN sont **nettoyées** (aucune directive qui exécuterait une commande) ; le conteneur reste en utilisateur non-root et n'appelle qu'une aide dédiée (`sudo`, sous-commandes et arguments validés) pour OpenVPN et le routage.
+Les configurations viennent de listes publiques **non fiables** et OpenVPN est lancé avec des privilèges élevés. Depuis la **v2.9.1**, elles sont filtrées par **liste blanche** :
+
+- seules les directives OpenVPN connues et inoffensives sont conservées (`client`, `remote`, `proto`, `cipher`, `auth`…) ; tout le reste est supprimé : scripts (`up`, `down`, `script-security`…), `plugin`, `config`, `management`, lecture de fichiers locaux (`ca /chemin`, `tmp-dir`…), options avec guillemets ou caractères spéciaux ;
+- seuls les blocs en ligne `<ca>`, `<cert>`, `<key>`, `<tls-auth>`, `<tls-crypt>` et `<tls-crypt-v2>` sont acceptés ; un bloc inconnu (`<connection>`…) ou non fermé fait **refuser tout le fichier** ;
+- le conteneur reste en **utilisateur non-root** : OpenVPN et le routage ne passent que par une aide dédiée (`sudo`, sous-commandes et arguments validés) qui **refait la même vérification** puis impose `--script-security 1` et `--route-nopull` ;
+- les clés WireGuard et les identifiants des liens sont stockés avec la ligne du proxy (jamais affichés dans le panel) et inclus dans les sauvegardes de la base.
+
+::: warning Mise à jour
+La **v2.9.0** utilisait une liste noire contournable : passez en **v2.9.1 ou plus**.
+:::
+
+## Dépannage
+
+| Symptôme | Cause probable |
+|---|---|
+| « OpenVPN indisponible dans ce conteneur » | `NET_ADMIN` ou `/dev/net/tun` absent : utilisez le `docker-compose.yml` du dépôt (déjà inclus) ou ajoutez-les dans Coolify |
+| Tunnel en « erreur » | serveur VPN gratuit hors ligne : il est relancé avec un délai croissant ; avec « garder à jour », il est remplacé |
+| « configuration refusée » | le fichier contient une directive ou un bloc non autorisé (voir Sécurité) |
+| Volume de données illisible après mise à jour | l'utilisateur du conteneur doit rester `100:101` (c'est le cas depuis la v2.9.0) |

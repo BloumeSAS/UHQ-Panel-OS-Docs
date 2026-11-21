@@ -41,6 +41,10 @@ sudo systemctl reload caddy
 
 Caddy obtient et renouvelle le certificat tout seul. Variante **Nginx** : `proxy_pass http://127.0.0.1:8000;` avec les en-têtes `Host`, `X-Forwarded-For` et `X-Forwarded-Proto`, et les en-têtes `Upgrade`/`Connection` pour le WebSocket (`/api/panel/ws`).
 
+::: info VPN dans les catégories
+Pour utiliser OpenVPN, le compose doit donner `NET_ADMIN` et `/dev/net/tun` au service (déjà le cas dans le `docker-compose.yml` du dépôt). Détails : [VPN dans les catégories](/guide/vpn).
+:::
+
 ## 4. Pare-feu
 
 ```bash
