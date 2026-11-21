@@ -8,7 +8,8 @@ Depuis la **v2.9.0**, un **VPN** peut être ajouté à une catégorie (pool) **c
 |---|---|---|
 | **OpenVPN** (`.ovpn`) | tunnel noyau, un par VPN | `NET_ADMIN` + `/dev/net/tun` |
 | **WireGuard** (`.conf`) | sing-box (espace utilisateur) | aucun |
-| **V2Ray** : `vless://` (Reality, WS, gRPC…), `vmess://`, `trojan://`, `ss://`, `hy2://` | sing-box | aucun |
+| **V2Ray** : `vless://` (Reality, WS, gRPC…), `vmess://`, `trojan://`, `ss://`, `hy2://`, `tuic://` | sing-box | aucun |
+| **Tunnel SSH** : `ssh://utilisateur:mot_de_passe@hôte:port` | sing-box | aucun |
 
 Le `docker-compose.yml` du dépôt ajoute déjà `cap_add: NET_ADMIN` et `devices: /dev/net/tun`. Sur un hôte sans `/dev/net/tun` (rare : OpenVZ/LXC), retirez ces deux blocs : seul OpenVPN sera indisponible (le dialogue l'indique).
 
@@ -23,12 +24,32 @@ Le `docker-compose.yml` du dépôt ajoute déjà `cap_add: NET_ADMIN` et `device
 
 ## Fonctionnement
 
-1. Chaque VPN est démarré en tâche de fond (jusqu'à **15 tunnels** simultanés — réglage `VPN_MAX_TUNNELS`).
+1. Chaque VPN est démarré en tâche de fond (jusqu'au **nombre maximum de tunnels**, voir plus bas).
 2. Un test réel mesure l'IP de sortie et la latence ; le VPN est marqué **actif** ou **hors ligne** (le checker classique ne les teste pas).
 3. Le moteur envoie les connexions des clients dans le tunnel du VPN choisi. Un VPN en échec est relancé avec un délai croissant.
 
+### Vérification automatique : tous les VPN, pas seulement ceux d'une source
+
+**Tous** les VPN du pool sont supervisés de la même façon — importés à la main, par URL ou par VPNGate : démarrage, test réel de l'IP de sortie et de la latence **toutes les minutes**, passage en « hors ligne » après 3 échecs, relance avec délai croissant. La différence avec une **source automatique** est seulement le **remplacement** : une source ajoute les nouveaux serveurs et retire ses VPN morts ; un VPN importé à la main reste jusqu'à ce que vous le supprimiez (ou qu'il expire).
+
+### Nombre maximum de tunnels : pourquoi une limite ?
+
+Chaque VPN actif est un **processus qui tourne en permanence** (10 à 30 Mo de mémoire, un peu de CPU, un périphérique réseau et une règle de routage pour OpenVPN). Sans plafond, un import de milliers de liens pourrait saturer le serveur. Le plafond est **réglable** dans *Ajouter des VPN → Sources & état → Tunnels simultanés maximum* (défaut **15**, maximum **100** : limite des tables de routage). Les VPN au-delà de la limite **restent dans le pool** mais ne démarrent pas ; les plus fiables démarrent en premier. Comptez environ 1 Go de mémoire pour 40 tunnels.
+
+Le nombre de VPN **importés** par source (« Nombre maximum de VPN », jusqu'à 200) est un autre réglage : il limite ce que la source ajoute au pool.
+
+### Expiration des VPN (abonnements, listes gratuites)
+
+Beaucoup de configurations gratuites expirent après quelques jours. Chaque import (VPNGate, URL / abonnement, import manuel) a un champ **« Expire après (jours) »** (0 = jamais) :
+
+- **import manuel / unique** : le VPN est **retiré automatiquement du pool** N jours après l'import ;
+- **source mise à jour automatiquement** : le compteur **repart de zéro à chaque fois que la source publie encore le VPN** ; il expire donc N jours après la dernière publication (un VPN que la source ne liste plus disparaît au bout de N jours, ou plus tôt s'il est hors ligne).
+
+L'expiration retire la ligne du pool et arrête le tunnel (vérification toutes les 15 secondes).
+
 ## Limites à connaître
 
+- **IKEv2, L2TP/IPsec, PPTP** : non pris en charge. Ils exigent une pile IPsec / GRE au niveau du noyau (impossible de faire tourner plusieurs tunnels indépendants dans un conteneur de façon fiable), PPTP est de plus obsolète et non sécurisé, et les sites qui les distribuent créent un compte par visiteur. Préférez OpenVPN, WireGuard ou V2Ray ; un **tunnel SSH** (`ssh://…`) est pris en charge.
 - **Pas de rotation d'IP sur un même VPN** : une IP fixe par VPN. Pour plus de rotation, ajoutez plus de VPN.
 - **VPN gratuits** (VPNGate…) : publics, instables, souvent bloqués par les sites, débit variable. Idéal pour tester ; pour des clients payants, préférez des VPN/proxies de fournisseurs.
 - **Sites qui ne se lisent pas automatiquement** : ipspeed.info (contrôle anti-robot), VPNBook (fichiers servis par JavaScript avec identifiants partagés) et VPNJantit (un compte est créé par visiteur sur chaque serveur). Le panel ne contourne pas les contrôles anti-robot et ne crée pas de comptes en masse sur un service tiers : copiez-collez leurs configurations dans l'**import manuel**.
