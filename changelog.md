@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.15.x
+
+### v2.15.0 — Addons Tickets, Parrainage et Statut
+- **3 nouveaux addons officiels** : Tickets (support client), Parrainage (affiliation sur le Wallet) et Statut (page de statut publique avec détection automatique des pannes et redéploiements).
+- La page publique `/status` du panel reprend l'addon « État des services » lorsqu'il est activé.
+- `/health` expose `uptimeSec` ; 10 nouveaux modèles d'e-mails ; Orders 1.6.0.
+- [UHQ Panel OS v2.15.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.15.0)
+
 ## v2.14.x
 
 ### v2.14.2 — Pool de connexions BDD : 9 → 40
