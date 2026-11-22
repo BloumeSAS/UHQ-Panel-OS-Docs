@@ -3,6 +3,14 @@
 > **Free Addon by [Bloume SAS](https://bloume.fr)**
 > Une **page d'accueil publique** pour votre panel : logo, nom, catalogue par catégorie, pays disponibles et simulateur de prix.
 
+## 🎬 Vidéo
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:16px 0">
+  <iframe src="https://www.youtube-nocookie.com/embed/1bPm8wEvaCQ" title="Addon Vitrine — installation, test et aperçu" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+</div>
+
+Vidéo : installation, test et aperçu — [la regarder sur YouTube](https://youtu.be/1bPm8wEvaCQ).
+
 ## Ce que ça change
 
 Sans l'addon, un visiteur qui ouvre `https://panel.exemple.fr/` est envoyé directement sur la page de connexion. **Avec la Vitrine active**, la page `/` affiche une vitrine commerciale — **uniquement aux visiteurs non connectés**. Dès qu'un utilisateur est connecté, il retrouve son tableau de bord comme avant. `/login`, `/register` et `/status` restent accessibles.

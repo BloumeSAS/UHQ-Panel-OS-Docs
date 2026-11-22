@@ -8,6 +8,14 @@ L'addon **Orders** nécessite l'addon **[Wallet](./wallet)** installé et joigna
 Tant que le Wallet est indisponible, la boutique affiche un avertissement et le paiement est désactivé.
 :::
 
+## 🎬 Vidéo
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:16px 0">
+  <iframe src="https://www.youtube-nocookie.com/embed/YRiaL9PhQ5o" title="Addon Orders — installation, test et aperçu" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+</div>
+
+Vidéo : installation, test et aperçu — [la regarder sur YouTube](https://youtu.be/YRiaL9PhQ5o).
+
 ---
 
 ## Fonctionnalités

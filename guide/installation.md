@@ -1,5 +1,13 @@
 # Installation
 
+## 🎬 Vidéo
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:16px 0">
+  <iframe src="https://www.youtube-nocookie.com/embed/bF2yE-W-93s" title="Installer UHQ Panel OS de A à Z" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+</div>
+
+Vidéo : installation, test et aperçu — [la regarder sur YouTube](https://youtu.be/bF2yE-W-93s).
+
 ## Prérequis
 
 | Outil | Version minimale | Remarque |

@@ -3,6 +3,14 @@
 > **Free Addon by [Bloume SAS](https://bloume.fr)**
 > Achetez et gérez vos proxies [UHQ.Monster](https://uhq.monster) **sans quitter le panel** : solde, création, ajout/retrait de Go, et **import automatique** dans vos catégories — plus de copier-coller d'identifiants.
 
+## 🎬 Vidéo
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:16px 0">
+  <iframe src="https://www.youtube-nocookie.com/embed/MPDvjlLr3l4" title="Addon UHQ.Monster Reseller — installation, test et aperçu" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+</div>
+
+Vidéo : installation, test et aperçu — [la regarder sur YouTube](https://youtu.be/MPDvjlLr3l4).
+
 ---
 
 ## Fonctionnalités
