@@ -7,6 +7,14 @@
 Statut fonctionne seul. Pour surveiller aussi le **moteur proxy**, le **pool** et les **addons**, activez **« Page d'état publique »** dans **Paramètres → Général** du panel (l'addon lit son état publique `/api/status`).
 :::
 
+## 🎬 Vidéo
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:16px 0">
+  <iframe src="https://www.youtube-nocookie.com/embed/nTGtTSsZQOA" title="Addon Statut — installation, test et aperçu" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+</div>
+
+Vidéo : installation, test et aperçu — [la regarder sur YouTube](https://youtu.be/nTGtTSsZQOA).
+
 ## La page publique
 
 Accessible **sans connexion** à `https://votre-panel/addon-proxy/status/` (et dans le menu du panel). Elle affiche :
