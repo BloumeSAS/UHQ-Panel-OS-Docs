@@ -2,6 +2,10 @@
 
 ## v2.14.x
 
+### v2.14.2 — Pool de connexions BDD : 9 → 40
+- **Panel indisponible sous forte charge** : pool de connexions à la base porté de 9 à 40 (variables `DB_POOL_SIZE` / `DB_POOL_TIMEOUT`).
+- [UHQ Panel OS v2.14.2](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.14.2)
+
 ### v2.14.1 — Import VPN : lignes invalides ignorées
 - **Import de sources VPN** : les liens sans port ou hôte valide sont ignorés au lieu de faire échouer tout l'import.
 - [UHQ Panel OS v2.14.1](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.14.1)
