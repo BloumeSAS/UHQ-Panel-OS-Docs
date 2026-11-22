@@ -13,7 +13,7 @@ Chaque modèle de la liste a :
 | ✈️ **Envoyer un test** | envoie le modèle (valeurs d'exemple) à l'adresse de votre choix, même s'il est désactivé |
 | ⏻ **Interrupteur** | active ou coupe cet envoi |
 
-Les modèles sont rangés par groupe : **Compte**, **Sécurité**, **Administration**, **Clients**, **Boutique (Orders)**, **Solde (Wallet)** et **Codes promo**.
+Les modèles sont rangés par groupe : **Compte**, **Sécurité**, **Administration**, **Clients**, **Boutique (Orders)**, **Solde (Wallet)**, **Codes promo**, **Support (Tickets)**, **Parrainage** et **Statut**.
 
 | Modèle | Destinataire | Par défaut |
 |---|---|---|

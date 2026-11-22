@@ -82,6 +82,9 @@ Ces addons sont **gratuits**, open-source (MIT), publiés par Bloume SAS et visi
 | [Vitrine](/addons/official/vitrine) | v1.0.0 | Page d’accueil publique : catalogue par catégorie, pays, simulateur de prix | Orders (recommandé) | <span class="badge-free">✓ Gratuit</span> | <span class="badge-free">✓ Gratuit</span> |
 | [Analytics](/addons/official/analytics) | v1.0.0 | Analyse complète du panel — statistiques par compte, catégorie, pool, checker, scraper et heures/jours les plus actifs | — | <span class="badge-free">✓ Gratuit</span> |
 | [UHQ.Monster Reseller](/addons/official/reseller) | v1.2.1 | Achetez et gérez vos proxies UHQ.Monster depuis le panel, avec import automatique dans vos catégories | — | <span class="badge-free">✓ Gratuit</span> |
+| [Tickets](/addons/official/tickets) | v1.0.0 | Support client intégré : tickets, pièces jointes, console Admin + Support, réponses types, notation | — | <span class="badge-free">✓ Gratuit</span> |
+| [Parrainage](/addons/official/referral) | v1.0.0 | Lien et code de parrainage, commission créditée sur le Wallet, bonus de bienvenue, délai de protection | Wallet, Orders | <span class="badge-free">✓ Gratuit</span> |
+| [Statut & incidents](/addons/official/status) | v1.0.0 | Page de statut publique, disponibilité 90 jours, détection automatique des pannes et redéploiements, alertes | — | <span class="badge-free">✓ Gratuit</span> |
 
 ### Déploiement
 
