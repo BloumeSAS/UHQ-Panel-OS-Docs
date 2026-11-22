@@ -2,6 +2,10 @@
 
 ## v2.14.x
 
+### v2.14.1 — Import VPN : lignes invalides ignorées
+- **Import de sources VPN** : les liens sans port ou hôte valide sont ignorés au lieu de faire échouer tout l'import.
+- [UHQ Panel OS v2.14.1](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.14.1)
+
 ### v2.14.0 — VPN : imports illimités
 - VPN : imports sans limite (0 = tout importer), import par lots (10 850 configurations en 3 s).
 - [UHQ Panel OS v2.14.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.14.0)
