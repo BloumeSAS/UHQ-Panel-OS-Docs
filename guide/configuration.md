@@ -44,6 +44,8 @@ L'API déclare (`app.set('trust proxy', 1)` dans `main.ts`) ne faire confiance q
 
 ::: tip IP bannies (depuis v2.4.22)
 Barre latérale admin → **IP bannies** (`/banned-ips`) : bannit une ou plusieurs IP (une par ligne) de l'utilisation du moteur proxy, **indépendamment des comptes** — une IP bannie ne peut plus rien faire avec aucun identifiant. Vérifié en mémoire dès l'établissement de la connexion TCP, avant même la lecture de la requête d'auth : l'IP reçoit une erreur HTTP 403 et la connexion est fermée immédiatement. Raison et expiration optionnelles ; débannissement individuel ou par sélection multiple.
+
+**Liste blanche (depuis v2.15.1)** : la même page contient une section **IP autorisées**. Une IP autorisée n'est **jamais** bannie — ni par l'auto-ban d'authentification, ni par l'anti-VPN, ni à la main (le bannissement est refusé). Utile quand votre site n'est plus sur le même serveur que le panel : ajoutez-y l'IP du serveur du site. Ajouter une IP lève son ban éventuel ; les ajouts et retraits sont tracés dans le journal d'audit.
 :::
 
 ::: tip Activer la 2FA sur un compte admin (depuis v2.4.22, appliquée au login depuis v2.4.28)
