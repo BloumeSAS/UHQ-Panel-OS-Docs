@@ -2,6 +2,10 @@
 
 ## v2.15.x
 
+### v2.15.1 — IP bannies : liste blanche
+- **IP bannies : liste blanche** — les IP autorisées (ex. le serveur de votre site) ne sont jamais bannies (auto-ban, anti-VPN, ban manuel).
+- [UHQ Panel OS v2.15.1](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.15.1)
+
 ### v2.15.0 — Addons Tickets, Parrainage et Statut
 - **3 nouveaux addons officiels** : Tickets (support client), Parrainage (affiliation sur le Wallet) et Statut (page de statut publique avec détection automatique des pannes et redéploiements).
 - La page publique `/status` du panel reprend l'addon « État des services » lorsqu'il est activé.
