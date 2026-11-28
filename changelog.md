@@ -2,6 +2,11 @@
 
 ## v2.15.x
 
+### v2.15.2 — Dépôt professionnel et image Docker Hub
+- Image Docker publiée aussi sur Docker Hub : `bloumesas/uhq-panel-os` (amd64 + arm64).
+- Dépôt GitHub : README anglais + français, licence MIT, politique de sécurité, changelog, guide de contribution.
+- [UHQ Panel OS v2.15.2](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.15.2)
+
 ### v2.15.1 — IP bannies : liste blanche
 - **IP bannies : liste blanche** — les IP autorisées (ex. le serveur de votre site) ne sont jamais bannies (auto-ban, anti-VPN, ban manuel).
 - [UHQ Panel OS v2.15.1](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.15.1)
