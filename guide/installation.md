@@ -90,6 +90,90 @@ Les volumes sont nommés explicitement — ils survivent aux redéploiements san
 
 ---
 
+## Option 2 bis — Image Docker prête à l'emploi (Docker Hub)
+
+L'image officielle est publiée à chaque version, pour `linux/amd64` et `linux/arm64` :
+
+| Registre | Image |
+|---|---|
+| Docker Hub | [`bloumesas/uhq-panel-os`](https://hub.docker.com/r/bloumesas/uhq-panel-os) |
+| GitHub Container Registry | `ghcr.io/bloumesas/uhq-panel-os` |
+
+Tags : `latest` (dernière version), `X.Y.Z` / `X.Y` (version précise), `main` (dernier commit).
+
+::: tip Aucun fichier .env à écrire
+Il suffit d'une **base PostgreSQL**. Le reste est automatique : secret JWT généré au premier démarrage, schéma de la base appliqué tout seul, jeton d'installation affiché dans les journaux. Le compte administrateur et l'hôte public du proxy se règlent ensuite dans l'assistant `/setup`.
+:::
+
+### Avec PostgreSQL inclus (le plus simple)
+
+Créez un fichier `docker-compose.yml` (changez `change-me` aux **deux** endroits) :
+
+```yaml
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: uhq
+      POSTGRES_PASSWORD: change-me
+      POSTGRES_DB: uhqpanel
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U uhq -d uhqpanel"]
+      interval: 10s
+      retries: 5
+
+  app:
+    image: bloumesas/uhq-panel-os:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"            # panel + API (à mettre derrière HTTPS)
+      - "990:990"              # moteur proxy TCP
+      - "9000-9250:9000-9250"  # ports dédiés (catégories / comptes)
+    cap_add: [NET_ADMIN]       # uniquement pour les sorties OpenVPN
+    devices: ["/dev/net/tun:/dev/net/tun"]
+    environment:
+      DATABASE_URL: postgresql://uhq:change-me@db:5432/uhqpanel
+      DATA_DIR: /app/data
+    volumes:
+      - appdata:/app/data
+
+volumes:
+  pgdata:
+  appdata:
+```
+
+```bash
+docker compose up -d
+docker compose logs app | grep TOKEN   # jeton d'installation
+```
+
+Ouvrez `http://<serveur>:8000`, collez le jeton, suivez l'assistant.
+
+### Avec une base PostgreSQL existante
+
+Lancez l'image **sans** `DATABASE_URL` : le panel démarre quand même et l'assistant affiche l'écran **Base de données** (`/setup/database`) pour saisir l'URL `postgresql://utilisateur:motdepasse@hôte:5432/base`. Elle est enregistrée dans `/app/data`.
+
+### À ne pas oublier
+
+- Les **deux volumes** (`pgdata` pour la base, `appdata` pour `/app/data` : secret JWT, URL de la base, données des addons). Sans eux, tout est perdu à la mise à jour de l'image.
+- Mettre le panel derrière **HTTPS** (Traefik, Caddy, Nginx…) et garder la base privée.
+- Pas d'hôte avec `/dev/net/tun` (OpenVZ / LXC) : supprimez `cap_add` et `devices`, seul OpenVPN sera indisponible.
+
+### Mise à jour
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+---
+
 ## Option 3 — Développement local (sans Docker)
 
 **Prérequis supplémentaires :** Node.js 20+ et une instance PostgreSQL.
