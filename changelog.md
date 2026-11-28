@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.16.x
+
+### v2.16.0 — Addon Sécurité (BloumeID)
+- **Nouvel addon Sécurité (BloumeID)** : empreinte d'appareil (BloumeID open source, ThumbmarkJS, FingerprintJS, Fingerprint.com en option) sur la connexion, l'inscription et le mot de passe oublié.
+- Addons embarqués : plus de double lancement au démarrage ; révélation des secrets d'addon durcie (Orders 1.6.1).
+- [UHQ Panel OS v2.16.0](https://github.com/BloumeSAS/UHQ-Panel-OS/releases/tag/v2.16.0)
+
 ## v2.15.x
 
 ### v2.15.2 — Dépôt professionnel et image Docker Hub
