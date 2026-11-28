@@ -139,6 +139,7 @@ export default defineConfig({
             { text: 'Tickets (gratuit)', link: '/addons/official/tickets' },
             { text: 'Parrainage (gratuit)', link: '/addons/official/referral' },
             { text: 'Statut & incidents (gratuit)', link: '/addons/official/status' },
+            { text: 'Sécurité — BloumeID (gratuit)', link: '/addons/official/security' },
           ],
         },
       ],

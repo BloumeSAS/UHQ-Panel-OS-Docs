@@ -85,6 +85,7 @@ Ces addons sont **gratuits**, open-source (MIT), publiés par Bloume SAS et visi
 | [Tickets](/addons/official/tickets) | v1.0.0 | Support client intégré : tickets, pièces jointes, console Admin + Support, réponses types, notation | — | <span class="badge-free">✓ Gratuit</span> |
 | [Parrainage](/addons/official/referral) | v1.0.0 | Lien et code de parrainage, commission créditée sur le Wallet, bonus de bienvenue, délai de protection | Wallet, Orders | <span class="badge-free">✓ Gratuit</span> |
 | [Statut & incidents](/addons/official/status) | v1.0.0 | Page de statut publique, disponibilité 90 jours, détection automatique des pannes et redéploiements, alertes | — | <span class="badge-free">✓ Gratuit</span> |
+| [Sécurité (BloumeID)](/addons/official/security) | v1.0.0 | Empreinte d'appareil (BloumeID, ThumbmarkJS, FingerprintJS, Fingerprint.com) sur connexion, inscription et mot de passe oublié : robots, navigateurs falsifiés, multi-comptes | — | <span class="badge-free">✓ Gratuit</span> |
 
 ### Déploiement
 
