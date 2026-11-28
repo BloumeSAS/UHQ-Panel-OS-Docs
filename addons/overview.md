@@ -72,20 +72,20 @@ Stocke le manifest en cache (DB)
 
 ## Addons officiels
 
-Ces addons sont **gratuits**, open-source (MIT), publiés par Bloume SAS et visibles directement dans l'onglet **Extensions** du panel (`Admin → Extensions`).
+Ces **10 addons** sont **gratuits**, open-source (MIT), publiés par Bloume SAS et visibles directement dans l'onglet **Extensions** du panel (`Admin → Extensions`).
 
-| Addon | Version | Description | Dépend de | Licence |
-|---|---|---|---|---|
-| [Wallet](/addons/official/wallet) | v1.4.0 | Système de solde par compte proxy, recharge en ligne, codes cadeau | — | <span class="badge-free">✓ Gratuit</span> |
-| [Orders](/addons/official/orders) | v1.5.0 | Boutique interne — vente au Go, codes promo, validation admin, renouvellement, PayPal, factures PDF | Wallet |
-| [Codes promo](/addons/official/promocodes) | v1.0.0 | Codes cadeau, bonus de recharge, réductions boutique, 100 % personnalisables | Wallet | <span class="badge-free">✓ Gratuit</span> | <span class="badge-free">✓ Gratuit</span> |
-| [Vitrine](/addons/official/vitrine) | v1.0.0 | Page d’accueil publique : catalogue par catégorie, pays, simulateur de prix | Orders (recommandé) | <span class="badge-free">✓ Gratuit</span> | <span class="badge-free">✓ Gratuit</span> |
-| [Analytics](/addons/official/analytics) | v1.0.0 | Analyse complète du panel — statistiques par compte, catégorie, pool, checker, scraper et heures/jours les plus actifs | — | <span class="badge-free">✓ Gratuit</span> |
-| [UHQ.Monster Reseller](/addons/official/reseller) | v1.2.1 | Achetez et gérez vos proxies UHQ.Monster depuis le panel, avec import automatique dans vos catégories | — | <span class="badge-free">✓ Gratuit</span> |
-| [Tickets](/addons/official/tickets) | v1.0.0 | Support client intégré : tickets, pièces jointes, console Admin + Support, réponses types, notation | — | <span class="badge-free">✓ Gratuit</span> |
-| [Parrainage](/addons/official/referral) | v1.0.0 | Lien et code de parrainage, commission créditée sur le Wallet, bonus de bienvenue, délai de protection | Wallet, Orders | <span class="badge-free">✓ Gratuit</span> |
-| [Statut & incidents](/addons/official/status) | v1.0.0 | Page de statut publique, disponibilité 90 jours, détection automatique des pannes et redéploiements, alertes | — | <span class="badge-free">✓ Gratuit</span> |
-| [Sécurité (BloumeID)](/addons/official/security) | v1.0.0 | Empreinte d'appareil (BloumeID, ThumbmarkJS, FingerprintJS, Fingerprint.com) sur connexion, inscription et mot de passe oublié : robots, navigateurs falsifiés, multi-comptes | — | <span class="badge-free">✓ Gratuit</span> |
+| Addon | Description | Dépend de | Licence |
+|---|---|---|---|
+| [Wallet](/addons/official/wallet) | Système de solde par compte proxy, recharge en ligne, codes cadeau | — | <span class="badge-free">✓ Gratuit</span> |
+| [Orders](/addons/official/orders) | Boutique interne — vente au Go, codes promo, validation admin, renouvellement, PayPal, factures PDF | Wallet | <span class="badge-free">✓ Gratuit</span> |
+| [Codes promo](/addons/official/promocodes) | Codes cadeau, bonus de recharge, réductions boutique, 100 % personnalisables | Wallet | <span class="badge-free">✓ Gratuit</span> |
+| [Vitrine](/addons/official/vitrine) | Page d’accueil publique : catalogue par catégorie, pays, simulateur de prix | Orders (recommandé) | <span class="badge-free">✓ Gratuit</span> |
+| [Analytics](/addons/official/analytics) | Analyse complète du panel — statistiques par compte, catégorie, pool, checker, scraper et heures/jours les plus actifs | — | <span class="badge-free">✓ Gratuit</span> |
+| [UHQ.Monster Reseller](/addons/official/reseller) | Achetez et gérez vos proxies UHQ.Monster depuis le panel, avec import automatique dans vos catégories | — | <span class="badge-free">✓ Gratuit</span> |
+| [Tickets](/addons/official/tickets) | Support client intégré : tickets, pièces jointes, console Admin + Support, réponses types, notation | — | <span class="badge-free">✓ Gratuit</span> |
+| [Parrainage](/addons/official/referral) | Lien et code de parrainage, commission créditée sur le Wallet, bonus de bienvenue, délai de protection | Wallet, Orders | <span class="badge-free">✓ Gratuit</span> |
+| [Statut & incidents](/addons/official/status) | Page de statut publique, disponibilité 90 jours, détection automatique des pannes et redéploiements, alertes | — | <span class="badge-free">✓ Gratuit</span> |
+| [Sécurité (BloumeID)](/addons/official/security) | Empreinte d'appareil (BloumeID, ThumbmarkJS, FingerprintJS, Fingerprint.com) sur connexion, inscription et mot de passe oublié : robots, navigateurs falsifiés, multi-comptes | — | <span class="badge-free">✓ Gratuit</span> |
 
 ### Déploiement
 

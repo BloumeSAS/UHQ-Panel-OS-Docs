@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { useData, withBase } from 'vitepress';
 
 type Block =
   | { t: 'p'; text: string }
@@ -19,6 +20,12 @@ interface Step {
 }
 
 type Path = 'auto' | 'manual' | 'local';
+
+// Bilingue : la page française (racine) et la page anglaise (/en/) utilisent le même composant.
+const { lang } = useData();
+const EN = computed(() => lang.value.startsWith('en'));
+const x = (fr: string, en: string) => (EN.value ? en : fr);
+const link = (p: string) => withBase(EN.value ? `/en${p}` : p);
 
 const STORE = 'uhq-install-wizard-v1';
 const path = ref<Path | null>(null);
@@ -50,169 +57,176 @@ const fill = (s: string) =>
     .replaceAll('{ip}', f.ip.trim() || '203.0.113.10')
     .replaceAll('{port}', f.port.trim() || '990');
 
-const PATHS: { id: Path; icon: string; title: string; time: string; text: string; for: string }[] = [
-  { id: 'auto', icon: '⚡', title: 'Automatique', time: '≈ 15 min', text: 'Coolify installe, relance et met à jour le panel pour vous : HTTPS, redéploiement en un clic, mises à jour depuis le panel.', for: 'Recommandé pour la production' },
-  { id: 'manual', icon: '🛠️', title: 'Manuelle', time: '≈ 25 min', text: 'Docker Compose sur n’importe quel VPS, avec votre propre reverse proxy HTTPS (Caddy). Vous gardez la main sur chaque étape.', for: 'Pour les habitués de Docker' },
-  { id: 'local', icon: '💻', title: 'Test en local', time: '≈ 3 min', text: 'Essayez le panel sur votre ordinateur avec Docker Desktop, sans domaine ni serveur.', for: 'Pour découvrir' },
-];
+const PATHS = computed<{ id: Path; icon: string; title: string; time: string; text: string; for: string }[]>(() => [
+  { id: 'auto', icon: '⚡', title: x('Automatique', 'Automatic'), time: '≈ 15 min', text: x('Coolify installe, relance et met à jour le panel pour vous : HTTPS, redéploiement en un clic, mises à jour depuis le panel.', 'Coolify installs, restarts and updates the panel for you: HTTPS, one-click redeploys, updates from the panel.'), for: x('Recommandé pour la production', 'Recommended for production') },
+  { id: 'manual', icon: '🛠️', title: x('Manuelle', 'Manual'), time: '≈ 25 min', text: x('Docker Compose sur n’importe quel VPS, avec votre propre reverse proxy HTTPS (Caddy). Vous gardez la main sur chaque étape.', 'Docker Compose on any VPS, with your own HTTPS reverse proxy (Caddy). You stay in control of every step.'), for: x('Pour les habitués de Docker', 'For Docker users') },
+  { id: 'local', icon: '💻', title: x('Test en local', 'Local test'), time: '≈ 3 min', text: x('Essayez le panel sur votre ordinateur avec Docker Desktop, sans domaine ni serveur.', 'Try the panel on your computer with Docker Desktop, without a domain or a server.'), for: x('Pour découvrir', 'To discover it') },
+]);
 
-const commonSetup: Step = {
+const commonSetup = (): Step => ({
   id: 'setup',
-  title: 'Assistant d’installation (/setup)',
+  title: x('Assistant d’installation (/setup)', 'Setup wizard (/setup)'),
   time: '3 min',
   icon: '🧭',
   blocks: [
-    { t: 'p', text: 'Ouvrez **https://{domain}/setup** (ou **http://localhost:8000/setup** en local). L’assistant se déroule en trois temps :' },
+    { t: 'p', text: x('Ouvrez **https://{domain}/setup** (ou **http://localhost:8000/setup** en local). L’assistant se déroule en trois temps :', 'Open **https://{domain}/setup** (or **http://localhost:8000/setup** locally). The wizard has three parts:') },
     { t: 'list', items: [
-      '**Base de données** : cliquez sur « Continuer avec la base intégrée » (PostgreSQL du `docker-compose.yml`).',
-      '**Jeton d’installation** : collez la valeur trouvée à l’étape précédente.',
-      '**Votre panel** : nom du site, **hôte public du proxy** `{proxyHost}` et port `{port}`, puis votre compte administrateur (e-mail + mot de passe fort).',
+      x('**Base de données** : cliquez sur « Continuer avec la base intégrée » (PostgreSQL du `docker-compose.yml`).', '**Database**: click “Continue with the built-in database” (PostgreSQL from `docker-compose.yml`).'),
+      x('**Jeton d’installation** : collez la valeur trouvée à l’étape précédente.', '**Installation token**: paste the value found in the previous step.'),
+      x('**Votre panel** : nom du site, **hôte public du proxy** `{proxyHost}` et port `{port}`, puis votre compte administrateur (e-mail + mot de passe fort).', '**Your panel**: site name, **public proxy host** `{proxyHost}` and port `{port}`, then your administrator account (e-mail + strong password).'),
     ] },
-    { t: 'tip', text: 'Le bloc « Vérification de l’installation » contrôle votre domaine, le port {port} et Cloudflare avant de terminer. Corrigez ce qu’il signale, puis relancez-le.' },
-    { t: 'info', text: 'Vous avez déjà une sauvegarde ? Utilisez l’onglet « Restaurer une sauvegarde » : toutes vos données reviennent.' },
+    { t: 'tip', text: x('Le bloc « Vérification de l’installation » contrôle votre domaine, le port {port} et Cloudflare avant de terminer. Corrigez ce qu’il signale, puis relancez-le.', 'The “Installation check” block verifies your domain, port {port} and Cloudflare before finishing. Fix what it reports, then run it again.') },
+    { t: 'info', text: x('Vous avez déjà une sauvegarde ? Utilisez l’onglet « Restaurer une sauvegarde » : toutes vos données reviennent.', 'Already have a backup? Use the “Restore a backup” tab: all your data comes back.') },
   ],
-  check: ['Le panel s’affiche et je suis connecté en administrateur', 'La visite guidée s’est lancée'],
-};
+  check: [x('Le panel s’affiche et je suis connecté en administrateur', 'The panel shows up and I am signed in as administrator'), x('La visite guidée s’est lancée', 'The guided tour started')],
+});
 
 const tokenStep = (cmd: string, where: string): Step => ({
   id: 'token',
-  title: 'Récupérer le jeton d’installation',
+  title: x('Récupérer le jeton d’installation', 'Get the installation token'),
   time: '1 min',
   icon: '🔑',
   blocks: [
-    { t: 'p', text: 'Pour empêcher qu’un inconnu installe votre panel à votre place, l’écran `/setup` demande un **jeton généré automatiquement au premier démarrage**. Il n’est écrit dans aucun fichier `.env` : il apparaît dans les **logs** du conteneur.' },
+    { t: 'p', text: x('Pour empêcher qu’un inconnu installe votre panel à votre place, l’écran `/setup` demande un **jeton généré automatiquement au premier démarrage**. Il n’est écrit dans aucun fichier `.env` : il apparaît dans les **logs** du conteneur.', 'To stop a stranger from installing your panel before you, the `/setup` screen asks for a **token generated automatically on first start**. It is not written in any `.env` file: it appears in the container **logs**.') },
     ...(where ? [{ t: 'p', text: where } as Block] : []),
     ...(cmd ? [{ t: 'code', lang: 'bash', text: cmd } as Block] : []),
-    { t: 'p', text: 'Cherchez le bloc suivant et copiez la valeur après `TOKEN D’INSTALLATION :`' },
+    { t: 'p', text: x('Cherchez le bloc suivant et copiez la valeur après `TOKEN D’INSTALLATION :`', 'Look for the following block and copy the value after `TOKEN D’INSTALLATION :` (installation token)') },
     { t: 'code', lang: 'text', text: '════════════════════════════════════════\n  INSTALLATION À FAIRE — l’écran /setup est protégé.\n  TOKEN D’INSTALLATION : 7f3c…a91d\n════════════════════════════════════════' },
-    { t: 'tip', text: 'Vous préférez choisir le jeton ? Définissez la variable `SETUP_TOKEN=votre-valeur`. `SETUP_TOKEN=off` désactive la protection (déconseillé sur Internet). Le jeton est effacé une fois l’installation terminée.' },
+    { t: 'tip', text: x('Vous préférez choisir le jeton ? Définissez la variable `SETUP_TOKEN=votre-valeur`. `SETUP_TOKEN=off` désactive la protection (déconseillé sur Internet). Le jeton est effacé une fois l’installation terminée.', 'Prefer to choose the token? Set `SETUP_TOKEN=your-value`. `SETUP_TOKEN=off` disables the protection (not recommended on the Internet). The token is erased once the installation is complete.') },
   ],
-  check: ['J’ai copié le jeton'],
+  check: [x('J’ai copié le jeton', 'I copied the token')],
 });
 
-const testStep: Step = {
+const testStep = (): Step => ({
   id: 'test',
-  title: 'Créer un premier compte et tester',
+  title: x('Créer un premier compte et tester', 'Create a first account and test it'),
   time: '4 min',
   icon: '🧪',
   blocks: [
     { t: 'list', items: [
-      '**Pool de proxies** : ajoutez une source dans **Scraper** (ou importez une liste dans **Pool de proxies**), puis lancez un cycle du **Checker**.',
-      '**Catégorie** : créez-en une dans **Catégories proxies** (optionnel : domaine et port dédiés).',
-      '**Compte proxy** : créez un compte dans **Comptes proxy**, puis cliquez sur **Tester** : le panel fait une vraie requête via le moteur.',
+      x('**Pool de proxies** : ajoutez une source dans **Scraper** (ou importez une liste dans **Pool de proxies**), puis lancez un cycle du **Checker**.', '**Proxy pool**: add a source in **Scraper** (or import a list in **Proxy pool**), then run a **Checker** cycle.'),
+      x('**Catégorie** : créez-en une dans **Catégories proxies** (optionnel : domaine et port dédiés).', '**Category**: create one in **Proxy categories** (optional: dedicated domain and port).'),
+      x('**Compte proxy** : créez un compte dans **Comptes proxy**, puis cliquez sur **Tester** : le panel fait une vraie requête via le moteur.', '**Proxy account**: create an account in **Proxy accounts**, then click **Test**: the panel sends a real request through the engine.'),
     ] },
-    { t: 'p', text: 'Test depuis votre ordinateur (remplacez identifiant et mot de passe) :' },
-    { t: 'code', lang: 'bash', text: 'curl -x http://IDENTIFIANT:MOT_DE_PASSE@{proxyHost}:{port} https://api.ipify.org' },
-    { t: 'tip', text: 'Si ça échoue, ouvrez **Diagnostic** dans le panel : il indique l’enregistrement DNS à créer, détecte Cloudflare (nuage orange) et teste le port.' },
+    { t: 'p', text: x('Test depuis votre ordinateur (remplacez identifiant et mot de passe) :', 'Test from your computer (replace username and password):') },
+    { t: 'code', lang: 'bash', text: x('curl -x http://IDENTIFIANT:MOT_DE_PASSE@{proxyHost}:{port} https://api.ipify.org', 'curl -x http://USERNAME:PASSWORD@{proxyHost}:{port} https://api.ipify.org') },
+    { t: 'tip', text: x('Si ça échoue, ouvrez **Diagnostic** dans le panel : il indique l’enregistrement DNS à créer, détecte Cloudflare (nuage orange) et teste le port.', 'If it fails, open **Diagnostics** in the panel: it shows the DNS record to create, detects Cloudflare (orange cloud) and tests the port.') },
   ],
-  check: ['Un compte proxy répond avec une IP différente de la mienne'],
-};
+  check: [x('Un compte proxy répond avec une IP différente de la mienne', 'A proxy account answers with an IP different from mine')],
+});
 
 const stepsFor = (p: Path): Step[] => {
   const prereq: Step = {
     id: 'prereq',
-    title: 'Préparer le serveur',
+    title: x('Préparer le serveur', 'Prepare the server'),
     time: '5 min',
     icon: '📋',
     blocks: p === 'local'
       ? [
-        { t: 'list', items: ['**Docker Desktop** (Windows / macOS) ou Docker Engine (Linux) en version 24+', '**Git** installé', 'Les ports **8000** et **990** libres sur votre machine'] },
+        { t: 'list', items: [x('**Docker Desktop** (Windows / macOS) ou Docker Engine (Linux) en version 24+', '**Docker Desktop** (Windows / macOS) or Docker Engine (Linux) version 24+'), x('**Git** installé', '**Git** installed'), x('Les ports **8000** et **990** libres sur votre machine', 'Ports **8000** and **990** free on your machine')] },
         { t: 'code', lang: 'bash', text: 'docker --version\ndocker compose version\ngit --version' },
       ]
       : [
-        { t: 'table', head: ['Élément', 'Minimum conseillé'], rows: [['Serveur (VPS)', '2 vCPU · 2 Go RAM · 20 Go disque · Ubuntu 22.04+ / Debian 12+'], ['Domaine', 'Un nom de domaine dont vous gérez la zone DNS'], ['Ports ouverts', '22 (SSH), 80 et 443 (HTTPS), {port} (proxy), 9000-9250 (ports dédiés, optionnel)'], ['IP publique', 'Notée : {ip}']] },
-        { t: 'warn', text: 'Le proxy TCP (port {port}) **ne passe pas** par Cloudflare orange ni par un reverse proxy HTTP : il doit être joignable directement sur l’IP du serveur.' },
+        { t: 'table', head: [x('Élément', 'Item'), x('Minimum conseillé', 'Recommended minimum')], rows: [
+          [x('Serveur (VPS)', 'Server (VPS)'), x('2 vCPU · 2 Go RAM · 20 Go disque · Ubuntu 22.04+ / Debian 12+', '2 vCPU · 2 GB RAM · 20 GB disk · Ubuntu 22.04+ / Debian 12+')],
+          [x('Domaine', 'Domain'), x('Un nom de domaine dont vous gérez la zone DNS', 'A domain name whose DNS zone you manage')],
+          [x('Ports ouverts', 'Open ports'), x('22 (SSH), 80 et 443 (HTTPS), {port} (proxy), 9000-9250 (ports dédiés, optionnel)', '22 (SSH), 80 and 443 (HTTPS), {port} (proxy), 9000-9250 (dedicated ports, optional)')],
+          [x('IP publique', 'Public IP'), x('Notée : {ip}', 'Noted: {ip}')],
+        ] },
+        { t: 'warn', text: x('Le proxy TCP (port {port}) **ne passe pas** par Cloudflare orange ni par un reverse proxy HTTP : il doit être joignable directement sur l’IP du serveur.', 'The TCP proxy (port {port}) **does not go** through an orange Cloudflare cloud or an HTTP reverse proxy: it must be reachable directly on the server IP.') },
       ],
-    check: p === 'local' ? ['Docker fonctionne'] : ['Mon VPS est accessible en SSH', 'J’ai un domaine'],
+    check: p === 'local' ? [x('Docker fonctionne', 'Docker works')] : [x('Mon VPS est accessible en SSH', 'My VPS is reachable over SSH'), x('J’ai un domaine', 'I have a domain')],
   };
 
   const dns: Step = {
     id: 'dns',
-    title: 'Configurer le DNS',
+    title: x('Configurer le DNS', 'Configure DNS'),
     time: '3 min',
     icon: '🌐',
     blocks: [
-      { t: 'p', text: 'Dans la zone DNS de votre domaine, créez :' },
-      { t: 'table', head: ['Type', 'Nom', 'Valeur', 'Proxy (Cloudflare)'], rows: sameDomain.value
-        ? [['A', '{domain}', '{ip}', '**DNS seul** (nuage gris)']]
-        : [['A', '{domain}', '{ip}', 'au choix (nuage orange accepté)'], ['A', '{proxyHost}', '{ip}', '**DNS seul** (nuage gris) — obligatoire']] },
-      { t: 'tip', text: sameDomain.value ? 'Un seul domaine suffit : gardez-le en **nuage gris**. Vous voulez profiter de Cloudflare pour le panel ? Utilisez un second sous-domaine pour le proxy (champ « Domaine du proxy » en haut de l’assistant).' : 'Le sous-domaine du proxy doit rester en **nuage gris** : Cloudflare ne transmet pas le trafic TCP du proxy.' },
+      { t: 'p', text: x('Dans la zone DNS de votre domaine, créez :', 'In your domain’s DNS zone, create:') },
+      { t: 'table', head: ['Type', x('Nom', 'Name'), x('Valeur', 'Value'), 'Proxy (Cloudflare)'], rows: sameDomain.value
+        ? [['A', '{domain}', '{ip}', x('**DNS seul** (nuage gris)', '**DNS only** (grey cloud)')]]
+        : [['A', '{domain}', '{ip}', x('au choix (nuage orange accepté)', 'your choice (orange cloud allowed)')], ['A', '{proxyHost}', '{ip}', x('**DNS seul** (nuage gris) — obligatoire', '**DNS only** (grey cloud) — required')]] },
+      { t: 'tip', text: sameDomain.value
+        ? x('Un seul domaine suffit : gardez-le en **nuage gris**. Vous voulez profiter de Cloudflare pour le panel ? Utilisez un second sous-domaine pour le proxy (champ « Domaine du proxy » en haut de l’assistant).', 'One domain is enough: keep it **grey cloud**. Want Cloudflare in front of the panel? Use a second subdomain for the proxy (“Proxy domain” field at the top of the wizard).')
+        : x('Le sous-domaine du proxy doit rester en **nuage gris** : Cloudflare ne transmet pas le trafic TCP du proxy.', 'The proxy subdomain must stay **grey cloud**: Cloudflare does not forward the proxy’s TCP traffic.') },
       { t: 'code', lang: 'bash', text: 'nslookup {domain}' },
     ],
-    check: ['Le domaine pointe vers l’IP de mon serveur'],
+    check: [x('Le domaine pointe vers l’IP de mon serveur', 'The domain points to my server IP')],
   };
 
   const backups: Step = {
     id: 'backups',
-    title: 'Sauvegardes et mises à jour',
+    title: x('Sauvegardes et mises à jour', 'Backups and updates'),
     time: '4 min',
     icon: '💾',
     blocks: [
       { t: 'list', items: [
-        '**Paramètres → Sauvegardes** : activez les sauvegardes automatiques (local, ou S3 / Cloudflare R2 / MinIO) et testez-en une.',
-        '**Paramètres → Sécurité** : exigez la double authentification (2FA) pour les administrateurs.',
+        x('**Paramètres → Sauvegardes** : activez les sauvegardes automatiques (local, ou S3 / Cloudflare R2 / MinIO) et testez-en une.', '**Settings → Backups**: enable automatic backups (local, or S3 / Cloudflare R2 / MinIO) and test one.'),
+        x('**Paramètres → Sécurité** : exigez la double authentification (2FA) pour les administrateurs.', '**Settings → Security**: require two-factor authentication (2FA) for administrators.'),
         p === 'auto'
-          ? '**Paramètres → Général → Mise à jour automatique** : choisissez « Coolify », collez l’URL du Deploy Webhook et le jeton API : le bouton **Mettre à jour maintenant** de la page À propos fait le reste.'
-          : '**Mise à jour** : `git pull && docker compose up -d --build` (ou une plateforme avec webhook : voir la préconfiguration adaptée dans Paramètres → Général).',
+          ? x('**Paramètres → Général → Mise à jour automatique** : choisissez « Coolify », collez l’URL du Deploy Webhook et le jeton API : le bouton **Mettre à jour maintenant** de la page À propos fait le reste.', '**Settings → General → Automatic update**: choose “Coolify”, paste the Deploy Webhook URL and the API token: the **Update now** button on the About page does the rest.')
+          : x('**Mise à jour** : `git pull && docker compose up -d --build` (ou une plateforme avec webhook : voir la préconfiguration adaptée dans Paramètres → Général).', '**Update**: `git pull && docker compose up -d --build` (or a platform with a webhook: see the matching preset in Settings → General).'),
       ] },
-      { t: 'links', items: [{ text: 'Sauvegardes & restauration', href: '/guide/sauvegardes' }, { text: 'Mise à jour automatique', href: '/guide/mise-a-jour-automatique' }] },
+      { t: 'links', items: [{ text: x('Sauvegardes & restauration', 'Backups & restore'), href: link('/guide/sauvegardes') }, { text: x('Mise à jour automatique', 'Automatic updates'), href: link('/guide/mise-a-jour-automatique') }] },
     ],
-    check: ['Une sauvegarde de test a réussi'],
+    check: [x('Une sauvegarde de test a réussi', 'A test backup succeeded')],
   };
 
   const addons: Step = {
     id: 'addons',
-    title: 'E-mails et addons (facultatif)',
+    title: x('E-mails et addons (facultatif)', 'E-mails and add-ons (optional)'),
     time: '5 min',
     icon: '🧩',
     blocks: [
       { t: 'list', items: [
-        '**SMTP & e-mails** : renseignez votre serveur SMTP ; chaque e-mail (bienvenue, mot de passe, commandes…) s’active, se prévisualise et se personnalise.',
-        '**Extensions** : activez **Wallet** (solde), **Orders** (boutique, paiement Stripe / PayPal / crypto), **Codes promo** et **Analytics** en un clic.',
-        '**Page /status** : publiez l’état de votre service (addons et ports compris).',
+        x('**SMTP & e-mails** : renseignez votre serveur SMTP ; chaque e-mail (bienvenue, mot de passe, commandes…) s’active, se prévisualise et se personnalise.', '**SMTP & e-mails**: enter your SMTP server; every e-mail (welcome, password, orders…) can be enabled, previewed and customised.'),
+        x('**Extensions** : activez en un clic les 10 addons officiels gratuits — Wallet, Orders, Codes promo, Analytics, Reseller, Vitrine, Tickets, Parrainage, Statut et Sécurité (BloumeID).', '**Extensions**: enable the 10 free official add-ons in one click — Wallet, Orders, Promo Codes, Analytics, Reseller, Vitrine, Tickets, Referral, Status and Security (BloumeID).'),
+        x('**Page /status** : publiez l’état de votre service (addons et ports compris).', '**/status page**: publish the state of your service (add-ons and ports included).'),
       ] },
-      { t: 'links', items: [{ text: 'E-mails', href: '/guide/emails' }, { text: 'Addons officiels', href: '/addons/overview' }] },
+      { t: 'links', items: [{ text: 'E-mails', href: link('/guide/emails') }, { text: x('Addons officiels', 'Official add-ons'), href: link('/addons/overview') }] },
     ],
   };
 
   if (p === 'local') {
     return [
       prereq,
-      { id: 'run', title: 'Lancer le panel', time: '2 min', icon: '🚀', blocks: [
+      { id: 'run', title: x('Lancer le panel', 'Start the panel'), time: '2 min', icon: '🚀', blocks: [
         { t: 'code', lang: 'bash', text: 'git clone https://github.com/BloumeSAS/UHQ-Panel-OS\ncd UHQ-Panel-OS\ndocker compose up -d --build' },
-        { t: 'p', text: 'La première construction prend quelques minutes. Suivez-la avec :' },
+        { t: 'p', text: x('La première construction prend quelques minutes. Suivez-la avec :', 'The first build takes a few minutes. Follow it with:') },
         { t: 'code', lang: 'bash', text: 'docker compose logs -f app' },
-        { t: 'tip', text: 'Quand vous lisez « Application started », le panel répond sur **http://localhost:8000** et le proxy sur **localhost:{port}**.' },
-      ], check: ['http://localhost:8000 répond'] },
-      tokenStep('docker compose logs app | grep -A1 "TOKEN"', 'Dans le dossier du projet :'),
-      commonSetup,
-      testStep,
+        { t: 'tip', text: x('Quand vous lisez « Application started », le panel répond sur **http://localhost:8000** et le proxy sur **localhost:{port}**.', 'When you read “Application started”, the panel answers on **http://localhost:8000** and the proxy on **localhost:{port}**.') },
+      ], check: [x('http://localhost:8000 répond', 'http://localhost:8000 answers')] },
+      tokenStep('docker compose logs app | grep -A1 "TOKEN"', x('Dans le dossier du projet :', 'In the project folder:')),
+      commonSetup(),
+      testStep(),
     ];
   }
 
   if (p === 'manual') {
     return [
       prereq,
-      { id: 'docker', title: 'Installer Docker', time: '3 min', icon: '🐳', blocks: [
-        { t: 'p', text: 'Sur le serveur (en SSH) :' },
-        { t: 'code', lang: 'bash', text: 'curl -fsSL https://get.docker.com | sudo sh\nsudo usermod -aG docker $USER\n# reconnectez-vous en SSH, puis :\ndocker compose version' },
-        { t: 'p', text: 'Ouvrez les ports nécessaires (exemple avec UFW) :' },
-        { t: 'code', lang: 'bash', text: 'sudo ufw allow 22/tcp\nsudo ufw allow 80,443/tcp\nsudo ufw allow {port}/tcp\nsudo ufw allow 9000:9250/tcp   # ports dédiés (optionnel)\nsudo ufw enable' },
-      ], check: ['`docker compose version` répond'] },
+      { id: 'docker', title: x('Installer Docker', 'Install Docker'), time: '3 min', icon: '🐳', blocks: [
+        { t: 'p', text: x('Sur le serveur (en SSH) :', 'On the server (over SSH):') },
+        { t: 'code', lang: 'bash', text: x('curl -fsSL https://get.docker.com | sudo sh\nsudo usermod -aG docker $USER\n# reconnectez-vous en SSH, puis :\ndocker compose version', 'curl -fsSL https://get.docker.com | sudo sh\nsudo usermod -aG docker $USER\n# reconnect over SSH, then:\ndocker compose version') },
+        { t: 'p', text: x('Ouvrez les ports nécessaires (exemple avec UFW) :', 'Open the required ports (UFW example):') },
+        { t: 'code', lang: 'bash', text: x('sudo ufw allow 22/tcp\nsudo ufw allow 80,443/tcp\nsudo ufw allow {port}/tcp\nsudo ufw allow 9000:9250/tcp   # ports dédiés (optionnel)\nsudo ufw enable', 'sudo ufw allow 22/tcp\nsudo ufw allow 80,443/tcp\nsudo ufw allow {port}/tcp\nsudo ufw allow 9000:9250/tcp   # dedicated ports (optional)\nsudo ufw enable') },
+      ], check: [x('`docker compose version` répond', '`docker compose version` answers')] },
       dns,
-      { id: 'run', title: 'Récupérer et lancer le panel', time: '5 min', icon: '🚀', blocks: [
+      { id: 'run', title: x('Récupérer et lancer le panel', 'Get and start the panel'), time: '5 min', icon: '🚀', blocks: [
         { t: 'code', lang: 'bash', text: 'git clone https://github.com/BloumeSAS/UHQ-Panel-OS\ncd UHQ-Panel-OS\ndocker compose up -d --build\ndocker compose logs -f app' },
-        { t: 'info', text: 'Les données sont conservées dans les volumes `uhq-panel-pgdata` et `uhq-panel-appdata` : elles survivent aux mises à jour.' },
-      ], check: ['Le conteneur « app » est démarré'] },
-      { id: 'https', title: 'HTTPS avec Caddy', time: '4 min', icon: '🔒', blocks: [
-        { t: 'p', text: 'Caddy obtient et renouvelle automatiquement le certificat. Installez-le (voir caddyserver.com/docs/install) puis éditez `/etc/caddy/Caddyfile` :' },
+        { t: 'info', text: x('Les données sont conservées dans les volumes `uhq-panel-pgdata` et `uhq-panel-appdata` : elles survivent aux mises à jour.', 'Data is kept in the `uhq-panel-pgdata` and `uhq-panel-appdata` volumes: it survives updates.') },
+      ], check: [x('Le conteneur « app » est démarré', 'The “app” container is running')] },
+      { id: 'https', title: x('HTTPS avec Caddy', 'HTTPS with Caddy'), time: '4 min', icon: '🔒', blocks: [
+        { t: 'p', text: x('Caddy obtient et renouvelle automatiquement le certificat. Installez-le (voir caddyserver.com/docs/install) puis éditez `/etc/caddy/Caddyfile` :', 'Caddy gets and renews the certificate automatically. Install it (see caddyserver.com/docs/install) then edit `/etc/caddy/Caddyfile`:') },
         { t: 'code', lang: 'text', title: 'Caddyfile', text: '{domain} {\n    reverse_proxy localhost:8000\n}' },
         { t: 'code', lang: 'bash', text: 'sudo systemctl reload caddy' },
-        { t: 'warn', text: 'Seul le port **8000** (web) passe par Caddy. Le port **{port}** (proxy TCP) reste exposé directement par Docker.' },
-      ], check: ['https://{domain} affiche le panel'] },
-      tokenStep('cd UHQ-Panel-OS\ndocker compose logs app | grep -A1 "TOKEN"', 'Sur le serveur, dans le dossier du projet :'),
-      commonSetup,
-      testStep,
+        { t: 'warn', text: x('Seul le port **8000** (web) passe par Caddy. Le port **{port}** (proxy TCP) reste exposé directement par Docker.', 'Only port **8000** (web) goes through Caddy. Port **{port}** (TCP proxy) stays exposed directly by Docker.') },
+      ], check: [x('https://{domain} affiche le panel', 'https://{domain} shows the panel')] },
+      tokenStep('cd UHQ-Panel-OS\ndocker compose logs app | grep -A1 "TOKEN"', x('Sur le serveur, dans le dossier du projet :', 'On the server, in the project folder:')),
+      commonSetup(),
+      testStep(),
       backups,
       addons,
     ];
@@ -220,30 +234,30 @@ const stepsFor = (p: Path): Step[] => {
 
   return [
     prereq,
-    { id: 'coolify', title: 'Installer Coolify', time: '4 min', icon: '🧊', blocks: [
-      { t: 'p', text: 'Sur un serveur vierge (en SSH, utilisateur root ou sudo) :' },
+    { id: 'coolify', title: x('Installer Coolify', 'Install Coolify'), time: '4 min', icon: '🧊', blocks: [
+      { t: 'p', text: x('Sur un serveur vierge (en SSH, utilisateur root ou sudo) :', 'On a blank server (over SSH, as root or with sudo):') },
       { t: 'code', lang: 'bash', text: 'curl -fsSL https://cdn.coollabs.io/coolify/install.sh | sudo bash' },
-      { t: 'p', text: 'À la fin, ouvrez **http://{ip}:8000** et créez votre compte administrateur Coolify.' },
-      { t: 'tip', text: 'Coolify possède son propre panneau sur le port 8000 : le panel UHQ, lui, sera servi sur votre domaine via Traefik (HTTPS automatique).' },
-    ], check: ['Je suis connecté à Coolify'] },
+      { t: 'p', text: x('À la fin, ouvrez **http://{ip}:8000** et créez votre compte administrateur Coolify.', 'At the end, open **http://{ip}:8000** and create your Coolify administrator account.') },
+      { t: 'tip', text: x('Coolify possède son propre panneau sur le port 8000 : le panel UHQ, lui, sera servi sur votre domaine via Traefik (HTTPS automatique).', 'Coolify has its own dashboard on port 8000: the UHQ panel will be served on your domain through Traefik (automatic HTTPS).') },
+    ], check: [x('Je suis connecté à Coolify', 'I am signed in to Coolify')] },
     dns,
-    { id: 'app', title: 'Créer l’application dans Coolify', time: '4 min', icon: '📦', blocks: [
+    { id: 'app', title: x('Créer l’application dans Coolify', 'Create the application in Coolify'), time: '4 min', icon: '📦', blocks: [
       { t: 'list', items: [
         '**Projects → Add → New Resource → Public Repository**',
-        'Dépôt : `https://github.com/BloumeSAS/UHQ-Panel-OS` — branche `main`',
-        '**Build Pack : Docker Compose**, fichier `docker-compose.yml`',
-        'Domaine du service **app** : `https://{domain}` (port **8000**)',
+        x('Dépôt : `https://github.com/BloumeSAS/UHQ-Panel-OS` — branche `main`', 'Repository: `https://github.com/BloumeSAS/UHQ-Panel-OS` — branch `main`'),
+        x('**Build Pack : Docker Compose**, fichier `docker-compose.yml`', '**Build Pack: Docker Compose**, file `docker-compose.yml`'),
+        x('Domaine du service **app** : `https://{domain}` (port **8000**)', 'Domain of the **app** service: `https://{domain}` (port **8000**)'),
       ] },
-      { t: 'warn', text: 'Ne mettez **aucun domaine** sur le port {port} : c’est du TCP, pas du HTTP. Il est publié directement sur l’hôte par le compose.' },
-      { t: 'code', lang: 'bash', text: 'sudo ufw allow {port}/tcp\nsudo ufw allow 9000:9250/tcp   # ports dédiés (optionnel)' },
-    ], check: ['L’application est créée avec son domaine'] },
-    { id: 'deploy', title: 'Déployer', time: '5 min', icon: '🚀', blocks: [
-      { t: 'p', text: 'Cliquez sur **Deploy**. La première construction dure quelques minutes ; suivez-la dans l’onglet **Deployments**.' },
-      { t: 'tip', text: 'Quand le statut passe à **Running**, `https://{domain}/health` répond `{"status":"running"…}`.' },
-    ], check: ['Le déploiement est en « Running »'] },
-    tokenStep('', 'Dans Coolify : votre application → onglet **Logs** (le conteneur « app »). Cherchez « TOKEN D’INSTALLATION ».'),
-    commonSetup,
-    testStep,
+      { t: 'warn', text: x('Ne mettez **aucun domaine** sur le port {port} : c’est du TCP, pas du HTTP. Il est publié directement sur l’hôte par le compose.', 'Do **not** put any domain on port {port}: it is TCP, not HTTP. The compose file publishes it directly on the host.') },
+      { t: 'code', lang: 'bash', text: x('sudo ufw allow {port}/tcp\nsudo ufw allow 9000:9250/tcp   # ports dédiés (optionnel)', 'sudo ufw allow {port}/tcp\nsudo ufw allow 9000:9250/tcp   # dedicated ports (optional)') },
+    ], check: [x('L’application est créée avec son domaine', 'The application is created with its domain')] },
+    { id: 'deploy', title: x('Déployer', 'Deploy'), time: '5 min', icon: '🚀', blocks: [
+      { t: 'p', text: x('Cliquez sur **Deploy**. La première construction dure quelques minutes ; suivez-la dans l’onglet **Deployments**.', 'Click **Deploy**. The first build takes a few minutes; follow it in the **Deployments** tab.') },
+      { t: 'tip', text: x('Quand le statut passe à **Running**, `https://{domain}/health` répond `{"status":"running"…}`.', 'When the status becomes **Running**, `https://{domain}/health` answers `{"status":"running"…}`.') },
+    ], check: [x('Le déploiement est en « Running »', 'The deployment is “Running”')] },
+    tokenStep('', x('Dans Coolify : votre application → onglet **Logs** (le conteneur « app »). Cherchez « TOKEN D’INSTALLATION ».', 'In Coolify: your application → **Logs** tab (the “app” container). Look for “TOKEN D’INSTALLATION”.')),
+    commonSetup(),
+    testStep(),
     backups,
     addons,
   ];
@@ -253,6 +267,7 @@ const steps = computed(() => (path.value ? stepsFor(path.value) : []));
 const step = computed(() => steps.value[current.value]);
 const progress = computed(() => (steps.value.length ? Math.round((steps.value.filter((s) => done[`${path.value}:${s.id}`]).length / steps.value.length) * 100) : 0));
 const finished = computed(() => steps.value.length > 0 && current.value >= steps.value.length);
+const currentPath = computed(() => PATHS.value.find((p) => p.id === path.value));
 
 function choose(p: Path) { path.value = p; current.value = 0; }
 function restart() { path.value = null; current.value = 0; for (const k of Object.keys(done)) delete done[k]; for (const k of Object.keys(checked)) delete checked[k]; }
@@ -269,11 +284,10 @@ const md = (s: string) => fill(s)
 
 <template>
   <div class="iw">
-    <!-- Choix du parcours -->
     <section v-if="!path" class="iw-choose">
       <div class="iw-hero">
-        <h2>Comment voulez-vous installer UHQ Panel OS ?</h2>
-        <p>Choisissez un parcours : l’assistant vous guide pas à pas, avec des commandes prêtes à copier et vos propres valeurs.</p>
+        <h2>{{ x('Comment voulez-vous installer UHQ Panel OS ?', 'How do you want to install UHQ Panel OS?') }}</h2>
+        <p>{{ x('Choisissez un parcours : l’assistant vous guide pas à pas, avec des commandes prêtes à copier et vos propres valeurs.', 'Pick a path: the wizard guides you step by step, with ready-to-copy commands and your own values.') }}</p>
       </div>
       <div class="iw-cards">
         <button v-for="p in PATHS" :key="p.id" class="iw-card" @click="choose(p.id)">
@@ -282,34 +296,33 @@ const md = (s: string) => fill(s)
           <span class="iw-card-time">{{ p.time }}</span>
           <span class="iw-card-text">{{ p.text }}</span>
           <span class="iw-card-for">{{ p.for }}</span>
-          <span class="iw-card-go">Commencer →</span>
+          <span class="iw-card-go">{{ x('Commencer →', 'Start →') }}</span>
         </button>
       </div>
     </section>
 
-    <!-- Parcours -->
     <section v-else class="iw-run">
       <header class="iw-top">
         <div>
-          <span class="iw-badge">{{ PATHS.find((p) => p.id === path)?.icon }} Installation {{ PATHS.find((p) => p.id === path)?.title.toLowerCase() }}</span>
+          <span class="iw-badge">{{ currentPath?.icon }} {{ x('Installation', 'Installation') }} — {{ currentPath?.title }}</span>
           <div class="iw-progress" role="progressbar" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"><span :style="{ width: progress + '%' }" /></div>
-          <small>{{ progress }} % — étape {{ Math.min(current + 1, steps.length) }} sur {{ steps.length }}</small>
+          <small>{{ progress }} % — {{ x('étape', 'step') }} {{ Math.min(current + 1, steps.length) }} {{ x('sur', 'of') }} {{ steps.length }}</small>
         </div>
-        <button class="iw-link" @click="restart">Changer de parcours</button>
+        <button class="iw-link" @click="restart">{{ x('Changer de parcours', 'Change path') }}</button>
       </header>
 
       <details v-if="path !== 'local'" class="iw-values" open>
-        <summary>Vos valeurs (injectées dans toutes les commandes)</summary>
+        <summary>{{ x('Vos valeurs (injectées dans toutes les commandes)', 'Your values (used in every command)') }}</summary>
         <div class="iw-values-grid">
-          <label>Domaine du panel<input v-model="f.domain" placeholder="panel.exemple.fr" spellcheck="false" /></label>
-          <label>Domaine du proxy <em>(facultatif)</em><input v-model="f.proxyDomain" placeholder="proxy.exemple.fr" spellcheck="false" /></label>
-          <label>IP publique du serveur<input v-model="f.ip" placeholder="203.0.113.10" spellcheck="false" /></label>
-          <label>Port du proxy<input v-model="f.port" placeholder="990" inputmode="numeric" /></label>
+          <label>{{ x('Domaine du panel', 'Panel domain') }}<input v-model="f.domain" placeholder="panel.exemple.fr" spellcheck="false" /></label>
+          <label>{{ x('Domaine du proxy', 'Proxy domain') }} <em>({{ x('facultatif', 'optional') }})</em><input v-model="f.proxyDomain" placeholder="proxy.exemple.fr" spellcheck="false" /></label>
+          <label>{{ x('IP publique du serveur', 'Server public IP') }}<input v-model="f.ip" placeholder="203.0.113.10" spellcheck="false" /></label>
+          <label>{{ x('Port du proxy', 'Proxy port') }}<input v-model="f.port" placeholder="990" inputmode="numeric" /></label>
         </div>
       </details>
 
       <div class="iw-layout">
-        <nav class="iw-steps" aria-label="Étapes">
+        <nav class="iw-steps" :aria-label="x('Étapes', 'Steps')">
           <button v-for="(s, i) in steps" :key="s.id" :class="['iw-step', { active: i === current, ok: done[path + ':' + s.id] }]" @click="go(i)">
             <span class="iw-dot">{{ done[path + ':' + s.id] ? '✓' : i + 1 }}</span>
             <span class="iw-step-text"><b>{{ s.title }}</b><small>{{ s.time }}</small></span>
@@ -328,7 +341,7 @@ const md = (s: string) => fill(s)
               <ul v-else-if="b.t === 'list'" class="iw-list"><li v-for="(it, ii) in b.items" :key="ii" v-html="md(it)" /></ul>
               <div v-else-if="b.t === 'code'" class="iw-code">
                 <div class="iw-code-bar"><span>{{ b.title || b.lang || 'terminal' }}</span>
-                  <button @click="copy(b.text, step.id + bi)">{{ copied === step.id + bi ? 'Copié ✓' : 'Copier' }}</button></div>
+                  <button @click="copy(b.text, step.id + bi)">{{ copied === step.id + bi ? x('Copié ✓', 'Copied ✓') : x('Copier', 'Copy') }}</button></div>
                 <pre><code>{{ fill(b.text) }}</code></pre>
               </div>
               <div v-else-if="b.t === 'table'" class="iw-table-wrap">
@@ -344,23 +357,23 @@ const md = (s: string) => fill(s)
             </ul>
 
             <div class="iw-nav">
-              <button class="iw-btn ghost" :disabled="current === 0" @click="go(current - 1)">← Précédent</button>
-              <button class="iw-btn" @click="next">{{ current === steps.length - 1 ? 'Terminer ✓' : 'Étape suivante →' }}</button>
+              <button class="iw-btn ghost" :disabled="current === 0" @click="go(current - 1)">← {{ x('Précédent', 'Previous') }}</button>
+              <button class="iw-btn" @click="next">{{ current === steps.length - 1 ? x('Terminer ✓', 'Finish ✓') : x('Étape suivante →', 'Next step →') }}</button>
             </div>
           </template>
 
           <div v-else class="iw-finish">
             <div class="iw-finish-icon">🎉</div>
-            <h3>Votre panel est installé</h3>
-            <p>Bravo ! Voici les prochaines étapes pour bien démarrer :</p>
+            <h3>{{ x('Votre panel est installé', 'Your panel is installed') }}</h3>
+            <p>{{ x('Bravo ! Voici les prochaines étapes pour bien démarrer :', 'Well done! Here are the next steps to get started:') }}</p>
             <div class="iw-links big">
-              <a href="/guide/mise-en-service">Mise en service →</a>
-              <a href="/guide/visite-guidee">Visite guidée →</a>
-              <a href="/guide/emails">E-mails personnalisés →</a>
-              <a href="/addons/overview">Addons officiels →</a>
-              <a href="/guide/mise-a-jour-automatique">Mises à jour automatiques →</a>
+              <a :href="link('/guide/mise-en-service')">{{ x('Mise en service', 'Go-live') }} →</a>
+              <a :href="link('/guide/visite-guidee')">{{ x('Visite guidée', 'Guided tour') }} →</a>
+              <a :href="link('/guide/emails')">{{ x('E-mails personnalisés', 'Custom e-mails') }} →</a>
+              <a :href="link('/addons/overview')">{{ x('Addons officiels', 'Official add-ons') }} →</a>
+              <a :href="link('/guide/mise-a-jour-automatique')">{{ x('Mises à jour automatiques', 'Automatic updates') }} →</a>
             </div>
-            <button class="iw-btn ghost" @click="go(0)">Revoir les étapes</button>
+            <button class="iw-btn ghost" @click="go(0)">{{ x('Revoir les étapes', 'Review the steps') }}</button>
           </div>
         </article>
       </div>

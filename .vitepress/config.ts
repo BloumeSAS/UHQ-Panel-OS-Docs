@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress';
+import { defineConfig, type DefaultTheme } from 'vitepress';
 import { readFileSync } from 'node:fs';
 
 // Dernière version publiée = première entrée "### vX.Y.Z" du changelog (mise à jour à chaque release).
@@ -11,176 +11,207 @@ const latestVersion = (() => {
   }
 })();
 
-export default defineConfig({
-  vite: {
-    server: {
-      allowedHosts: true,
+/**
+ * Deux langues : français à la racine (URLs inchangées), anglais sous /en/ avec les MÊMES noms de fichiers
+ * (en/guide/installation.md ↔ guide/installation.md). Ajouter une page = l'ajouter dans les deux arbres et les deux barres latérales.
+ */
+type Labels = {
+  install: string; hosts: string; chooseHost: string; guide: string; start: string; startInstall: string; installation: string; install5: string;
+  configuration: string; tour: string; golive: string; monitoring: string; emails: string; backups: string; customers: string; errors: string;
+  traffic: string; updates: string; autoupdate: string; pools: string; vpn: string; addonSystem: string; overview: string; quickstart: string;
+  manifest: string; fullRef: string; pages: string; widgets: string; slots: string; translations: string; integrations: string; auth: string;
+  backup: string; addonUpdates: string; deploy: string; env: string; official: string; free: string; promocodes: string; referral: string;
+  status: string; security: string; apiRef: string; zones: string; icons: string;
+};
+
+function nav(p: string, l: Labels): DefaultTheme.NavItem[] {
+  return [
+    { text: `🚀 ${l.install}`, link: `${p}/guide/commencer` },
+    {
+      text: `🌍 ${l.hosts}`,
+      items: [
+        { text: l.chooseHost, link: `${p}/guide/hebergeurs/` },
+        { text: 'Coolify (Docker Compose)', link: `${p}/guide/hebergeurs/coolify` },
+        { text: 'Dokploy', link: `${p}/guide/hebergeurs/dokploy` },
+        { text: 'VPS + Docker Compose', link: `${p}/guide/hebergeurs/vps` },
+        { text: 'Vercel, Netlify, Heroku…', link: `${p}/guide/hebergeurs/serverless` },
+      ],
     },
-  },
+    { text: l.guide, link: `${p}/guide/introduction` },
+    { text: 'Addons', link: `${p}/addons/overview` },
+    { text: 'API', link: `${p}/api/manifest` },
+    {
+      text: latestVersion,
+      items: [
+        { text: 'Changelog', link: `${p}/changelog` },
+        { text: 'GitHub', link: 'https://github.com/BloumeSAS/UHQ-Panel-OS' },
+      ],
+    },
+  ];
+}
+
+function sidebar(p: string, l: Labels): DefaultTheme.Sidebar {
+  const f = (s: string) => `${s} (${l.free})`;
+  return {
+    [`${p}/guide/`]: [
+      {
+        text: `🌍 ${l.hosts}`,
+        items: [
+          { text: l.chooseHost, link: `${p}/guide/hebergeurs/` },
+          { text: 'Coolify (Docker Compose) ⭐', link: `${p}/guide/hebergeurs/coolify` },
+          { text: 'Dokploy', link: `${p}/guide/hebergeurs/dokploy` },
+          { text: 'VPS + Docker Compose', link: `${p}/guide/hebergeurs/vps` },
+          { text: 'Portainer', link: `${p}/guide/hebergeurs/portainer` },
+          { text: 'CapRover', link: `${p}/guide/hebergeurs/caprover` },
+          { text: 'Railway', link: `${p}/guide/hebergeurs/railway` },
+          { text: 'Vercel, Netlify, Render, Heroku', link: `${p}/guide/hebergeurs/serverless` },
+        ],
+      },
+      {
+        text: `🚀 ${l.start}`,
+        items: [
+          { text: 'Introduction', link: `${p}/guide/introduction` },
+          { text: `🚀 ${l.startInstall}`, link: `${p}/guide/commencer` },
+          { text: l.installation, link: `${p}/guide/installation` },
+          { text: l.install5, link: `${p}/guide/installer-en-5-minutes` },
+          { text: l.configuration, link: `${p}/guide/configuration` },
+          { text: l.tour, link: `${p}/guide/visite-guidee` },
+          { text: l.golive, link: `${p}/guide/mise-en-service` },
+          { text: l.monitoring, link: `${p}/guide/surveillance` },
+          { text: l.emails, link: `${p}/guide/emails` },
+          { text: l.backups, link: `${p}/guide/sauvegardes` },
+          { text: l.customers, link: `${p}/guide/clients-et-support` },
+          { text: l.errors, link: `${p}/guide/erreurs-et-fallback` },
+          { text: l.traffic, link: `${p}/guide/trafic` },
+          { text: l.updates, link: `${p}/guide/mises-a-jour` },
+          { text: l.autoupdate, link: `${p}/guide/mise-a-jour-automatique` },
+          { text: 'Docker & Coolify', link: `${p}/guide/docker` },
+          { text: l.pools, link: `${p}/guide/proxy-pools` },
+          { text: l.vpn, link: `${p}/guide/vpn` },
+        ],
+      },
+    ],
+    [`${p}/addons/`]: [
+      { text: `🧩 ${l.addonSystem}`, items: [{ text: l.overview, link: `${p}/addons/overview` }, { text: l.quickstart, link: `${p}/addons/getting-started` }] },
+      {
+        text: `📄 ${l.manifest}`,
+        items: [
+          { text: l.fullRef, link: `${p}/addons/manifest` },
+          { text: l.pages, link: `${p}/addons/pages` },
+          { text: l.widgets, link: `${p}/addons/widgets` },
+          { text: l.slots, link: `${p}/addons/slots` },
+          { text: l.translations, link: `${p}/addons/translations` },
+        ],
+      },
+      {
+        text: `🔧 ${l.integrations}`,
+        items: [
+          { text: l.auth, link: `${p}/addons/auth` },
+          { text: l.backup, link: `${p}/addons/backup` },
+          { text: l.addonUpdates, link: `${p}/addons/updates` },
+        ],
+      },
+      { text: `🐳 ${l.deploy}`, items: [{ text: 'Docker & Coolify', link: `${p}/addons/docker` }, { text: l.env, link: `${p}/addons/env` }] },
+      {
+        text: `📦 ${l.official}`,
+        items: [
+          { text: f('Wallet'), link: `${p}/addons/official/wallet` },
+          { text: f('Orders'), link: `${p}/addons/official/orders` },
+          { text: f(l.promocodes), link: `${p}/addons/official/promocodes` },
+          { text: f('Vitrine'), link: `${p}/addons/official/vitrine` },
+          { text: f('Analytics'), link: `${p}/addons/official/analytics` },
+          { text: f('UHQ.Monster Reseller'), link: `${p}/addons/official/reseller` },
+          { text: f('Tickets'), link: `${p}/addons/official/tickets` },
+          { text: f(l.referral), link: `${p}/addons/official/referral` },
+          { text: f(l.status), link: `${p}/addons/official/status` },
+          { text: f(l.security), link: `${p}/addons/official/security` },
+        ],
+      },
+    ],
+    [`${p}/api/`]: [
+      {
+        text: `📋 ${l.apiRef}`,
+        items: [
+          { text: 'uhq-manifest.json', link: `${p}/api/manifest` },
+          { text: l.zones, link: `${p}/api/zones` },
+          { text: l.icons, link: `${p}/api/icons` },
+        ],
+      },
+    ],
+  };
+}
+
+const FR: Labels = {
+  install: 'Installer', hosts: 'Hébergeurs', chooseHost: 'Choisir son hébergeur', guide: 'Guide', start: 'Démarrage', startInstall: 'Commencer l’installation',
+  installation: 'Installation', install5: 'Installer en 5 minutes', configuration: 'Configuration', tour: 'Visite guidée', golive: 'Mise en service',
+  monitoring: 'Surveillance & alertes', emails: 'E-mails & modèles', backups: 'Sauvegardes & restauration', customers: 'Clients & support',
+  errors: 'Erreurs & fallback', traffic: 'Trafic, quotas & multiplicateur', updates: 'Mises à jour & redémarrages', autoupdate: 'Mise à jour automatique',
+  pools: 'Proxy Pools (catégories)', vpn: 'VPN dans les catégories', addonSystem: 'Système d\'addons', overview: 'Vue d\'ensemble', quickstart: 'Démarrage rapide',
+  manifest: 'Manifest', fullRef: 'Référence complète', pages: 'Pages (nav)', widgets: 'Widgets (iframes)', slots: 'Slots (topbar)', translations: 'Traductions (i18n)',
+  integrations: 'Intégrations', auth: 'Authentification JWT', backup: 'Backup automatique', addonUpdates: 'Mises à jour', deploy: 'Déploiement', env: 'Variables d\'env',
+  official: 'Addons officiels', free: 'gratuit', promocodes: 'Codes promo', referral: 'Parrainage', status: 'Statut & incidents', security: 'Sécurité — BloumeID',
+  apiRef: 'Référence API', zones: 'Zones disponibles', icons: 'Icônes Lucide',
+};
+const EN: Labels = {
+  install: 'Install', hosts: 'Hosting', chooseHost: 'Choose a host', guide: 'Guide', start: 'Getting started', startInstall: 'Start the installation',
+  installation: 'Installation', install5: 'Install in 5 minutes', configuration: 'Configuration', tour: 'Guided tour', golive: 'Go-live',
+  monitoring: 'Monitoring & alerts', emails: 'E-mails & templates', backups: 'Backups & restore', customers: 'Customers & support',
+  errors: 'Errors & fallback', traffic: 'Traffic, quotas & multiplier', updates: 'Updates & restarts', autoupdate: 'Automatic updates',
+  pools: 'Proxy pools (categories)', vpn: 'VPN in categories', addonSystem: 'Add-on system', overview: 'Overview', quickstart: 'Quick start',
+  manifest: 'Manifest', fullRef: 'Full reference', pages: 'Pages (nav)', widgets: 'Widgets (iframes)', slots: 'Slots (top bar)', translations: 'Translations (i18n)',
+  integrations: 'Integrations', auth: 'JWT authentication', backup: 'Automatic backup', addonUpdates: 'Updates', deploy: 'Deployment', env: 'Environment variables',
+  official: 'Official add-ons', free: 'free', promocodes: 'Promo Codes', referral: 'Referral', status: 'Status & incidents', security: 'Security — BloumeID',
+  apiRef: 'API reference', zones: 'Available zones', icons: 'Lucide icons',
+};
+
+export default defineConfig({
+  vite: { server: { allowedHosts: true } },
   ignoreDeadLinks: true,
   title: 'UHQ Panel OS',
-  description: 'Documentation officielle — Panel proxy & système d\'addons',
-  lang: 'fr-FR',
-
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#e8632a' }],
   ],
 
+  locales: {
+    root: {
+      label: 'Français',
+      lang: 'fr-FR',
+      description: 'Documentation officielle — Panel proxy & système d\'addons',
+      themeConfig: {
+        nav: nav('', FR),
+        sidebar: sidebar('', FR),
+        footer: { message: 'Publié sous licence MIT', copyright: '© 2026 Bloume SAS' },
+        lastUpdated: { text: 'Dernière mise à jour' },
+        docFooter: { prev: 'Page précédente', next: 'Page suivante' },
+        outline: { label: 'Sur cette page', level: [2, 3] },
+        langMenuLabel: 'Langue',
+        returnToTopLabel: 'Retour en haut',
+        sidebarMenuLabel: 'Menu',
+        darkModeSwitchLabel: 'Thème',
+      },
+    },
+    en: {
+      label: 'English',
+      lang: 'en-US',
+      link: '/en/',
+      description: 'Official documentation — proxy panel & add-on system',
+      themeConfig: {
+        nav: nav('/en', EN),
+        sidebar: sidebar('/en', EN),
+        footer: { message: 'Released under the MIT License', copyright: '© 2026 Bloume SAS' },
+        lastUpdated: { text: 'Last updated' },
+        docFooter: { prev: 'Previous page', next: 'Next page' },
+        outline: { label: 'On this page', level: [2, 3] },
+      },
+    },
+  },
+
   themeConfig: {
     logo: '/logo.png',
     siteTitle: 'UHQ Panel OS',
-
-    nav: [
-      { text: '🚀 Installer', link: '/guide/commencer' },
-      {
-        text: '🌍 Hébergeurs',
-        items: [
-          { text: 'Choisir son hébergeur', link: '/guide/hebergeurs/' },
-          { text: 'Coolify (Docker Compose)', link: '/guide/hebergeurs/coolify' },
-          { text: 'Dokploy', link: '/guide/hebergeurs/dokploy' },
-          { text: 'VPS + Docker Compose', link: '/guide/hebergeurs/vps' },
-          { text: 'Vercel, Netlify, Heroku…', link: '/guide/hebergeurs/serverless' },
-        ],
-      },
-      { text: 'Guide', link: '/guide/introduction' },
-      { text: 'Addons', link: '/addons/overview' },
-      { text: 'API', link: '/api/manifest' },
-      {
-        text: latestVersion,
-        items: [
-          { text: 'Changelog', link: '/changelog' },
-          { text: 'GitHub', link: 'https://github.com/bloumesas/uhq-panel-os' },
-        ],
-      },
-    ],
-
-    sidebar: {
-      '/guide/': [
-        {
-          text: '🌍 Hébergeurs',
-          items: [
-            { text: 'Choisir son hébergeur', link: '/guide/hebergeurs/' },
-            { text: 'Coolify (Docker Compose) ⭐', link: '/guide/hebergeurs/coolify' },
-            { text: 'Dokploy', link: '/guide/hebergeurs/dokploy' },
-            { text: 'VPS + Docker Compose', link: '/guide/hebergeurs/vps' },
-            { text: 'Portainer', link: '/guide/hebergeurs/portainer' },
-            { text: 'CapRover', link: '/guide/hebergeurs/caprover' },
-            { text: 'Railway', link: '/guide/hebergeurs/railway' },
-            { text: 'Vercel, Netlify, Render, Heroku', link: '/guide/hebergeurs/serverless' },
-          ],
-        },
-        {
-          text: '🚀 Démarrage',
-          items: [
-            { text: 'Introduction', link: '/guide/introduction' },
-            { text: '🚀 Commencer l’installation', link: '/guide/commencer' },
-            { text: 'Installation', link: '/guide/installation' },
-            { text: 'Installer en 5 minutes', link: '/guide/installer-en-5-minutes' },
-            { text: 'Configuration', link: '/guide/configuration' },
-            { text: 'Visite guidée', link: '/guide/visite-guidee' },
-            { text: 'Mise en service', link: '/guide/mise-en-service' },
-            { text: 'Surveillance & alertes', link: '/guide/surveillance' },
-            { text: 'E-mails & modèles', link: '/guide/emails' },
-            { text: 'Sauvegardes & restauration', link: '/guide/sauvegardes' },
-            { text: 'Clients & support', link: '/guide/clients-et-support' },
-            { text: 'Erreurs & fallback', link: '/guide/erreurs-et-fallback' },
-            { text: 'Trafic, quotas & multiplicateur', link: '/guide/trafic' },
-            { text: 'Mises à jour & redémarrages', link: '/guide/mises-a-jour' },
-            { text: 'Mise à jour automatique', link: '/guide/mise-a-jour-automatique' },
-            { text: 'Docker & Coolify', link: '/guide/docker' },
-            { text: 'Proxy Pools (catégories)', link: '/guide/proxy-pools' },
-            { text: 'VPN dans les catégories', link: '/guide/vpn' },
-          ],
-        },
-      ],
-      '/addons/': [
-        {
-          text: '🧩 Système d\'addons',
-          items: [
-            { text: 'Vue d\'ensemble', link: '/addons/overview' },
-            { text: 'Démarrage rapide', link: '/addons/getting-started' },
-          ],
-        },
-        {
-          text: '📄 Manifest',
-          items: [
-            { text: 'Référence complète', link: '/addons/manifest' },
-            { text: 'Pages (nav)', link: '/addons/pages' },
-            { text: 'Widgets (iframes)', link: '/addons/widgets' },
-            { text: 'Slots (topbar)', link: '/addons/slots' },
-            { text: 'Traductions (i18n)', link: '/addons/translations' },
-          ],
-        },
-        {
-          text: '🔧 Intégrations',
-          items: [
-            { text: 'Authentification JWT', link: '/addons/auth' },
-            { text: 'Backup automatique', link: '/addons/backup' },
-            { text: 'Mises à jour', link: '/addons/updates' },
-          ],
-        },
-        {
-          text: '🐳 Déploiement',
-          items: [
-            { text: 'Docker & Coolify', link: '/addons/docker' },
-            { text: 'Variables d\'env', link: '/addons/env' },
-          ],
-        },
-        {
-          text: '📦 Addons officiels',
-          items: [
-            { text: 'Wallet (gratuit)', link: '/addons/official/wallet' },
-            { text: 'Orders (gratuit)', link: '/addons/official/orders' },
-            { text: 'Codes promo (gratuit)', link: '/addons/official/promocodes' },
-            { text: 'Vitrine (gratuit)', link: '/addons/official/vitrine' },
-            { text: 'Analytics (gratuit)', link: '/addons/official/analytics' },
-            { text: 'UHQ.Monster Reseller (gratuit)', link: '/addons/official/reseller' },
-            { text: 'Tickets (gratuit)', link: '/addons/official/tickets' },
-            { text: 'Parrainage (gratuit)', link: '/addons/official/referral' },
-            { text: 'Statut & incidents (gratuit)', link: '/addons/official/status' },
-            { text: 'Sécurité — BloumeID (gratuit)', link: '/addons/official/security' },
-          ],
-        },
-      ],
-      '/api/': [
-        {
-          text: '📋 Référence API',
-          items: [
-            { text: 'uhq-manifest.json', link: '/api/manifest' },
-            { text: 'Zones disponibles', link: '/api/zones' },
-            { text: 'Icônes Lucide', link: '/api/icons' },
-          ],
-        },
-      ],
-    },
-
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/bloumesas/uhq-panel-os' },
-    ],
-
-    footer: {
-      message: 'Publié sous licence MIT',
-      copyright: '© 2026 Bloume SAS',
-    },
-
+    socialLinks: [{ icon: 'github', link: 'https://github.com/BloumeSAS/UHQ-Panel-OS' }],
     search: { provider: 'local' },
-
-    editLink: {
-      pattern: 'https://github.com/bloumesas/uhq-panel-os/edit/main/docs/:path',
-      text: 'Modifier cette page',
-    },
-
-    lastUpdated: { text: 'Dernière mise à jour' },
-
-    docFooter: {
-      prev: 'Page précédente',
-      next: 'Page suivante',
-    },
-
-    outline: {
-      label: 'Sur cette page',
-      level: [2, 3],
-    },
+    editLink: { pattern: 'https://github.com/BloumeSAS/UHQ-Panel-OS-Docs/edit/main/:path', text: 'GitHub' },
   },
 });
